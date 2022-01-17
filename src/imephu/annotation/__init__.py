@@ -12,7 +12,7 @@ from imephu.geometry import Point, Vector
 class Annotation(Protocol):
     """An annotation to add to a finder chart."""
 
-    def add_to(self, ax: WCSAxes):
+    def add_to(self, ax: WCSAxes) -> None:
         """Add this annotation to plot axes.
 
         Parameters

@@ -106,7 +106,7 @@ class FinderChart:
             aspect="equal",
         )
 
-    def _update_axes(self, ax: WCSAxesSubplot):
+    def _update_axes(self, ax: WCSAxesSubplot) -> None:
         axis_type_names = {
             "pos.eq.dec": "Dec (ICRS)",
             "pos.eq.ra": "RA (ICRS)",
