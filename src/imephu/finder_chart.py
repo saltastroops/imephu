@@ -9,6 +9,8 @@ from astropy.visualization.mpl_normalize import simple_norm
 from astropy.visualization.interval import AsymmetricPercentileInterval
 from astropy.visualization.wcsaxes.core import WCSAxesSubplot
 
+"""A finder chart."""
+
 
 class FinderChart:
     """A finder chart for an astronomical observation.
@@ -75,7 +77,7 @@ class FinderChart:
         self._add_fits_content(ax)
         self._update_axes(ax)
 
-        # ax.coords.grid(True, color=)
+        # ax.coords.grid(True)
 
     def _add_fits_content(self, ax: WCSAxesSubplot) -> None:
         """
