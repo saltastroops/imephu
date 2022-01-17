@@ -24,6 +24,7 @@ def check_finder(file_regression):
     file_regression: file regression fixture
         The file regression fixture from the pytest-regressions plugin.
     """
+
     def _check_fits(finder_chart):
         np.random.seed(0)
         contents = io.BytesIO()
@@ -46,4 +47,5 @@ def fits_file():
     `pathlib.Path`
         The path to the example FITS file.
     """
+
     return pathlib.Path(__file__).parent / "data" / "ra0_dec0.fits"

@@ -98,12 +98,12 @@ class FinderChart:
         normalizer = simple_norm(self._data, power=2, min_cut=vmin, max_cut=vmax)
 
         ax.imshow(
-             self._hdu.data,
-             cmap=cmap,
-             interpolation="nearest",
-             origin="lower",
-             norm=normalizer,
-             aspect="equal",
+            self._hdu.data,
+            cmap=cmap,
+            interpolation="nearest",
+            origin="lower",
+            norm=normalizer,
+            aspect="equal",
         )
 
     def _update_axes(self, ax: WCSAxesSubplot):
@@ -114,12 +114,16 @@ class FinderChart:
         axis_types = self._wcs.world_axis_physical_types
         x_axis_type = axis_types[0]
         y_axis_type = axis_types[1]
-        if x_axis_type != 'pos.eq.ra':
-            raise ValueError("Only pos.eq.ra is supported for the physical type of "
-                             "the first world axis")
-        if y_axis_type != 'pos.eq.dec':
-            raise ValueError("Only pos.eq.dec is supported for the physical type of "
-                             "the second world axis")
+        if x_axis_type != "pos.eq.ra":
+            raise ValueError(
+                "Only pos.eq.ra is supported for the physical type of "
+                "the first world axis"
+            )
+        if y_axis_type != "pos.eq.dec":
+            raise ValueError(
+                "Only pos.eq.dec is supported for the physical type of "
+                "the second world axis"
+            )
 
         ax.coords[0].set_axislabel(axis_type_names[x_axis_type])
         ax.coords[1].set_axislabel(axis_type_names[y_axis_type])
