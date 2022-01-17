@@ -6,6 +6,7 @@ myst-parser
 numpydoc
 pytest
 pytest-cov
+pytest-regressions
 sphinx
 sphinx-autodoc-typehints
 sphinx-book-theme

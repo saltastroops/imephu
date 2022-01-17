@@ -34,6 +34,9 @@ class FinderChart:
 
     def __init__(self, name: Union[str, BinaryIO, os.PathLike[Any]]):
         self._hdu = fits.open(name)[0]
+        # The FITS data is read in only when it is needed. To avoid trying to read from
+        # a closed stream later on, we thus force the data to be read in immediately.
+        self._data = self._hdu.data
         self._wcs = WCS(self._hdu)
 
     def show(self) -> None:
@@ -87,13 +90,13 @@ class FinderChart:
         vmin = -0.1 * (vmax - vmin) + vmin
         vmax = 0.1 * (vmax - vmin) + vmax
 
-        normalizer = simple_norm(self._hdu.data, power=2, min_cut=vmin, max_cut=vmax)
+        normalizer = simple_norm(self._data, power=2, min_cut=vmin, max_cut=vmax)
 
         ax.imshow(
-            self._hdu.data,
-            cmap=cmap,
-            interpolation="nearest",
-            origin="lower",
-            norm=normalizer,
-            aspect="equal",
+             self._hdu.data,
+             cmap=cmap,
+             interpolation="nearest",
+             origin="lower",
+             norm=normalizer,
+             aspect="equal",
         )
