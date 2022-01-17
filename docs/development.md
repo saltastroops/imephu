@@ -2,7 +2,7 @@
 
 ## Setting up the development environment
 
-Make sure that all the Python versions supported by the plugin (3.7 to 3.10 at the time of writing) are installed on your computer and available to tox. [asdf](https://asdf-vm.com) and [python-launcher](https://github.com/brettcannon/python-launcher) can be of help in this regard.
+Make sure that all the Python versions supported by the plugin (3.8 to 3.10 at the time of writing) are installed on your computer and available to tox. [asdf](https://asdf-vm.com) and [python-launcher](https://github.com/brettcannon/python-launcher) can be of help in this regard.
 
 Clone the project's repository
 
