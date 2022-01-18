@@ -69,7 +69,7 @@ class FinderChart:
             The format in which to store the finder chart.
         """
         self._create_plot()
-        plt.savefig(name, format=format)
+        plt.savefig(name, format=format, bbox_inches='tight')
 
     def _create_plot(self) -> None:
         ax = plt.subplot(projection=self._wcs)
