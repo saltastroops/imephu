@@ -66,8 +66,8 @@ Command | Use | Own positional arguments?
 
 ## Unit testing
 
-```{warning}
-When running unit tests with a debugger, you need to call `pytest` with the `--no-cov` flag, as otherwise execution will not be paused at breakpoints.
+```{info}
+The project setup includes coverage for unit tests run with `tox`. This is not the case when `pytest` is run straight from the command line, as test coverage interferes with debugger breakpoints, causing code execution not to be paused at them. However, you may still include coverage by using the `--cov` flag.
 ```
 
 Most of the unit tests create a finder chart, save it and compare it to a previously saved version, asserting nothing has changed. The pytest plugin [pytest-regressions](https://pytest-regressions.readthedocs.io/en/latest/overview.html) is used for simplifying the task. The files created by this plugin should be put under version control.
