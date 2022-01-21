@@ -12,10 +12,16 @@ from imephu.geometry import rotate, sky_position_to_pixel, translate
 
 class TextAnnotation(Annotation):
     """An annotation for adding text to a plot.
+    
+    .. note::
+        The `rotate` method rotates the text position, but not the text itself. If you
+        want to rotate the text rather than the text position, you should use the
+        ``rotation`` parameter with the angle in degrees.
+
 
     Parameters
     ----------
-    position: `~astropy.units.SkyCoord`
+    position: `~astropy.coordinates.SkyCoord`
         The right ascension and declination of the point where to put the text.
     s: str
         The text.
@@ -30,14 +36,7 @@ class TextAnnotation(Annotation):
     **kwargs: dict, optional
         Additional keyword arguments, which will be passed to Matplotlib's
         `~matplotlib.axes.Axes.text` method for adding text to plot Axes.
-
-    Notes
-    -----
-    The `rotate` method rotates the text position ``x``, ``y``, but not the text itself.
-    If you want top rotate the text rather than the text position, you should use the
-    ``rotation`` parameter with the angle in degrees.
     """  # noqa: E501
-
     def __init__(
         self,
         position: SkyCoord,
@@ -74,7 +73,7 @@ class TextAnnotation(Annotation):
 
         Parameters
         ----------
-        center: `~astropy.units.SkyCoord`
+        center: `~astropy.coordinates.SkyCoord`
             Point around which to rotate the annotation.
         angle: `~astropy.units.Quantity` ["angle"]
             Angle of rotation, measured from north to east.

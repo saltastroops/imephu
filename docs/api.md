@@ -6,6 +6,12 @@
     :members:
 ```
 
+## `imephu.annotation.general`
+```{eval-rst}
+.. automodule:: imephu.annotation.general
+    :members:
+```
+
 ### `imephu.geometry`
 ```{eval-rst}
 .. automodule:: imephu.geometry

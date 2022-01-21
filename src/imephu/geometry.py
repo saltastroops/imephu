@@ -25,9 +25,9 @@ def rotate(v: SkyCoord, pivot: SkyCoord, angle: Quantity, wcs: WCS) -> SkyCoord:
 
     Parameters
     ----------
-    v: 2D array or sequence of `~astropy.units.Quantity` ["angle"]
+    v: `~astropy.coordinates.SkyCoord`
         The point to rotate.
-    pivot: 2D array or sequence of `~astropy.units.Quantity` ["angle"]
+    pivot: `~astropy.coordinates.SkyCoord`
         The point around which the point ``v`` is rotated.
     angle: Quantity ["angle"]
         The angle of rotation, measured from north to east.
@@ -36,7 +36,7 @@ def rotate(v: SkyCoord, pivot: SkyCoord, angle: Quantity, wcs: WCS) -> SkyCoord:
 
     Returns
     -------
-    `~astropy.units.SkyCoord`
+    `~astropy.coordinates.SkyCoord`
         The point after the rotation.
     """
     # Convert from world coordinates to pixels
@@ -77,14 +77,14 @@ def translate(v: SkyCoord, displacement: Quantity) -> SkyCoord:
 
     Parameters
     ----------
-    v: `~astropy.units.SkyCoord`
+    v: `~astropy.coordinates.SkyCoord`
         Point to move.
     displacement: 2D array of angles
         Vector by which to move the point.
 
     Returns
     -------
-    `~astropy.units.SkyCoord`
+    `~astropy.coordinates.SkyCoord`
         The point after moving.
     """
     # Convert from sky coordinates to real angles
@@ -153,7 +153,7 @@ def sky_position_to_pixel(position: SkyCoord, wcs: WCS) -> npt.NDArray[np.float_
 
     Parameters
     ----------
-    position: 2D sequence of `~astropy.units.Quantity ["angle"]
+    position: `~astropy.coordinates.SkyCoord`
         Sky position as right ascension and declination.
     wcs: `~astropy.wcs.WCS`
         WCS object.
@@ -172,14 +172,14 @@ def pixel_to_sky_position(position_px: npt.NDArray[np.float_], wcs: WCS) -> SkyC
 
     Parameters
     ----------
-    position_px: `sequence` or `~numpy.ndarray` of `float`
+    position_px: `~numpy.ndarray` of `float`
         Pixel coordinates.
     wcs: `~astropy.wcs.WCS`
         WCS object.
 
     Returns
     -------
-    `~astropy.units.SkyCoord`
+    `~astropy.coordinates.SkyCoord`
         The sky coordinates.
     """
     return pixel_to_skycoord(position_px[0], position_px[1], wcs=wcs)  # noqa

@@ -27,7 +27,7 @@ class Annotation(Protocol):
 
         Parameters
         ----------
-        center: `~astropy.units.SkyCoord`
+        center: `~astropy.coordinates.SkyCoord`
             Point around which to rotate the annotation.
         angle: `~astropy.coordinates.Angle`
             Angle of rotation, measured from north towards the east.

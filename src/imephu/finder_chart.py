@@ -35,10 +35,6 @@ class FinderChart:
     ----------
     name: `str`, `path-like` or `binary file-like`
         FITS file to display.
-
-    Attributes
-    ----------
-    wcs
     """
 
     def __init__(self, name: Union[str, BinaryIO, os.PathLike[Any]]):
