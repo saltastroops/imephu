@@ -59,7 +59,7 @@ class TextAnnotation(Annotation):
         self._kwargs["verticalalignment"] = verticalalignment
 
     def add_to(self, ax: WCSAxes) -> None:
-        """Add the text to a plot.
+        """Add the text to a finder chart.
 
         ax: WCSAxes
             WCS axes object.

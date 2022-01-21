@@ -9,7 +9,7 @@ class Annotation(Protocol):
     """An annotation to add to a finder chart."""
 
     def add_to(self, ax: WCSAxes) -> None:
-        """Add this annotation to a plot.
+        """Add this annotation to a finder chart.
 
         Parameters
         ----------
