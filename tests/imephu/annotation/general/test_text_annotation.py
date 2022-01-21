@@ -9,6 +9,7 @@ fits_center = SkyCoord(ra=10 * u.deg, dec=-60 * u.deg)
 
 
 def test_text_annotation(fits_file, check_finder):
+    """Test text annotations."""
     finder_chart = FinderChart(fits_file)
     text_annotation = TextAnnotation(
         fits_center,
@@ -30,6 +31,7 @@ def test_text_annotation(fits_file, check_finder):
     ],
 )
 def test_text_annotation_rotated(center, angle, fits_file, check_finder):
+    """Test rotated text annotations."""
     finder_chart = FinderChart(fits_file)
     non_rotated_text_annotation = TextAnnotation(
         fits_center, "Non-rotated text", wcs=finder_chart.wcs
@@ -44,6 +46,7 @@ def test_text_annotation_rotated(center, angle, fits_file, check_finder):
 
 @pytest.mark.parametrize("displacement", [(0, 0) * u.arcmin, (2.5, -4) * u.arcmin])
 def test_text_annotation_translated(displacement, fits_file, check_finder):
+    """Test translated texzt annotations."""
     s = f"Text start displaced by {displacement}"
     finder_chart = FinderChart(fits_file)
     text_annotation = TextAnnotation(

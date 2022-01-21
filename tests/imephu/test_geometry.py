@@ -24,6 +24,7 @@ from imephu.geometry import rotate, translate
     ],
 )
 def test_geometry_rotate(v, pivot, angle, expected_rotated_v, fits_file):
+    """Test rotations on the sky."""
     finder_chart = FinderChart(fits_file)
     wcs = finder_chart._wcs
     v_rotated = rotate(v, pivot, angle, wcs)
@@ -54,6 +55,7 @@ def test_geometry_rotate(v, pivot, angle, expected_rotated_v, fits_file):
     ],
 )
 def test_geometry_translate(v, displacement, expected_translated_v, fits_file):
+    """Test translations on the sky."""
     v_translated = translate(v, displacement)
     expected_ra_deg = expected_translated_v.ra.to_value(u.deg)
     expected_dec_deg = expected_translated_v.dec.to_value(u.deg)

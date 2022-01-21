@@ -12,7 +12,7 @@ from imephu.geometry import rotate, sky_position_to_pixel, translate
 
 class TextAnnotation(Annotation):
     """An annotation for adding text to a plot.
-    
+
     .. note::
         The `rotate` method rotates the text position, but not the text itself. If you
         want to rotate the text rather than the text position, you should use the
@@ -37,6 +37,7 @@ class TextAnnotation(Annotation):
         Additional keyword arguments, which will be passed to Matplotlib's
         `~matplotlib.axes.Axes.text` method for adding text to plot Axes.
     """  # noqa: E501
+
     def __init__(
         self,
         position: SkyCoord,

@@ -4,14 +4,12 @@ from astropy.coordinates import Angle, SkyCoord
 from astropy.units import Quantity
 from astropy.visualization.wcsaxes import WCSAxes
 
-"""A finder chart annotation."""
-
 
 class Annotation(Protocol):
     """An annotation to add to a finder chart."""
 
     def add_to(self, ax: WCSAxes) -> None:
-        """Add this annotation to a plot
+        """Add this annotation to a plot.
 
         Parameters
         ----------

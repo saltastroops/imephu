@@ -1,3 +1,5 @@
+"""pytest configuration."""
+
 import io
 import pathlib
 
@@ -8,7 +10,7 @@ import pytest
 @pytest.fixture()
 def check_finder(file_regression):
     """
-    A fixture for checking finder charts.
+    Return a function for checking finder charts.
 
     The finder chart is saved as a png, and the png is compared against a previously
     saved version. If no version exists already, the file is saved and the test fails.
@@ -23,6 +25,11 @@ def check_finder(file_regression):
     ----------
     file_regression: file regression fixture
         The file regression fixture from the pytest-regressions plugin.
+
+    Returns
+    -------
+    function
+        A function for checking a finder chart.
     """
 
     def _check_fits(finder_chart):
@@ -37,7 +44,7 @@ def check_finder(file_regression):
 @pytest.fixture()
 def fits_file():
     """
-    A fixture for the path of an example FITS file.
+    Return the path of an example FITS file.
 
     The FITS file whose path is returned shows a 10 arcsecond by 10 arcsecond sky area
     centered on the right ascension 10 degrees and the declination -60 degrees.
@@ -47,5 +54,4 @@ def fits_file():
     `pathlib.Path`
         The path to the example FITS file.
     """
-
     return pathlib.Path(__file__).parent / "data" / "ra10_dec-60.fits"

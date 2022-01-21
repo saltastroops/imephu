@@ -99,6 +99,8 @@ def translate(v: SkyCoord, displacement: Quantity) -> SkyCoord:
 
 def pixel_scales(wcs: WCS) -> Tuple[Angle, Angle]:
     """
+    Calculate the pixel scales of a WCS object.
+
     For a WCS returns pixel scales along each axis of the image pixel at
     the ``CRPIX`` location once it is projected onto the
     "plane of intermediate world coordinates" as defined in
@@ -118,7 +120,7 @@ def pixel_scales(wcs: WCS) -> Tuple[Angle, Angle]:
         celestial axes only, e.g., by passing in the
         `~astropy.wcs.WCS.celestial` WCS object.
 
-    Adapted from APLpy.
+    The code has been adapted from APLpy.
 
     Parameters
     ----------
@@ -204,7 +206,6 @@ def _is_positive_angle_anti_clockwise(wcs: WCS) -> bool:
         ``True`` if angles from north to east correspond to mathematically positive
         ("anti-clockwise") angles on a finder chart, ``False`` otherwise.
     """
-
     origin_px: npt.NDArray[np.float_] = np.array((0.0, 0.0))
     origin_on_sky = pixel_to_sky_position(origin_px, wcs)
     origin_ra = origin_on_sky.ra
