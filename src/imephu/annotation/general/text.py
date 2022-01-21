@@ -67,14 +67,14 @@ class TextAnnotation(Annotation):
         position_px = sky_position_to_pixel(self._position, self._wcs)
         ax.text(position_px[0], position_px[1], self._s, **self._kwargs)  # noqa
 
-    def rotate(self, center: SkyCoord, angle: Angle) -> "TextAnnotation":
-        """Rotate this annotation around a center and return the result.
+    def rotate(self, pivot: SkyCoord, angle: Angle) -> "TextAnnotation":
+        """Rotate this annotation around a pivot and return the result.
 
         The rotation angle is an angle on the sky, measured from north to east.
 
         Parameters
         ----------
-        center: `~astropy.coordinates.SkyCoord`
+        pivot: `~astropy.coordinates.SkyCoord`
             Point around which to rotate the annotation.
         angle: `~astropy.units.Quantity` ["angle"]
             Angle of rotation, measured from north to east.
@@ -85,7 +85,7 @@ class TextAnnotation(Annotation):
             The annotation resulting from the rotation.
         """
         rotated_annotation = deepcopy(self)
-        rotated_position = rotate(self._position, center, angle, self._wcs)
+        rotated_position = rotate(self._position, pivot, angle, self._wcs)
         rotated_annotation._position = rotated_position
         return rotated_annotation
 

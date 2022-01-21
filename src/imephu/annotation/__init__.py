@@ -21,14 +21,14 @@ class Annotation(Protocol):
         """
         ...
 
-    def rotate(self, center: SkyCoord, angle: Angle) -> "Annotation":
-        """Rotate this annotation around a center and return the result.
+    def rotate(self, pivot: SkyCoord, angle: Angle) -> "Annotation":
+        """Rotate this annotation around a pivot and return the result.
 
         The rotation angle is an angle on the sky, measured from north to east.
 
         Parameters
         ----------
-        center: `~astropy.coordinates.SkyCoord`
+        pivot: `~astropy.coordinates.SkyCoord`
             Point around which to rotate the annotation.
         angle: `~astropy.coordinates.Angle`
             Angle of rotation, measured from north towards the east.

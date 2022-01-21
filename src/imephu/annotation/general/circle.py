@@ -67,15 +67,15 @@ class CircleAnnotation(Annotation):
         circle_patch = Circle(center_px, radius_px, **self._kwargs)
         ax.add_patch(circle_patch)
 
-    def rotate(self, center: SkyCoord, angle: Angle) -> "CircleAnnotation":
-        """Rotate this annotation around a center and return the result.
+    def rotate(self, pivot: SkyCoord, angle: Angle) -> "CircleAnnotation":
+        """Rotate this annotation around a pivot and return the result.
 
         The rotation angle is an angle on the sky, measured from north to east.
 
         Parameters
         ----------
-        center: `~astropy.coordinates.SkyCoord`
-            Point around which to rotate the annotation (not the center of the circle).
+        pivot: `~astropy.coordinates.SkyCoord`
+            Point around which to rotate the annotation.
         angle: `~astropy.units.Quantity` ["angle"]
             Angle of rotation, measured from north to east.
 
@@ -85,7 +85,7 @@ class CircleAnnotation(Annotation):
             The annotation resulting from the rotation.
         """
         rotated_annotation = deepcopy(self)
-        rotated_center = rotate(self._center, center, angle, self._wcs)
+        rotated_center = rotate(self._center, pivot, angle, self._wcs)
         rotated_annotation._center = rotated_center
         return rotated_annotation
 
