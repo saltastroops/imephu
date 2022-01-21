@@ -5,15 +5,13 @@ from astropy.coordinates import SkyCoord
 from imephu.annotation.general import TextAnnotation, CircleAnnotation
 from imephu.finder_chart import FinderChart
 
-fits_center = SkyCoord(ra=10 * u.deg, dec=-60 * u.deg)
 
-
-def test_text_annotation(fits_file, check_finder):
+def test_text_annotation(fits_file, fits_center, check_finder):
     """Test text annotations."""
     finder_chart = FinderChart(fits_file)
     text_annotation = TextAnnotation(
         fits_center,
-        "Green, 18 pt, right-aligned",
+        s="Green, 18 pt, right-aligned",
         wcs=finder_chart.wcs,
         color="green",
         fontsize=18,
@@ -46,7 +44,7 @@ def test_text_annotation_rotated(pivot, angle, fits_file, check_finder):
 
 
 @pytest.mark.parametrize("displacement", [(0, 0) * u.arcmin, (2.5, -4) * u.arcmin])
-def test_text_annotation_translated(displacement, fits_file, check_finder):
+def test_text_annotation_translated(displacement, fits_file, fits_center, check_finder):
     """Test translated text annotations."""
     s = f"Some text"
     finder_chart = FinderChart(fits_file)

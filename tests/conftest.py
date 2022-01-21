@@ -5,6 +5,8 @@ import pathlib
 
 import numpy as np
 import pytest
+from astropy.coordinates import SkyCoord
+from astropy import units as u
 
 
 @pytest.fixture()
@@ -55,3 +57,9 @@ def fits_file():
         The path to the example FITS file.
     """
     return pathlib.Path(__file__).parent / "data" / "ra10_dec-60.fits"
+
+
+@pytest.fixture()
+def fits_center():
+    """Return the sky coordinates for the center of the example FITS file."""
+    return SkyCoord(ra=10 * u.deg, dec=-60 * u.deg)
