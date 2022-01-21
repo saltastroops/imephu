@@ -67,7 +67,7 @@ class TextAnnotation(Annotation):
         position_px = sky_position_to_pixel(self._position, self._wcs)
         ax.text(position_px[0], position_px[1], self._s, **self._kwargs)  # noqa
 
-    def rotate(self, center: SkyCoord, angle: Angle) -> Annotation:
+    def rotate(self, center: SkyCoord, angle: Angle) -> "TextAnnotation":
         """Rotate this annotation around a center and return the result.
 
         The rotation angle is an angle on the sky, measured from north to east.
@@ -89,7 +89,7 @@ class TextAnnotation(Annotation):
         rotated_annotation._position = rotated_position
         return rotated_annotation
 
-    def translate(self, displacement: Quantity) -> Annotation:
+    def translate(self, displacement: Quantity) -> "TextAnnotation":
         """
         Move this annotation along a displacement vector and return the result.
 

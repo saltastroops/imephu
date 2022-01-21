@@ -67,7 +67,7 @@ class CircleAnnotation(Annotation):
         circle_patch = Circle(center_px, radius_px, **self._kwargs)
         ax.add_patch(circle_patch)
 
-    def rotate(self, center: SkyCoord, angle: Angle) -> Annotation:
+    def rotate(self, center: SkyCoord, angle: Angle) -> "CircleAnnotation":
         """Rotate this annotation around a center and return the result.
 
         The rotation angle is an angle on the sky, measured from north to east.
@@ -89,7 +89,7 @@ class CircleAnnotation(Annotation):
         rotated_annotation._center = rotated_center
         return rotated_annotation
 
-    def translate(self, displacement: Quantity) -> Annotation:
+    def translate(self, displacement: Quantity) -> "CircleAnnotation":
         """
         Move this annotation along a displacement vector and return the result.
 
