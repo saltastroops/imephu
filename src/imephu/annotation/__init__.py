@@ -1,10 +1,8 @@
 from typing import Protocol
 
-from astropy.coordinates import Angle
+from astropy.coordinates import Angle, SkyCoord
+from astropy.units import Quantity
 from astropy.visualization.wcsaxes import WCSAxes
-
-from imephu.geometry import SkyPosition, SkyVector
-
 
 """A finder chart annotation."""
 
@@ -22,15 +20,17 @@ class Annotation(Protocol):
         """
         ...
 
-    def rotate(self, center: SkyPosition, angle: Angle) -> "Annotation":
+    def rotate(self, center: SkyCoord, angle: Angle) -> "Annotation":
         """Rotate this annotation around a center and return the result.
+
+        The rotation angle is an angle on the sky, measured from north to east.
 
         Parameters
         ----------
-        center: tuple of (`~astropy.units.Quantity` ["angle"], `~astropy.units.Quantity` ["angle"])
+        center: `~astropy.units.SkyCoord`
             Point around which to rotate the annotation.
-        angle: `~astropy.units.Quantity` ["angle"]
-            Angle of rotation. A positive value implies an anti-clockwise rotation.
+        angle: `~astropy.coordinates.Angle`
+            Angle of rotation, measured from north towards the east.
 
         Returns
         -------
@@ -39,13 +39,13 @@ class Annotation(Protocol):
         """
         ...
 
-    def translate(self, displacement: SkyVector) -> "Annotation":
+    def translate(self, displacement: Quantity) -> "Annotation":
         """
         Move this annotation along a displacement vector and return the result.
 
         Parameters
         ----------
-        displacement: `~imephu.geometry.SkyVector`
+        displacement: 2D array of angles
             The displacement by which to move the annotation.
 
         Returns

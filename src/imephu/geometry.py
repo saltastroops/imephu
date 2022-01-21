@@ -1,47 +1,42 @@
+import math
 from math import atan2, cos, sin
-from typing import Tuple
+from typing import Any, Tuple, cast
 
 import numpy as np
-from astropy.coordinates import Angle, SkyCoord
+import numpy.typing as npt
 from astropy import units as u
+from astropy.coordinates import Angle, SkyCoord
 from astropy.units import Quantity
 from astropy.wcs import WCS
-from astropy.wcs.utils import skycoord_to_pixel, pixel_to_skycoord
-
-AngleLike = Quantity
-
-SkyPosition = Tuple[AngleLike, AngleLike]
-
-SkyVector = Tuple[AngleLike, AngleLike]
-
-PixelPosition = Tuple[float, float]
-
-PixelVector = Tuple[float, float]
+from astropy.wcs.utils import pixel_to_skycoord, skycoord_to_pixel
 
 
-def rotate(v: SkyPosition, pivot: SkyPosition, angle: AngleLike, wcs: WCS) -> SkyPosition:
+def rotate(v: SkyCoord, pivot: SkyCoord, angle: Quantity, wcs: WCS) -> SkyCoord:
     """Rotate a point around a pivot.
 
     Both the pivot and the point to rotate are assumed to be given as right ascension
     and declination. The rotation angle is taken to be the angle on the sky. If the
-    pixel scales for right ascebsion abd declination differ, the angle seen on the
+    pixel scales for right ascension and declination differ, the angle seen on the
     finder chart will differ from this angle.
+
+    The angle is measured from north to south. Hence it depends on the orientation of
+    coordinate aces whether a positive angle corresponds to a clockwise or
+    anti-clockwise orientation.
 
     Parameters
     ----------
-    v: tuple of (`~astropy.units.Quantity` ["angle"], `~astropy.units.Quantity` ["angle"])
+    v: 2D array or sequence of `~astropy.units.Quantity` ["angle"]
         The point to rotate.
-    pivot: tuple of (`~astropy.units.Quantity` ["angle"], `~astropy.units.Quantity` ["angle"])
+    pivot: 2D array or sequence of `~astropy.units.Quantity` ["angle"]
         The point around which the point ``v`` is rotated.
     angle: Quantity ["angle"]
-        The angle of rotation. A positive angle corresponds to an anti-clockwise
-        rotation.
+        The angle of rotation, measured from north to east.
     wcs: `~astropy.units.WCS`
         WCS object.
 
     Returns
     -------
-    tuple of (`~astropy.units.Quantity` ["angle"], `~astropy.units.Quantity` ["angle"])
+    `~astropy.units.SkyCoord`
         The point after the rotation.
     """
     # Convert from world coordinates to pixels
@@ -57,16 +52,23 @@ def rotate(v: SkyPosition, pivot: SkyPosition, angle: AngleLike, wcs: WCS) -> Sk
     y_angle_px = float(sx / sy) * y_angle_sky
     angle_px = atan2(y_angle_px, x_angle_px)
 
+    # If necessary, change the sign of the angle to accommodate the orientation of the
+    # axes on the finder chart.
+    if not _is_positive_angle_anti_clockwise(wcs):
+        angle_px *= -1
+
     # Perform the rotation
-    rotation = np.array([[cos(angle_px), -sin(angle_px)], [sin(angle_px), cos(angle_px)]])
-    diff_vector_px = np.array(v_px) - np.array(pivot_px)
+    rotation: Any = np.array(
+        [[cos(angle_px), -sin(angle_px)], [sin(angle_px), cos(angle_px)]]
+    )
+    diff_vector_px: Any = np.array(v_px) - np.array(pivot_px)
     rotated_v_px = np.array(pivot_px) + rotation @ diff_vector_px
 
     # Convert back from pixels to world coordinates
     return pixel_to_sky_position(rotated_v_px, wcs)
 
 
-def translate(v: SkyPosition, displacement: SkyVector, wcs: WCS) -> SkyPosition:
+def translate(v: SkyCoord, displacement: Quantity) -> SkyCoord:
     """Move a point on the by a displacement vector.
 
     The point to move is assumed to be given as right ascension and declination. The
@@ -75,33 +77,33 @@ def translate(v: SkyPosition, displacement: SkyVector, wcs: WCS) -> SkyPosition:
 
     Parameters
     ----------
-    v: tuple of (`~astropy.units.Quantity` ["angle"], `~astropy.units.Quantity` ["angle"])
+    v: `~astropy.units.SkyCoord`
         Point to move.
-    displacement: tuple of (`~astropy.units.Quantity` ["angle"], `~astropy.units.Quantity` ["angle"])
+    displacement: 2D array of angles
         Vector by which to move the point.
-    wcs: `~astropy.wcs.WCS`
-        WCS object.
 
     Returns
     -------
-    tuple of (`~astropy.units.Quantity` ["angle"], `~astropy.units.Quantity` ["angle"])
+    `~astropy.units.SkyCoord`
         The point after moving.
     """
     # Convert from sky coordinates to real angles
-    displacement_delta_ra = displacement[0]
-    displacement_delta_dec = displacement[1] / cos(v[1].to_value(u.rad))
+    displacement_delta_ra = displacement[0] / cos(v.dec.to_value(u.rad))
+    displacement_delta_dec = displacement[1]
 
     # Perform the translation
-    w = (v[0] + displacement_delta_ra, v[1] + displacement_delta_dec)
-    return w
+    translated_v_ra = v.ra + displacement_delta_ra
+    translated_v_dec = v.dec + displacement_delta_dec
+    return SkyCoord(ra=translated_v_ra, dec=translated_v_dec)
 
 
-def pixel_scales(wcs: WCS):
+def pixel_scales(wcs: WCS) -> Tuple[Angle, Angle]:
     """
     For a WCS returns pixel scales along each axis of the image pixel at
     the ``CRPIX`` location once it is projected onto the
     "plane of intermediate world coordinates" as defined in
-    `Greisen & Calabretta 2002, A&A, 395, 1061 <https://ui.adsabs.harvard.edu/abs/2002A%26A...395.1061G>`_.
+    `Greisen & Calabretta 2002, A&A, 395, 1061
+    <https://ui.adsabs.harvard.edu/abs/2002A%26A...395.1061G>`_.
 
     .. note::
         This function is concerned **only** about the transformation
@@ -116,7 +118,7 @@ def pixel_scales(wcs: WCS):
         celestial axes only, e.g., by passing in the
         `~astropy.wcs.WCS.celestial` WCS object.
 
-    Taken from APLpy.
+    Adapted from APLpy.
 
     Parameters
     ----------
@@ -125,7 +127,7 @@ def pixel_scales(wcs: WCS):
 
     Returns
     -------
-    scale : `~numpy.ndarray`
+    scale : tuple of `~astropy.coordinates.Angle`
         A vector (`~numpy.ndarray`) of projection plane increments
         corresponding to each pixel side (axis). The units of the returned
         results are the same as the units of `~astropy.wcs.Wcsprm.cdelt`,
@@ -139,73 +141,124 @@ def pixel_scales(wcs: WCS):
     astropy.wcs.utils.proj_plane_pixel_area
 
     """
-    scale_factors = np.sqrt((wcs.pixel_scale_matrix**2).sum(axis=0, dtype=float))
-    return (Angle(scale_factors[0], wcs.world_axis_units[0]),
-            Angle(scale_factors[1], wcs.world_axis_units[1]))
+    scale_factors = np.sqrt((wcs.pixel_scale_matrix ** 2).sum(axis=0, dtype=float))
+    return (
+        Angle(scale_factors[0], wcs.world_axis_units[0]),
+        Angle(scale_factors[1], wcs.world_axis_units[1]),
+    )
 
 
-def sky_position_to_pixel(position: SkyPosition, wcs: WCS) -> PixelPosition:
+def sky_position_to_pixel(position: SkyCoord, wcs: WCS) -> npt.NDArray[np.float_]:
     """Convert a sky position to the corresponding pixel coordinates.
 
     Parameters
     ----------
-    position: tuple of (`~astropy.units.Quantity` ["angle"], `~astropy.units.Quantity` ["angle"])
+    position: 2D sequence of `~astropy.units.Quantity ["angle"]
         Sky position as right ascension and declination.
     wcs: `~astropy.wcs.WCS`
         WCS object.
 
     Returns
     -------
-    tuple of (float, float)
+    `~numpy.ndarray` of `float`
         The pixel coordinates.
     """
-    print(position)
-    sky_coords = SkyCoord(ra=position[0], dec=position[1])
-    return tuple(skycoord_to_pixel(coords=sky_coords, wcs=wcs))
+    pixel_coords = skycoord_to_pixel(coords=position, wcs=wcs)
+    return cast(npt.NDArray[np.float_], pixel_coords)
 
 
-def pixel_to_sky_position(position_px: PixelPosition, wcs: WCS):
+def pixel_to_sky_position(position_px: npt.NDArray[np.float_], wcs: WCS) -> SkyCoord:
     """Convert pixel coordinates to the corresponding sky position.
 
     Parameters
     ----------
-    position_px: tuple of (float, float)
+    position_px: `sequence` or `~numpy.ndarray` of `float`
         Pixel coordinates.
     wcs: `~astropy.wcs.WCS`
         WCS object.
 
     Returns
     -------
-    tuple of (`~astropy.units.Quantity` ["angle"], `~astropy.units.Quantity` ["angle"])
-        The sky position, as right asension and declination.
+    `~astropy.units.SkyCoord`
+        The sky coordinates.
     """
-    sky_coords = pixel_to_skycoord(position_px[0], position_px[1], wcs)
-    return sky_coords.ra, sky_coords.dec
+    return pixel_to_skycoord(position_px[0], position_px[1], wcs=wcs)  # noqa
 
 
-def sky_vector_to_pixel(vector: SkyVector, wcs: WCS) -> PixelVector:
-    """Convert a vector on the sky to the corresponding vector in pixels.
+def _is_positive_angle_anti_clockwise(wcs: WCS) -> bool:
+    """
+    Return whether for a given WCS positive angles are anti-clockwise when plotted.
 
-    The coordinates of the given vector are assumed to be real angles (rather than
-    coordinate differences). For right ascensions the real angle on the sky is the same
-    as the coordinate difference, but for all declinations other than 0 the two differ.
+    Angles on the sky are measured from north to east, and depending on the axis
+    orientation on the finder chart this may correspond to a mathematically positive
+    ("anti-clockwise") or negative ("clockwise") angle.
 
     Parameters
     ----------
-    vector: tuple of (`~astropy.units.Quantity` ["angle"], `~astropy.units.Quantity` ["angle"])
-        Vector on the sky. The first coordinate is a real angle in the direction of the
-        right ascension. The second coordinate is a real angle in the directio of the
-        declination.
     wcs: `~astropy.wcs.WCS`
         WCS object.
 
     Returns
     -------
-    tuple of (float, float)
-        The vector in pixels.
+    bool
+        ``True`` if angles from north to east correspond to mathematically positive
+        ("anti-clockwise") angles on a finder chart, ``False`` otherwise.
     """
-    ra_pixel_scale, _ = pixel_scales(wcs)
-    vector_px_x = float(vector[0] / ra_pixel_scale)
-    vector_px_y = float(vector[1] / ra_pixel_scale)
-    return vector_px_x, vector_px_y
 
+    origin_px: npt.NDArray[np.float_] = np.array((0.0, 0.0))
+    origin_on_sky = pixel_to_sky_position(origin_px, wcs)
+    origin_ra = origin_on_sky.ra
+    origin_dec = origin_on_sky.dec
+
+    # A "point to the north" on a finder chart
+    point_to_north_ra = origin_ra
+    point_to_north_dec = origin_dec + 1 * u.arcmin
+    point_to_north = SkyCoord(ra=point_to_north_ra, dec=point_to_north_dec)
+    point_to_north_px = sky_position_to_pixel(point_to_north, wcs)
+
+    # A "point to the north-east" on a finder chart
+    point_to_north_east_ra = origin_ra + 1 * u.arcmin
+    point_to_north_east_dec = origin_dec + 1 * u.arcmin
+    point_to_north_east = SkyCoord(
+        ra=point_to_north_east_ra, dec=point_to_north_east_dec
+    )
+    point_to_north_east_px = sky_position_to_pixel(point_to_north_east, wcs)
+
+    # A "point to the north-east" on a finder chart
+    point_to_north_west_ra = origin_ra - 1 * u.arcmin
+    point_to_north_west_dec = origin_dec + 1 * u.arcmin
+    point_to_north_west = SkyCoord(
+        ra=point_to_north_west_ra, dec=point_to_north_west_dec
+    )
+    point_to_north_west_px = sky_position_to_pixel(point_to_north_west, wcs)
+
+    # The difference between the point to the north and the origin gives a vector
+    # pointing north - but as the origin is (0, 0) this is just the point to the north.
+    # The same argument applies for the vector pointing north-east.
+    north_vector_px = point_to_north_px
+    north_east_vector_px = point_to_north_east_px
+    north_west_vector_px = point_to_north_west_px
+
+    # Get the angle between the vectors to the north and to the north-east. Due to
+    # symmetry, this is the same as the angle between the vectors to the north and to
+    # north-west
+    cos_angle = np.dot(north_vector_px, north_east_vector_px) / (
+        np.linalg.norm(north_vector_px) * np.linalg.norm(north_east_vector_px)
+    )
+    angle = math.acos(cos_angle)
+
+    # Rotate the vector to the north (in anti-clockwise direction) by this angle
+    rotation: npt.NDArray[np.float_] = np.array(
+        [[cos(angle), -sin(angle)], [sin(angle), cos(angle)]]
+    )
+    rotated_north_vector_px = np.dot(rotation, north_vector_px)
+
+    # If a rotation from north to east corresponds to an anti-clockwise rotation on a
+    # finder chart, the rotated vector must aligned with the vector to the north-east.
+    # This implies that their scalar product then must be larger than that between the
+    # rotated vector and the vector to the north-west.
+    return cast(
+        bool,
+        np.dot(rotated_north_vector_px, north_east_vector_px)
+        > np.dot(rotated_north_vector_px, north_west_vector_px),
+    )

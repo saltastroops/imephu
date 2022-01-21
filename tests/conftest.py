@@ -40,7 +40,7 @@ def fits_file():
     A fixture for the path of an example FITS file.
 
     The FITS file whose path is returned shows a 10 arcsecond by 10 arcsecond sky area
-    centered on the right ascension 10 degrees and the declination -45 degrees.
+    centered on the right ascension 10 degrees and the declination -60 degrees.
 
     Returns
     -------
@@ -48,4 +48,4 @@ def fits_file():
         The path to the example FITS file.
     """
 
-    return pathlib.Path(__file__).parent / "data" / "ra10_dec-45.fits"
+    return pathlib.Path(__file__).parent / "data" / "ra10_dec-60.fits"

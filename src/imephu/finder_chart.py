@@ -1,13 +1,16 @@
 from __future__ import annotations
+
 import os
-from typing import Any, BinaryIO, Union, Optional
+from typing import Any, BinaryIO, List, Optional, Union
 
 import matplotlib.pyplot as plt
 from astropy.io import fits
-from astropy.wcs import WCS
-from astropy.visualization.mpl_normalize import simple_norm
 from astropy.visualization.interval import AsymmetricPercentileInterval
+from astropy.visualization.mpl_normalize import simple_norm
 from astropy.visualization.wcsaxes.core import WCSAxesSubplot
+from astropy.wcs import WCS
+
+from imephu.annotation import Annotation
 
 """A finder chart."""
 
@@ -32,6 +35,10 @@ class FinderChart:
     ----------
     name: `str`, `path-like` or `binary file-like`
         FITS file to display.
+
+    Attributes
+    ----------
+    wcs
     """
 
     def __init__(self, name: Union[str, BinaryIO, os.PathLike[Any]]):
@@ -40,6 +47,27 @@ class FinderChart:
         # a closed stream later on, we thus force the data to be read in immediately.
         self._data = self._hdu.data
         self._wcs = WCS(self._hdu)
+        self._annotations: List[Annotation] = []
+
+    @property
+    def wcs(self) -> WCS:
+        """Return a deep copy of the WCS object of the finder chart.
+
+        Returns
+        -------
+        `~astropy.wcs.WCS`
+            A deep copy of the WCS object.
+        """
+        return self._wcs.deepcopy()
+
+    def add_annotation(self, annotation: Annotation) -> None:
+        """Add an annotation to the finder chart.
+
+        Annotations will be plotted onto the finder chart in the order they have been
+        added. So, for example, the annotation added last will be output on top of all
+        the other annotations.
+        """
+        self._annotations.append(annotation)
 
     def show(self) -> None:
         """Display the finder chart on the screen."""
@@ -69,15 +97,19 @@ class FinderChart:
             The format in which to store the finder chart.
         """
         self._create_plot()
-        plt.savefig(name, format=format, bbox_inches='tight')
+        plt.savefig(name, format=format, bbox_inches="tight")
 
     def _create_plot(self) -> None:
+        plt.figure(figsize=(10, 9))
         ax = plt.subplot(projection=self._wcs)
 
         self._add_fits_content(ax)
         self._update_axes(ax)
 
-        # ax.coords.grid(True)
+        ax.grid(True, color="blue", alpha=0.2)
+
+        for annotation in self._annotations:
+            annotation.add_to(ax)
 
     def _add_fits_content(self, ax: WCSAxesSubplot) -> None:
         """
@@ -125,5 +157,13 @@ class FinderChart:
                 "the second world axis"
             )
 
-        ax.coords[0].set_axislabel(axis_type_names[x_axis_type])
-        ax.coords[1].set_axislabel(axis_type_names[y_axis_type])
+        x = ax.coords[0]
+        y = ax.coords[1]
+        x.set_axislabel(axis_type_names[x_axis_type])
+        y.set_axislabel(axis_type_names[y_axis_type])
+
+        x.display_minor_ticks(True)
+        y.display_minor_ticks(True)
+
+        x.set_ticks(size=7)
+        y.set_ticks(size=7)
