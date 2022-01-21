@@ -29,7 +29,7 @@ def check_finder(file_regression):
     Returns
     -------
     function
-        A function for checking a finder chart.
+        The function for checking a finder chart.
     """
 
     def _check_fits(finder_chart):

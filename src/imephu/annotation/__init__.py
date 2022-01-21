@@ -5,6 +5,9 @@ from astropy.units import Quantity
 from astropy.visualization.wcsaxes import WCSAxes
 
 
+_all__ = ["Annotation"]
+
+
 class Annotation(Protocol):
     """An annotation to add to a finder chart."""
 
