@@ -81,7 +81,7 @@ class CircleAnnotation(Annotation):
 
         Returns
         -------
-        `~imephu.annotation.Annotation`
+        `~imephu.annotation.general.CircleAnnotation`
             The annotation resulting from the rotation.
         """
         rotated_annotation = deepcopy(self)
@@ -100,7 +100,7 @@ class CircleAnnotation(Annotation):
 
         Returns
         -------
-        `~imephu.annotation.Annotation`
+        `~imephu.annotation.general.CircleAnnotation`
             The annotation resulting from the translation.
         """
         translated_annotation = deepcopy(self)

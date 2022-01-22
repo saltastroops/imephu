@@ -81,7 +81,7 @@ class TextAnnotation(Annotation):
 
         Returns
         -------
-        `~imephu.annotation.Annotation`
+        `~imephu.annotation.general.TextAnnotation`
             The annotation resulting from the rotation.
         """
         rotated_annotation = deepcopy(self)
@@ -100,7 +100,7 @@ class TextAnnotation(Annotation):
 
         Returns
         -------
-        `~imephu.annotation.Annotation`
+        `~imephu.annotation.general.TextAnnotation`
             The annotation resulting from the translation.
         """
         translated_annotation = deepcopy(self)
