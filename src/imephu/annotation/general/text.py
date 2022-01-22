@@ -61,7 +61,7 @@ class TextAnnotation(Annotation):
     def add_to(self, ax: WCSAxes) -> None:
         """Add the text to a finder chart.
 
-        ax: WCSAxes
+        ax:  `~astropy.visualization.wcsaxes.WCSAxes`
             WCS axes object.
         """
         position_px = sky_position_to_pixel(self._position, self._wcs)

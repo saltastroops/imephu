@@ -56,7 +56,7 @@ class CircleAnnotation(Annotation):
     def add_to(self, ax: WCSAxes) -> None:
         """Add the circle to a finder chart.
 
-        ax: WCSAxes
+        ax: `~astropy.visualization.wcsaxes.WCSAxes`
             WCS axes object.
         """
         center_px = cast(
