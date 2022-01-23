@@ -2,8 +2,11 @@ import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 
-from imephu.annotation.general import CircleAnnotation, TextAnnotation
-from imephu.annotation.general.line_path import LinePathAnnotation
+from imephu.annotation.general import (
+    CircleAnnotation,
+    LinePathAnnotation,
+    TextAnnotation,
+)
 from imephu.finder_chart import FinderChart
 
 
