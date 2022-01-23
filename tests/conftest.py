@@ -5,8 +5,8 @@ import pathlib
 
 import numpy as np
 import pytest
-from astropy.coordinates import SkyCoord
 from astropy import units as u
+from astropy.coordinates import SkyCoord
 
 
 @pytest.fixture()

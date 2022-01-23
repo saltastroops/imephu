@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Any, cast, Tuple
+from typing import Any, Tuple, cast
 
 from astropy.coordinates import Angle, SkyCoord
 from astropy.units import Quantity
@@ -8,7 +8,7 @@ from astropy.wcs import WCS
 from matplotlib.patches import Circle
 
 from imephu.annotation import Annotation
-from imephu.geometry import rotate, sky_position_to_pixel, translate, pixel_scales
+from imephu.geometry import pixel_scales, rotate, sky_position_to_pixel, translate
 
 
 class CircleAnnotation(Annotation):

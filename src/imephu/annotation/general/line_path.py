@@ -3,8 +3,8 @@ from typing import Any, Sequence
 
 from astropy.coordinates import Angle, SkyCoord
 from astropy.units import Quantity
-from astropy.wcs import WCS
 from astropy.visualization.wcsaxes import WCSAxes
+from astropy.wcs import WCS
 from matplotlib.patches import PathPatch
 from matplotlib.path import Path
 
@@ -55,7 +55,7 @@ class LinePathAnnotation(Annotation):
             # having that vertex twice
             self._vertices = list(vertices)[:] + [vertices[-1]]
         else:
-            self._vertices = vertices
+            self._vertices = list(vertices)
         self._wcs = wcs
         self._closed = closed
         self._kwargs = deepcopy(kwargs)
@@ -70,8 +70,10 @@ class LinePathAnnotation(Annotation):
         ax: `~astropy.visualization.wcsaxes.WCSAxes`
             Plot axes.
         """
-        vertices_px = [sky_position_to_pixel(vertex, self._wcs) for vertex in self._vertices]
-        path = Path(vertices_px, closed=self._closed)
+        vertices_px = [
+            sky_position_to_pixel(vertex, self._wcs) for vertex in self._vertices
+        ]
+        path = Path(vertices_px, closed=self._closed)  # noqa
         path_patch = PathPatch(path, **self._kwargs)
         ax.add_patch(path_patch)
 
@@ -93,7 +95,9 @@ class LinePathAnnotation(Annotation):
             The annotation resulting from the rotation.
         """
         rotated_annotation = deepcopy(self)
-        rotated_vertices = [rotate(vertex, pivot, angle, self._wcs) for vertex in self._vertices]
+        rotated_vertices = [
+            rotate(vertex, pivot, angle, self._wcs) for vertex in self._vertices
+        ]
         rotated_annotation._vertices = rotated_vertices
         return rotated_annotation
 
@@ -112,6 +116,8 @@ class LinePathAnnotation(Annotation):
             The annotation resulting from the translation.
         """
         translated_annotation = deepcopy(self)
-        translated_vertices = [translate(vertex, displacement) for vertex in self._vertices]
+        translated_vertices = [
+            translate(vertex, displacement) for vertex in self._vertices
+        ]
         translated_annotation._vertices = translated_vertices
         return translated_annotation

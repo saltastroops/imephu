@@ -1,8 +1,8 @@
-from typing import List, Any, cast
+from typing import Any, List, cast
 
 import numpy as np
 from astropy import units as u
-from astropy.coordinates import SkyCoord, Angle
+from astropy.coordinates import Angle, SkyCoord
 from astropy.units import Quantity
 from astropy.wcs import WCS
 
@@ -47,10 +47,23 @@ class RectangleAnnotation(LinePathAnnotation):
         `~matplotlib.patches.PathPatch` patch constructor.
     """
 
-    def __init__(self, center: SkyCoord, width: Quantity, height: Quantity, wcs: WCS, edgecolor: str="black", facecolor: str="none", **kwargs: Any):
+    def __init__(
+        self,
+        center: SkyCoord,
+        width: Quantity,
+        height: Quantity,
+        wcs: WCS,
+        edgecolor: str = "black",
+        facecolor: str = "none",
+        **kwargs: Any,
+    ):
         super().__init__(
             vertices=RectangleAnnotation._corners(center, width, height),
-            wcs=wcs, closed=True, edgecolor=edgecolor, facecolor=facecolor, **kwargs
+            wcs=wcs,
+            closed=True,
+            edgecolor=edgecolor,
+            facecolor=facecolor,
+            **kwargs,
         )
 
     @staticmethod
@@ -60,7 +73,15 @@ class RectangleAnnotation(LinePathAnnotation):
         half_height_arcsec = height.to_value(u.arcsec) / 2
         directions = [(-1, -1), (1, -1), (1, 1), (-1, 1)]
         for direction in directions:
-            center_to_corner = np.array((direction[0] * half_width_arcsec, direction[1] * half_height_arcsec)) * u.arcsec
+            center_to_corner = (
+                np.array(
+                    (
+                        direction[0] * half_width_arcsec,
+                        direction[1] * half_height_arcsec,
+                    )
+                )
+                * u.arcsec
+            )
             corner = translate(center, center_to_corner)
             corners.append(corner)
         return corners
@@ -99,4 +120,3 @@ class RectangleAnnotation(LinePathAnnotation):
             The annotation resulting from the translation.
         """
         return cast(RectangleAnnotation, super().translate(displacement))
-

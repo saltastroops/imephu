@@ -4,7 +4,6 @@ from astropy.coordinates import Angle, SkyCoord
 from astropy.units import Quantity
 from astropy.visualization.wcsaxes import WCSAxes
 
-
 _all__ = ["Annotation"]
 
 
