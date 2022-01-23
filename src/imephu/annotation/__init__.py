@@ -1,7 +1,6 @@
 from typing import Protocol
 
 from astropy.coordinates import Angle, SkyCoord
-from astropy.units import Quantity
 from astropy.visualization.wcsaxes import WCSAxes
 
 _all__ = ["Annotation"]
@@ -39,7 +38,7 @@ class Annotation(Protocol):
         """
         ...
 
-    def translate(self, displacement: Quantity) -> "Annotation":
+    def translate(self, displacement: Angle) -> "Annotation":
         """
         Move this annotation along a displacement vector and return the result.
 

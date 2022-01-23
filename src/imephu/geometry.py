@@ -6,12 +6,11 @@ import numpy as np
 import numpy.typing as npt
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
-from astropy.units import Quantity
 from astropy.wcs import WCS
 from astropy.wcs.utils import pixel_to_skycoord, skycoord_to_pixel
 
 
-def rotate(v: SkyCoord, pivot: SkyCoord, angle: Quantity, wcs: WCS) -> SkyCoord:
+def rotate(v: SkyCoord, pivot: SkyCoord, angle: Angle, wcs: WCS) -> SkyCoord:
     """Rotate a point around a pivot.
 
     Both the pivot and the point to rotate are assumed to be given as right ascension
@@ -29,9 +28,9 @@ def rotate(v: SkyCoord, pivot: SkyCoord, angle: Quantity, wcs: WCS) -> SkyCoord:
         The point to rotate.
     pivot: `~astropy.coordinates.SkyCoord`
         The point around which the point ``v`` is rotated.
-    angle: Quantity ["angle"]
+    angle: `~astropy.coordinates.Angle`
         The angle of rotation, measured from north to east.
-    wcs: `~astropy.units.WCS`
+    wcs: `~astropy.wcs.WCS`
         WCS object.
 
     Returns
@@ -68,7 +67,7 @@ def rotate(v: SkyCoord, pivot: SkyCoord, angle: Quantity, wcs: WCS) -> SkyCoord:
     return pixel_to_sky_position(rotated_v_px, wcs)
 
 
-def translate(v: SkyCoord, displacement: Quantity) -> SkyCoord:
+def translate(v: SkyCoord, displacement: Angle) -> SkyCoord:
     """Move a point on the by a displacement vector.
 
     The point to move is assumed to be given as right ascension and declination. The

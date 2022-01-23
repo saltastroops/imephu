@@ -3,7 +3,6 @@ from typing import Any, List, cast
 import numpy as np
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
-from astropy.units import Quantity
 from astropy.wcs import WCS
 
 from imephu.annotation.general.line_path import LinePathAnnotation
@@ -30,10 +29,10 @@ class RectangleAnnotation(LinePathAnnotation):
     ----------
     center: `~astropy.coordinates.SkyCoord`
         The center of the rectangle, in right ascension and declination.
-    width: `~astropy.units.Quantity` ["angle"]
+    width: `~astropy.coordinates.Angle`
         The width of the rectangle as an angle on the sky in the direction of the
         right ascension.
-    height: ~astropy.units.Quantity` ["angle"]
+    height: `~astropy.coordinates.Angle`
         The height of the rectangle as an angle on the sky in the direction of the
         declination.
     wcs: `~astropy.wcs.WCS`
@@ -50,8 +49,8 @@ class RectangleAnnotation(LinePathAnnotation):
     def __init__(
         self,
         center: SkyCoord,
-        width: Quantity,
-        height: Quantity,
+        width: Angle,
+        height: Angle,
         wcs: WCS,
         edgecolor: str = "black",
         facecolor: str = "none",
@@ -67,7 +66,7 @@ class RectangleAnnotation(LinePathAnnotation):
         )
 
     @staticmethod
-    def _corners(center: SkyCoord, width: Quantity, height: Quantity) -> List[SkyCoord]:
+    def _corners(center: SkyCoord, width: Angle, height: Angle) -> List[SkyCoord]:
         corners: List[SkyCoord] = []
         half_width_arcsec = width.to_value(u.arcsec) / 2
         half_height_arcsec = height.to_value(u.arcsec) / 2
@@ -105,7 +104,7 @@ class RectangleAnnotation(LinePathAnnotation):
         """
         return cast(RectangleAnnotation, super().rotate(pivot, angle))
 
-    def translate(self, displacement: Quantity) -> "RectangleAnnotation":
+    def translate(self, displacement: Angle) -> "RectangleAnnotation":
         """
         Move this annotation along a displacement vector and return the result.
 

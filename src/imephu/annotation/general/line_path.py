@@ -2,7 +2,6 @@ from copy import deepcopy
 from typing import Any, Sequence
 
 from astropy.coordinates import Angle, SkyCoord
-from astropy.units import Quantity
 from astropy.visualization.wcsaxes import WCSAxes
 from astropy.wcs import WCS
 from matplotlib.patches import PathPatch
@@ -101,7 +100,7 @@ class LinePathAnnotation(Annotation):
         rotated_annotation._vertices = rotated_vertices
         return rotated_annotation
 
-    def translate(self, displacement: Quantity) -> "LinePathAnnotation":
+    def translate(self, displacement: Angle) -> "LinePathAnnotation":
         """
         Move this annotation along a displacement vector and return the result.
 

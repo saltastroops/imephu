@@ -2,7 +2,6 @@ from copy import deepcopy
 from typing import Any, Literal
 
 from astropy.coordinates import Angle, SkyCoord
-from astropy.units import Quantity
 from astropy.visualization.wcsaxes import WCSAxes
 from astropy.wcs import WCS
 
@@ -76,7 +75,7 @@ class TextAnnotation(Annotation):
         ----------
         pivot: `~astropy.coordinates.SkyCoord`
             Point around which to rotate the annotation.
-        angle: `~astropy.units.Quantity` ["angle"]
+        angle: `~astropy.coordinates.Angle`
             Angle of rotation, measured from north to east.
 
         Returns
@@ -89,7 +88,7 @@ class TextAnnotation(Annotation):
         rotated_annotation._position = rotated_position
         return rotated_annotation
 
-    def translate(self, displacement: Quantity) -> "TextAnnotation":
+    def translate(self, displacement: Angle) -> "TextAnnotation":
         """
         Move this annotation along a displacement vector and return the result.
 

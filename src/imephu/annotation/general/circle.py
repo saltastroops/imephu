@@ -2,7 +2,6 @@ from copy import deepcopy
 from typing import Any, Tuple, cast
 
 from astropy.coordinates import Angle, SkyCoord
-from astropy.units import Quantity
 from astropy.visualization.wcsaxes import WCSAxes
 from astropy.wcs import WCS
 from matplotlib.patches import Circle
@@ -23,7 +22,7 @@ class CircleAnnotation(Annotation):
     ----------
     center: `~astropy.coordinates.SkyCoord`
         The right ascension and declination of the circle's center.
-    radius: `~astropy.units.Quantity` ["angle"]
+    radius: `~astropy.coordinates.Angle`
         The circle radius, as an angular distance on the sky in right ascension
         direction.
     wcs: `~astropy.wcs.WCS`
@@ -40,7 +39,7 @@ class CircleAnnotation(Annotation):
     def __init__(
         self,
         center: SkyCoord,
-        radius: Quantity,
+        radius: Angle,
         wcs: WCS,
         edgecolor: str = "black",
         facecolor: str = "none",
@@ -76,7 +75,7 @@ class CircleAnnotation(Annotation):
         ----------
         pivot: `~astropy.coordinates.SkyCoord`
             Point around which to rotate the annotation.
-        angle: `~astropy.units.Quantity` ["angle"]
+        angle: `~astropy.coordinates.Angle`
             Angle of rotation, measured from north to east.
 
         Returns
@@ -89,7 +88,7 @@ class CircleAnnotation(Annotation):
         rotated_annotation._center = rotated_center
         return rotated_annotation
 
-    def translate(self, displacement: Quantity) -> "CircleAnnotation":
+    def translate(self, displacement: Angle) -> "CircleAnnotation":
         """
         Move this annotation along a displacement vector and return the result.
 
