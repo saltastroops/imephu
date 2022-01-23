@@ -9,6 +9,7 @@ from astropy.visualization.interval import AsymmetricPercentileInterval
 from astropy.visualization.mpl_normalize import simple_norm
 from astropy.visualization.wcsaxes.core import WCSAxesSubplot
 from astropy.wcs import WCS
+from matplotlib.figure import Figure
 
 from imephu.annotation import Annotation
 
@@ -67,8 +68,9 @@ class FinderChart:
 
     def show(self) -> None:
         """Display the finder chart on the screen."""
-        self._create_plot()
+        figure = self._create_plot()
         plt.show()
+        plt.close(figure)
 
     def save(
         self,
@@ -92,11 +94,12 @@ class FinderChart:
         format: `str`, optional
             The format in which to store the finder chart.
         """
-        self._create_plot()
+        figure = self._create_plot()
         plt.savefig(name, format=format, bbox_inches="tight")
+        plt.close(figure)
 
-    def _create_plot(self) -> None:
-        plt.figure(figsize=(10, 9))
+    def _create_plot(self) -> Figure:
+        figure = plt.figure(figsize=(10, 9))
         ax = plt.subplot(projection=self._wcs)
 
         self._add_fits_content(ax)
@@ -106,6 +109,8 @@ class FinderChart:
 
         for annotation in self._annotations:
             annotation.add_to(ax)
+
+        return figure
 
     def _add_fits_content(self, ax: WCSAxesSubplot) -> None:
         """
