@@ -165,7 +165,7 @@ def sky_position_to_pixel(position: SkyCoord, wcs: WCS) -> npt.NDArray[np.float_
         The pixel coordinates.
     """
     pixel_coords = skycoord_to_pixel(coords=position, wcs=wcs)
-    return cast(npt.NDArray[np.float_], pixel_coords)
+    return np.array([float(pixel_coords[0].item()), float(pixel_coords[1].item())])
 
 
 def pixel_to_sky_position(position_px: npt.NDArray[np.float_], wcs: WCS) -> SkyCoord:
