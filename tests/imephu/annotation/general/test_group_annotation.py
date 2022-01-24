@@ -41,9 +41,7 @@ def test_group_annotation(fits_file, check_finder):
         alpha=0.2,
         linewidth=4,
     )
-    group_annotation = GroupAnnotation(
-        [rectangle1_annotation, rectangle2_annotation]
-    )
+    group_annotation = GroupAnnotation([rectangle1_annotation, rectangle2_annotation])
     group_annotation.add_item(circle_annotation)
     finder_chart.add_annotation(group_annotation)
     check_finder(finder_chart)
