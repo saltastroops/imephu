@@ -1,9 +1,9 @@
 from typing import Any
 
 import numpy as np
-from numpy import typing as npt
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
+from numpy import typing as npt
 
 from imephu.annotation.general import GroupAnnotation, LinePathAnnotation
 from imephu.geometry import pixel_scales, pixel_to_sky_position, sky_position_to_pixel

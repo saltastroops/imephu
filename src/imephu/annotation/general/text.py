@@ -1,6 +1,8 @@
 from copy import deepcopy
-from typing import Any, Literal
+from typing import Any, Literal, Sequence, Union
 
+import numpy as np
+import numpy.typing as npt
 from astropy.coordinates import Angle, SkyCoord
 from astropy.visualization.wcsaxes import WCSAxes
 from astropy.wcs import WCS
@@ -12,6 +14,14 @@ from imephu.geometry import rotate, sky_position_to_pixel, translate
 class TextAnnotation(Annotation):
     """An annotation for adding text to a plot.
 
+    The text position can be specified as a position on the sky (as an instance of
+    `~astropy.coordinates.SkyCoord`) or as a point in axes coordinates (as an array of
+    `float` values. Axes coordinates range from (0, 0) (bottom left of the axes) to
+    (1, 1) (top right of the axes).
+
+    You can only rotate and translate the annotation if the text position is specified
+    as a position on the sky.
+
     .. note::
         The `rotate` method rotates the text position, but not the text itself. If you
         want to rotate the text rather than the text position, you should use the
@@ -20,7 +30,7 @@ class TextAnnotation(Annotation):
 
     Parameters
     ----------
-    position: `~astropy.coordinates.SkyCoord`
+    position: `~astropy.coordinates.SkyCoord` or
         The right ascension and declination of the point where to put the text.
     s: str
         The text.
@@ -39,7 +49,7 @@ class TextAnnotation(Annotation):
 
     def __init__(
         self,
-        position: SkyCoord,
+        position: Union[SkyCoord, Sequence[float], npt.NDArray[np.float_]],
         s: str,
         wcs: WCS,
         color: str = "black",
@@ -63,8 +73,17 @@ class TextAnnotation(Annotation):
         ax:  `~astropy.visualization.wcsaxes.WCSAxes`
             WCS axes object.
         """
-        position_px = sky_position_to_pixel(self._position, self._wcs)
-        ax.text(position_px[0], position_px[1], self._s, **self._kwargs)  # noqa
+        if type(self._position) == SkyCoord:
+            position_px = sky_position_to_pixel(self._position, self._wcs)
+            ax.text(position_px[0], position_px[1], self._s, **self._kwargs)  # noqa
+        else:
+            ax.text(
+                self._position[0],
+                self._position[1],
+                self._s,
+                transform=ax.transAxes,
+                **self._kwargs,
+            )
 
     def rotate(self, pivot: SkyCoord, angle: Angle) -> "TextAnnotation":
         """Rotate this annotation around a pivot and return the result.
@@ -83,6 +102,11 @@ class TextAnnotation(Annotation):
         `~imephu.annotation.general.TextAnnotation`
             The annotation resulting from the rotation.
         """
+        if type(self._position) is not SkyCoord:
+            raise NotImplementedError(
+                "The text can only be rotated if its position is an instance of "
+                "astropy.coord.SkyCoord."
+            )
         rotated_annotation = deepcopy(self)
         rotated_position = rotate(self._position, pivot, angle, self._wcs)
         rotated_annotation._position = rotated_position
@@ -102,6 +126,11 @@ class TextAnnotation(Annotation):
         `~imephu.annotation.general.TextAnnotation`
             The annotation resulting from the translation.
         """
+        if type(self._position) is not SkyCoord:
+            raise NotImplementedError(
+                "The text can only be translated if its position is an instance of "
+                "astropy.coord.SkyCoord."
+            )
         translated_annotation = deepcopy(self)
         translated_position = translate(self._position, displacement)
         translated_annotation._position = translated_position

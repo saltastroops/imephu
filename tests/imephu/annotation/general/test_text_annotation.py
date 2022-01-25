@@ -1,6 +1,9 @@
+from contextlib import contextmanager
+
+import numpy as np
 import pytest
 from astropy import units as u
-from astropy.coordinates import SkyCoord
+from astropy.coordinates import Angle, SkyCoord
 
 from imephu.annotation.general import CircleAnnotation, TextAnnotation
 from imephu.finder_chart import FinderChart
@@ -19,6 +22,44 @@ def test_text_annotation(fits_file, fits_center, check_finder):
     )
     finder_chart.add_annotation(text_annotation)
     check_finder(finder_chart)
+
+
+def test_text_annotation_with_axes_coordinates(fits_file, check_finder):
+    """Test text annotations."""
+    finder_chart = FinderChart(fits_file)
+    text_annotation = TextAnnotation(
+        (0.5, 1.05),
+        s="Orange, 18 pt, centered",
+        wcs=finder_chart.wcs,
+        color="orange",
+        fontsize=18,
+        horizontalalignment="center",
+    )
+    finder_chart.add_annotation(text_annotation)
+    check_finder(finder_chart)
+
+
+@contextmanager
+def _does_not_raise():
+    yield
+
+
+@pytest.mark.parametrize(
+    "position,expectation",
+    [
+        (SkyCoord(ra="00h40m00s", dec="-60d00m00s"), _does_not_raise()),
+        ((0.5, 0.5), pytest.raises(NotImplementedError)),
+        (np.array((0.5, 0.5)), pytest.raises(NotImplementedError)),
+    ],
+)
+def test_text_annotation_rotation_only_defined_for_sky_position(
+    position, expectation, fits_file, fits_center
+):
+    """Test that rotation is only implemented for sky positions."""
+    finder_chart = FinderChart(fits_file)
+    text_annotation = TextAnnotation(position, "Some Text", wcs=finder_chart.wcs)
+    with expectation:
+        text_annotation.rotate(fits_center, Angle("30deg"))  # noqa
 
 
 @pytest.mark.parametrize(
@@ -82,3 +123,21 @@ def test_text_annotation_translated(displacement, fits_file, fits_center, check_
     finder_chart.add_annotation(translated_text_annotation)
     finder_chart.add_annotation(legend)
     check_finder(finder_chart)
+
+
+@pytest.mark.parametrize(
+    "position,expectation",
+    [
+        (SkyCoord(ra="00h40m00s", dec="-60d00m00s"), _does_not_raise()),
+        ((0.5, 0.5), pytest.raises(NotImplementedError)),
+        (np.array((0.5, 0.5)), pytest.raises(NotImplementedError)),
+    ],
+)
+def test_text_annotation_translation_only_defined_for_sky_position(
+    position, expectation, fits_file
+):
+    """Test that translation is only implemented for sky positions."""
+    finder_chart = FinderChart(fits_file)
+    text_annotation = TextAnnotation(position, "Some Text", wcs=finder_chart.wcs)
+    with expectation:
+        text_annotation.translate(Angle((2.5, -4) * u.arcmin))
