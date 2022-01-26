@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Any, Literal, Sequence, Union
+from typing import Any, Literal, Sequence, Tuple, Union
 
 import numpy as np
 import numpy.typing as npt
@@ -36,7 +36,7 @@ class TextAnnotation(Annotation):
         The text.
     wcs: `~astropy.wcs.WCS`
         WCS object.
-    color: str, default: "black"
+    color: color, default: "black"
         The text color.
     horizontalalignment: {"center", "left", "right"}, default: "center"
         The horizontal alignment of the text.
@@ -52,7 +52,7 @@ class TextAnnotation(Annotation):
         position: Union[SkyCoord, Sequence[float], npt.NDArray[np.float_]],
         s: str,
         wcs: WCS,
-        color: str = "black",
+        color: Union[str, Tuple[float, float, float]] = "black",
         horizontalalignment: Literal["center", "left", "right"] = "center",
         verticalalignment: Literal[
             "baseline", "bottom", "center", "center_baseline", "top"

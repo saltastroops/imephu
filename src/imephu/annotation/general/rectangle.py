@@ -1,4 +1,4 @@
-from typing import Any, List, cast
+from typing import Any, List, Tuple, Union, cast
 
 import numpy as np
 from astropy import units as u
@@ -37,9 +37,9 @@ class RectangleAnnotation(LinePathAnnotation):
         declination.
     wcs: `~astropy.wcs.WCS`
         WCS object.
-    edgecolor: str, default: "black"
+    edgecolor: color, default: "black"
         The edge color.
-    facecolor: str, default: "none"
+    facecolor: color, default: "none"
         The filling color.
     **kwargs: dict, optional
         Additional keyword arguments, which will be passed to Matplotlib's
@@ -52,8 +52,8 @@ class RectangleAnnotation(LinePathAnnotation):
         width: Angle,
         height: Angle,
         wcs: WCS,
-        edgecolor: str = "black",
-        facecolor: str = "none",
+        edgecolor: Union[str, Tuple[float, float, float]] = "black",
+        facecolor: Union[str, Tuple[float, float, float]] = "none",
         **kwargs: Any,
     ):
         super().__init__(

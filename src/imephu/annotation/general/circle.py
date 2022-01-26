@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Any, Tuple, cast
+from typing import Any, Tuple, Union, cast
 
 from astropy.coordinates import Angle, SkyCoord
 from astropy.visualization.wcsaxes import WCSAxes
@@ -27,9 +27,9 @@ class CircleAnnotation(Annotation):
         direction.
     wcs: `~astropy.wcs.WCS`
         WCS object.
-    edgecolor: str, default: "black"
+    edgecolor: color, default: "black"
         The edge color.
-    facecolor: str, default: "none"
+    facecolor: color, default: "none"
         The filling color.
     **kwargs: dict, optional
         Additional keyword arguments, which will be passed to Matplotlib's
@@ -41,8 +41,8 @@ class CircleAnnotation(Annotation):
         center: SkyCoord,
         radius: Angle,
         wcs: WCS,
-        edgecolor: str = "black",
-        facecolor: str = "none",
+        edgecolor: Union[str, Tuple[float, float, float]] = "black",
+        facecolor: Union[str, Tuple[float, float, float]] = "none",
         **kwargs: Any,
     ):
         self._center = center

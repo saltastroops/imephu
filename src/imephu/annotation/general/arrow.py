@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Tuple, Union
 
 import numpy as np
 from astropy.coordinates import Angle, SkyCoord
@@ -36,7 +36,7 @@ class ArrowAnnotation(GroupAnnotation):
         Whether the arrow head is filled.
     tail_shown: `bool`, default: True
         Whether the tail should be shown. If ``False``, only the head is displayed.
-    color: `str`, default: "black"
+    color: color, default: "black"
         The arrow color.
     **kwargs: dict, optional
         Additional keyword arguments, which will be passed to the
@@ -53,7 +53,7 @@ class ArrowAnnotation(GroupAnnotation):
         head_height: Angle,
         head_filled: bool = False,
         tail_shown: bool = True,
-        color: str = "black",
+        color: Union[str, Tuple[float, float, float]] = "black",
         **kwargs: Any,
     ):
         super().__init__([])
@@ -67,7 +67,11 @@ class ArrowAnnotation(GroupAnnotation):
 
     @staticmethod
     def _tail(
-        start: SkyCoord, end: SkyCoord, wcs: WCS, color: str, **kwargs: Any
+        start: SkyCoord,
+        end: SkyCoord,
+        wcs: WCS,
+        color: Union[str, Tuple[float, float, float]],
+        **kwargs: Any,
     ) -> LinePathAnnotation:
         return LinePathAnnotation(
             vertices=[start, end], wcs=wcs, closed=False, edgecolor=color, **kwargs
@@ -81,7 +85,7 @@ class ArrowAnnotation(GroupAnnotation):
         head_width: Angle,
         head_height: Angle,
         head_filled: bool,
-        color: str,
+        color: Union[str, Tuple[float, float, float]],
         **kwargs: Any,
     ) -> LinePathAnnotation:
         # Let S, be the start of the arrow's tail, T be the tip of the arrow and A, B

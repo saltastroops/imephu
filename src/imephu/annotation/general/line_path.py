@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Any, Sequence
+from typing import Any, Sequence, Tuple, Union
 
 from astropy.coordinates import Angle, SkyCoord
 from astropy.visualization.wcsaxes import WCSAxes
@@ -31,9 +31,9 @@ class LinePathAnnotation(Annotation):
     closed: bool, default: True
         Whether the the path is closed, i.e. whether the last vertex is connected to the
         first by a line.
-    edgecolor: str, default: "black"
+    edgecolor: color, default: "black"
         The edge color.
-    facecolor: str, default: "none"
+    facecolor: color, default: "none"
         The filling color.
     **kwargs: dict, optional
         Additional keyword arguments, which will be passed to Matplotlib's
@@ -45,8 +45,8 @@ class LinePathAnnotation(Annotation):
         vertices: Sequence[SkyCoord],
         wcs: WCS,
         closed: bool = True,
-        edgecolor: str = "black",
-        facecolor: str = "none",
+        edgecolor: Union[str, Tuple[float, float, float]] = "black",
+        facecolor: Union[str, Tuple[float, float, float]] = "none",
         **kwargs: Any,
     ):
         if closed:
