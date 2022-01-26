@@ -53,3 +53,10 @@ def test_position_angle_annotation(angle, automated, fits_file, check_finder):
     finder_chart.add_annotation(position_angle_annotation)
     finder_chart.add_annotation(legend)
     check_finder(finder_chart)
+
+
+def test_survey_annotation(fits_file, check_finder):
+    finder_chart = FinderChart(fits_file)
+    survey_annotation = general.survey("POSS2/UKSTU Red", finder_chart.wcs)
+    finder_chart.add_annotation(survey_annotation)
+    check_finder(finder_chart)

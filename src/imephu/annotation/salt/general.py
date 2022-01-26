@@ -99,18 +99,47 @@ def position_angle(angle: Angle, automated: bool, wcs: WCS) -> TextAnnotation:
 
     Returns
     -------
-    `~immephu.annotation.general.TextAnnotation`
+    `~imephu.annotation.general.TextAnnotation`
         The annotation for the position angle.
     """
     text = f"PA = {angle.to_value(u.degree):.1f}"
     if automated:
         text += " (auto)"
     return TextAnnotation(
-        (1, -0.06),
+        (1, -0.068),
         text,
         wcs=wcs,
         color="black",
         horizontalalignment="right",
+        verticalalignment="baseline",
+        style="italic",
+        weight="bold",
+        size="large",
+    )
+
+
+def survey(survey_name: str, wcs: WCS) -> TextAnnotation:
+    """Return a text annotation with the survey name.
+
+    Parameters
+    ----------
+    survey_name: str
+        The survey name.
+    wcs: `~astropy.wcs.WCS`
+        WCS object.
+
+    Returns
+    -------
+    `~imephu.annotation.general.TextAnnotation`
+        The annotation with the survey name.
+    """
+    return TextAnnotation(
+        (0, -0.068),
+        survey_name,
+        wcs=wcs,
+        color="black",
+        horizontalalignment="left",
+        verticalalignment="baseline",
         style="italic",
         weight="bold",
         size="large",
