@@ -28,11 +28,21 @@ def test_directions_annotation(fits_file, fits_center, check_finder):
     check_finder(finder_chart)
 
 
-@pytest.mark.parametrize("angle,automated", [(Angle(1200 * u.arcmin), False), (Angle(-67.88 * u.deg), True), (Angle(127.14 * u.deg), False), (Angle(-77.3 * u.deg), True)])
+@pytest.mark.parametrize(
+    "angle,automated",
+    [
+        (Angle(1200 * u.arcmin), False),
+        (Angle(-67.88 * u.deg), True),
+        (Angle(127.14 * u.deg), False),
+        (Angle(-77.3 * u.deg), True),
+    ],
+)
 def test_position_angle_annotation(angle, automated, fits_file, check_finder):
-    """Test the position angle annotation"""
+    """Test the position angle annotation."""
     finder_chart = FinderChart(fits_file)
-    position_angle_annotation = general.position_angle(angle, automated, finder_chart.wcs)
+    position_angle_annotation = general.position_angle(
+        angle, automated, finder_chart.wcs
+    )
     legend = TextAnnotation(
         SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
         f"angle: {angle}, automated: {automated}",
