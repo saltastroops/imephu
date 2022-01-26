@@ -2,12 +2,12 @@ from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
-from imephu.annotation.general import GroupAnnotation, TextAnnotation
+from imephu.annotation.general import GroupAnnotation, TextAnnotation, CircleAnnotation
 
-BLUE_COLOR = (0, 0.5, 1)
+LIGHT_BLUE = (0, 0.5, 1)
 
 
-def title(
+def title_annotation(
     target: str, proposal_code: str, pi_family_name: str, wcs: WCS
 ) -> TextAnnotation:
     """Return a text annotation with the title to the finder chart.
@@ -29,7 +29,7 @@ def title(
     Returns
     -------
     `~imephu.annotation.general.TextAnnotation`
-        The titke annotation.
+        The title annotation.
     """
     title_text = f"{target} ({proposal_code}; {pi_family_name})"
     return TextAnnotation(
@@ -44,13 +44,13 @@ def title(
     )
 
 
-def directions(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation:
+def directions_annotation(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation:
     """Return an annotation for the east and north direction.
 
     Parameters
     ----------
     fits_center: `~astropy.coordinates.SkyCoord`
-        The central position of the finder chart, in right ascension and declination
+        The central position of the finder chart, in right ascension and declination.
     wcs: `~astropy.wcs.WCS`
         WCS object.
 
@@ -63,7 +63,7 @@ def directions(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation:
         fits_center,
         "E",
         wcs=wcs,
-        color=BLUE_COLOR,
+        color=LIGHT_BLUE,
         horizontalalignment="right",
         style="italic",
         weight="bold",
@@ -73,7 +73,7 @@ def directions(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation:
         fits_center,
         "N",
         wcs=wcs,
-        color=BLUE_COLOR,
+        color=LIGHT_BLUE,
         style="italic",
         weight="bold",
         size="large",
@@ -81,7 +81,75 @@ def directions(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation:
     return GroupAnnotation([east_annotation, north_annotation])
 
 
-def position_angle(angle: Angle, automated: bool, wcs: WCS) -> TextAnnotation:
+def salticam_field_of_view_annotation(
+    fits_center: SkyCoord, wcs: WCS
+) -> GroupAnnotation:
+    """
+    Return an annotation with the Salticam field of view.
+
+    Parameters
+    ----------
+    `~astropy.coordinates.SkyCoord`
+        The central position of the finder chart, in right ascension and declination.
+    wcs: `~astropy.wcs.WCS`
+        WCS object.
+
+    Returns
+    -------
+    `~imephu.annotation.general.GroupAnnotation`
+        An annotation with the Salticam field of view.
+    """
+    fov_annotation = CircleAnnotation(
+        fits_center, 5 * u.arcmin, wcs=wcs, edgecolor="green"
+    )
+    name_annotation = TextAnnotation(
+        (0.86, 0.86),
+        "SCAM",
+        wcs=wcs,
+        style="italic",
+        weight="bold",
+        size="large",
+        horizontalalignment="left",
+        color=(0, 0, 1),
+    )
+    return GroupAnnotation([fov_annotation, name_annotation])
+
+
+def rss_field_of_view_annotation(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation:
+    """
+    Return an annotation with the RSS field of view.
+
+    Parameters
+    ----------
+    `~astropy.coordinates.SkyCoord`
+        The central position of the finder chart, in right ascension and declination.
+    wcs: `~astropy.wcs.WCS`
+        WCS object.
+
+    Returns
+    -------
+    `~imephu.annotation.general.GroupAnnotation`
+        An annotation with the RSS field of view.
+    """
+    fov_annotation = CircleAnnotation(
+        fits_center, 4 * u.arcmin, wcs=wcs, edgecolor="green"
+    )
+    name_annotation = TextAnnotation(
+        (0.79, 0.79),
+        "RSS",
+        wcs=wcs,
+        style="italic",
+        weight="bold",
+        size="large",
+        horizontalalignment="left",
+        color=(0, 0, 1),
+    )
+    return GroupAnnotation([fov_annotation, name_annotation])
+
+
+def position_angle_annotation(
+    position_angle: Angle, automated_position_angle: bool, wcs: WCS
+) -> TextAnnotation:
     """Return a text annotation with the position angle.
 
     The text of the annotation is "PA: angle (auto)", where angle is a value in degrees,
@@ -90,9 +158,9 @@ def position_angle(angle: Angle, automated: bool, wcs: WCS) -> TextAnnotation:
 
     Parameters
     ----------
-    angle: `~astropy.coordinates.Angle`
+    position_angle: `~astropy.coordinates.Angle`
         The position angle, as an angle on the sky from north to east.
-    automated: bool
+    automated_position_angle: bool
         Whether the position angle has been calculated automatically.
     wcs: `~astropy.wcs.WCS`
         WCS object.
@@ -102,8 +170,8 @@ def position_angle(angle: Angle, automated: bool, wcs: WCS) -> TextAnnotation:
     `~imephu.annotation.general.TextAnnotation`
         The annotation for the position angle.
     """
-    text = f"PA = {angle.to_value(u.degree):.1f}"
-    if automated:
+    text = f"PA = {position_angle.to_value(u.degree):.1f}"
+    if automated_position_angle:
         text += " (auto)"
     return TextAnnotation(
         (1, -0.068),
@@ -118,7 +186,7 @@ def position_angle(angle: Angle, automated: bool, wcs: WCS) -> TextAnnotation:
     )
 
 
-def survey(survey_name: str, wcs: WCS) -> TextAnnotation:
+def survey_annotation(survey_name: str, wcs: WCS) -> TextAnnotation:
     """Return a text annotation with the survey name.
 
     Parameters
@@ -143,4 +211,65 @@ def survey(survey_name: str, wcs: WCS) -> TextAnnotation:
         style="italic",
         weight="bold",
         size="large",
+    )
+
+
+def base_annotations(
+    target: str,
+    proposal_code: str,
+    pi_family_name: str,
+    position_angle: Angle,
+    automated_position_angle: bool,
+    survey_name: str,
+    fits_center: SkyCoord,
+    wcs: WCS,
+) -> GroupAnnotation:
+    """
+    Return a group containing all the base annotations for SALT finder charts.
+
+    The base annotations include the title, directions, position angle, survey name and
+    the RSS and Salticam fields of view.
+
+    Parameters
+    ----------
+    target: str
+        The name of the target for which the finder chart is intended.
+    proposal_code: str
+        The proposal code for which the finder chart is intended.
+    pi_family_name: str
+        The family name of the Principal Investigator.
+    position_angle: `~astropy.coordinates.Angle`
+        The position angle, as an angle on the sky from north to east.
+    automated_position_angle: bool
+        Whether the position angle has been calculated automatically.
+    survey_name: str
+        The survey name.
+    fits_center: `~astropy.coordinates.SkyCoord`
+        The central position of the finder chart, in right ascension and declination
+    wcs: `~astropy.wcs.WCS`
+        WCS object.
+
+    Returns
+    -------
+    `~imephu.annotation.general.GroupAnnotation`
+        An annotation with all the SALT base annotations.
+    """
+    return GroupAnnotation(
+        [
+            title_annotation(
+                target=target,
+                proposal_code=proposal_code,
+                pi_family_name=pi_family_name,
+                wcs=wcs,
+            ),
+            survey_annotation(survey_name=survey_name, wcs=wcs),
+            position_angle_annotation(
+                position_angle=position_angle,
+                automated_position_angle=automated_position_angle,
+                wcs=wcs,
+            ),
+            directions_annotation(fits_center=fits_center, wcs=wcs),
+            salticam_field_of_view_annotation(fits_center=fits_center, wcs=wcs),
+            rss_field_of_view_annotation(fits_center=fits_center, wcs=wcs),
+        ]
     )
