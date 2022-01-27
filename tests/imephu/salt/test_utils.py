@@ -5,58 +5,6 @@ from astropy.coordinates import SkyCoord
 from imephu.salt.utils import MosMask, MosMaskSlit
 
 
-def _mask_xml(center, position_angle, reference_stars, slits):
-    xml = f"""\
-<?xml version="1.0" ?>
-<slitmask>
-<header>
-<parameter name="VERSION" value="1.1" />
-<parameter name="PROPOSALCODE" value="INDEF" />
-<parameter name="MASKNUM" value="0" />
-<parameter name="PI" value="INDEF" />
-<parameter name="CREATOR" value="Someone" />
-<parameter name="ROTANGLE" value="{position_angle.to_value(u.deg)}" />
-<parameter name="CENTERRA" value="{center.ra.to_value(u.deg)}" />
-<parameter name="CENTERDEC" value="{center.dec.to_value(u.deg)}" />
-<parameter name="EQUINOX" value="2000.0" />
-<parameter name="NSMODE" value="0" />
-<parameter name="COOSYS" value="RADEC" />
-<parameter name="VALIDATED" value="FALSE" />
-<parameter name="SPECLENGTH" value="12400" />
-<parameter name="SPECOFFSET" value="0" />
-<parameter name="SPECPOLSPLIT" value="0" />
-<parameter name="SPECHEIGHT" value="0" />
-</header>
-"""
-    id = 1
-    for star in reference_stars:
-        xml += f"""
-<refstar
-    id="{id}"
-    xce="{star.ra.to_value(u.deg)}"
-    yce="{star.dec.to_value(u.deg)}"
-    radius="0.5" mag="0.0"
-/>"""
-        id += 1
-
-    for slit in slits:
-        xml += f"""
-<slit
-     id="{id}"
-     xce="{slit.center.ra.to_value(u.deg)}"
-     yce="{slit.center.dec.to_value(u.deg)}"
-     width="{slit.width.to_value(u.arcsec)}"
-     length="{slit.height.to_value(u.arcsec)}"
-     tilt="{slit.tilt.to_value(u.deg)}"
-     priority="1.0"
-     mag="0.0"
-/>"""
-
-    xml += "</slitmask>"
-
-    return xml
-
-
 @pytest.mark.parametrize(
     "center,position_angle,reference_stars,slits",
     [
@@ -112,14 +60,14 @@ def _mask_xml(center, position_angle, reference_stars, slits):
         ),
     ],
 )
-def test_init_mos_mask(center, position_angle, reference_stars, slits):
+def test_init_mos_mask(center, position_angle, reference_stars, slits, mos_mask_xml):
     """Test MOS mask initialisation."""
     mask_slits = []
     for slit_center, width, height, tilt in slits:
         mask_slits.append(
             MosMaskSlit(center=slit_center, width=width, height=height, tilt=tilt)
         )
-    xml = _mask_xml(center, position_angle, reference_stars, mask_slits)
+    xml = mos_mask_xml(center, position_angle, reference_stars, mask_slits)
     mos_mask = MosMask(xml)
 
     assert mos_mask.center.ra.to_value(u.deg) == pytest.approx(

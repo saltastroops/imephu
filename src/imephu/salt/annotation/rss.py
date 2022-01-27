@@ -1,7 +1,9 @@
+from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
-from imephu.annotation.general import RectangleAnnotation
+from imephu.annotation.general import GroupAnnotation, RectangleAnnotation
+from imephu.salt.utils import MosMask
 
 
 def longslit_annotation(
@@ -34,3 +36,52 @@ def longslit_annotation(
     return RectangleAnnotation(
         fits_center, slit_width, slit_height, wcs=wcs, edgecolor="red", alpha=0.5
     ).rotate(fits_center, position_angle)
+
+
+def mos_mask_annotation(
+    mos_mask: MosMask, wcs: WCS, reference_star_box_width: Angle = 5 * u.arcsec
+) -> GroupAnnotation:
+    """Return the annotation for a MOS mask.
+
+    The slits and boxes around the reference stars are included in the annotation.
+
+    Parameters
+    ----------
+    mos_mask: `~imephu.salt.util.MosMask`
+        The MOS mask.
+    wcs: `~astropy.wcs.WCS`
+        WCS object.
+    reference_star_box_width: `~astropy.coordinates.Angle`
+        The width (and height) of the boxes around reference stars, as an angle on the
+        sky.
+
+    Returns
+    -------
+    `~imephu.annotation.general.GroupAnnotation`
+        The annotation displaying the MOS mask.
+    """
+    mask_annotation = GroupAnnotation([])
+
+    position_angle = mos_mask.position_angle
+    for star in mos_mask.reference_stars:
+        reference_star_annotation = RectangleAnnotation(
+            center=star,
+            width=reference_star_box_width,
+            height=reference_star_box_width,
+            wcs=wcs,
+            edgecolor=(1, 1, 0),
+            linewidth=2,
+        ).rotate(star, position_angle)
+        mask_annotation.add_item(reference_star_annotation)
+
+    for slit in mos_mask.slits:
+        slit_annotation = RectangleAnnotation(
+            center=slit.center,
+            width=slit.width,
+            height=slit.height,
+            wcs=wcs,
+            edgecolor="red",
+        ).rotate(slit.center, position_angle + slit.tilt)
+        mask_annotation.add_item(slit_annotation)
+
+    return mask_annotation
