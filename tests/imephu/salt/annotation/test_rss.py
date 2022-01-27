@@ -3,8 +3,8 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 
 from imephu.annotation.general import TextAnnotation
-from imephu.annotation.salt import rss
 from imephu.finder_chart import FinderChart
+from imephu.salt.annotation import rss
 
 
 @pytest.mark.parametrize(
@@ -17,6 +17,7 @@ from imephu.finder_chart import FinderChart
 def test_rss_longslit_annotation(
     slit_width, slit_height, position_angle, fits_file, fits_center, check_finder
 ):
+    """Test RSS longslit annotations."""
     finder_chart = FinderChart(fits_file)
     longslit_annotation = rss.longslit_annotation(
         fits_center=fits_center,

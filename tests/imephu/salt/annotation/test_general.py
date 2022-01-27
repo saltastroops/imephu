@@ -3,8 +3,8 @@ from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 
 from imephu.annotation.general import TextAnnotation
-from imephu.annotation.salt import general
 from imephu.finder_chart import FinderChart
+from imephu.salt.annotation import general
 
 
 def test_title_annotation(fits_file, check_finder):
@@ -56,6 +56,7 @@ def test_position_angle_annotation(angle, automated, fits_file, check_finder):
 
 
 def test_survey_annotation(fits_file, check_finder):
+    """Test survey annotations."""
     finder_chart = FinderChart(fits_file)
     survey_annotation = general.survey_annotation("POSS2/UKSTU Red", finder_chart.wcs)
     finder_chart.add_annotation(survey_annotation)
@@ -63,6 +64,7 @@ def test_survey_annotation(fits_file, check_finder):
 
 
 def test_salticam_field_of_view_annotation(fits_file, fits_center, check_finder):
+    """Test the Salticam field of view annotation."""
     finder_chart = FinderChart(fits_file)
     salticam_fov_annotation = general.salticam_field_of_view_annotation(
         fits_center, wcs=finder_chart.wcs
@@ -72,6 +74,7 @@ def test_salticam_field_of_view_annotation(fits_file, fits_center, check_finder)
 
 
 def test_rss_field_of_view_annotation(fits_file, fits_center, check_finder):
+    """Test the RSS field of view annotation."""
     finder_chart = FinderChart(fits_file)
     rss_fov_annotation = general.rss_field_of_view_annotation(
         fits_center, wcs=finder_chart.wcs
@@ -81,6 +84,7 @@ def test_rss_field_of_view_annotation(fits_file, fits_center, check_finder):
 
 
 def test_salt_base_annotations(fits_file, fits_center, check_finder):
+    """Test SALT base annotations."""
     finder_chart = FinderChart(fits_file)
     base_annotations = general.base_annotations(
         target="Magrathea",

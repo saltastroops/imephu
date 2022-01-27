@@ -2,7 +2,7 @@ from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
-from imephu.annotation.general import GroupAnnotation, TextAnnotation, CircleAnnotation
+from imephu.annotation.general import CircleAnnotation, GroupAnnotation, TextAnnotation
 
 LIGHT_BLUE = (0, 0.5, 1)
 
