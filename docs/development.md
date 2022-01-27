@@ -66,7 +66,7 @@ Command | Use | Own positional arguments?
 
 ## Unit testing
 
-```{info}
+```{note}
 The project setup includes coverage for unit tests run with `tox`. This is not the case when `pytest` is run straight from the command line, as test coverage interferes with debugger breakpoints, causing code execution not to be paused at them. However, you may still include coverage by using the `--cov` flag.
 ```
 
