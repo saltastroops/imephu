@@ -63,26 +63,6 @@ def test_survey_annotation(fits_file, check_finder):
     check_finder(finder_chart)
 
 
-def test_salticam_field_of_view_annotation(fits_file, fits_center, check_finder):
-    """Test the Salticam field of view annotation."""
-    finder_chart = FinderChart(fits_file)
-    salticam_fov_annotation = general.salticam_field_of_view_annotation(
-        fits_center, wcs=finder_chart.wcs
-    )
-    finder_chart.add_annotation(salticam_fov_annotation)
-    check_finder(finder_chart)
-
-
-def test_rss_field_of_view_annotation(fits_file, fits_center, check_finder):
-    """Test the RSS field of view annotation."""
-    finder_chart = FinderChart(fits_file)
-    rss_fov_annotation = general.rss_field_of_view_annotation(
-        fits_center, wcs=finder_chart.wcs
-    )
-    finder_chart.add_annotation(rss_fov_annotation)
-    check_finder(finder_chart)
-
-
 def test_salt_base_annotations(fits_file, fits_center, check_finder):
     """Test SALT base annotations."""
     finder_chart = FinderChart(fits_file)

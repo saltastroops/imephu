@@ -8,6 +8,14 @@ from imephu.salt.annotation import rss
 from imephu.salt.utils import MosMask, MosMaskSlit
 
 
+def test_rss_field_of_view_annotation(fits_file, fits_center, check_finder):
+    """Test the RSS field of view annotation."""
+    finder_chart = FinderChart(fits_file)
+    rss_fov_annotation = rss.field_of_view_annotation(fits_center, wcs=finder_chart.wcs)
+    finder_chart.add_annotation(rss_fov_annotation)
+    check_finder(finder_chart)
+
+
 @pytest.mark.parametrize(
     "slit_width,slit_height,position_angle",
     [

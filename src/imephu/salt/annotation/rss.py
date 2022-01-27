@@ -2,8 +2,45 @@ from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
-from imephu.annotation.general import GroupAnnotation, RectangleAnnotation
+from imephu.annotation.general import (
+    CircleAnnotation,
+    GroupAnnotation,
+    RectangleAnnotation,
+    TextAnnotation,
+)
 from imephu.salt.utils import MosMask
+
+
+def field_of_view_annotation(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation:
+    """
+    Return an annotation with the RSS field of view.
+
+    Parameters
+    ----------
+    fits_center: `~astropy.coordinates.SkyCoord`
+        The center of the finder chart, in right ascension and declination.
+    wcs: `~astropy.wcs.WCS`
+        WCS object.
+
+    Returns
+    -------
+    `~imephu.annotation.general.GroupAnnotation`
+        An annotation with the RSS field of view.
+    """
+    fov_annotation = CircleAnnotation(
+        fits_center, 4 * u.arcmin, wcs=wcs, edgecolor="green"
+    )
+    name_annotation = TextAnnotation(
+        (0.79, 0.79),
+        "RSS",
+        wcs=wcs,
+        style="italic",
+        weight="bold",
+        size="large",
+        horizontalalignment="left",
+        color=(0, 0, 1),
+    )
+    return GroupAnnotation([fov_annotation, name_annotation])
 
 
 def longslit_annotation(

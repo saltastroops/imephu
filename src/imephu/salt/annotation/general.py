@@ -2,9 +2,8 @@ from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
-from imephu.annotation.general import CircleAnnotation, GroupAnnotation, TextAnnotation
-
-LIGHT_BLUE = (0, 0.5, 1)
+from imephu.annotation.general import GroupAnnotation, TextAnnotation
+from imephu.salt.annotation import rss, salticam
 
 
 def title_annotation(
@@ -63,7 +62,7 @@ def directions_annotation(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation:
         fits_center,
         "E",
         wcs=wcs,
-        color=LIGHT_BLUE,
+        color=(0, 0.5, 1),
         horizontalalignment="right",
         style="italic",
         weight="bold",
@@ -73,78 +72,12 @@ def directions_annotation(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation:
         fits_center,
         "N",
         wcs=wcs,
-        color=LIGHT_BLUE,
+        color=(0, 0.5, 1),
         style="italic",
         weight="bold",
         size="large",
     ).translate(Angle((0, 4.8) * u.arcmin))
     return GroupAnnotation([east_annotation, north_annotation])
-
-
-def salticam_field_of_view_annotation(
-    fits_center: SkyCoord, wcs: WCS
-) -> GroupAnnotation:
-    """
-    Return an annotation with the Salticam field of view.
-
-    Parameters
-    ----------
-    `~astropy.coordinates.SkyCoord`
-        The central position of the finder chart, in right ascension and declination.
-    wcs: `~astropy.wcs.WCS`
-        WCS object.
-
-    Returns
-    -------
-    `~imephu.annotation.general.GroupAnnotation`
-        An annotation with the Salticam field of view.
-    """
-    fov_annotation = CircleAnnotation(
-        fits_center, 5 * u.arcmin, wcs=wcs, edgecolor="green"
-    )
-    name_annotation = TextAnnotation(
-        (0.86, 0.86),
-        "SCAM",
-        wcs=wcs,
-        style="italic",
-        weight="bold",
-        size="large",
-        horizontalalignment="left",
-        color=(0, 0, 1),
-    )
-    return GroupAnnotation([fov_annotation, name_annotation])
-
-
-def rss_field_of_view_annotation(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation:
-    """
-    Return an annotation with the RSS field of view.
-
-    Parameters
-    ----------
-    `~astropy.coordinates.SkyCoord`
-        The central position of the finder chart, in right ascension and declination.
-    wcs: `~astropy.wcs.WCS`
-        WCS object.
-
-    Returns
-    -------
-    `~imephu.annotation.general.GroupAnnotation`
-        An annotation with the RSS field of view.
-    """
-    fov_annotation = CircleAnnotation(
-        fits_center, 4 * u.arcmin, wcs=wcs, edgecolor="green"
-    )
-    name_annotation = TextAnnotation(
-        (0.79, 0.79),
-        "RSS",
-        wcs=wcs,
-        style="italic",
-        weight="bold",
-        size="large",
-        horizontalalignment="left",
-        color=(0, 0, 1),
-    )
-    return GroupAnnotation([fov_annotation, name_annotation])
 
 
 def position_angle_annotation(
@@ -269,7 +202,7 @@ def base_annotations(
                 wcs=wcs,
             ),
             directions_annotation(fits_center=fits_center, wcs=wcs),
-            salticam_field_of_view_annotation(fits_center=fits_center, wcs=wcs),
-            rss_field_of_view_annotation(fits_center=fits_center, wcs=wcs),
+            salticam.field_of_view_annotation(fits_center=fits_center, wcs=wcs),
+            rss.field_of_view_annotation(fits_center=fits_center, wcs=wcs),
         ]
     )
