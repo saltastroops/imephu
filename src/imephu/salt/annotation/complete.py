@@ -1,0 +1,122 @@
+from dataclasses import dataclass
+
+from astropy.coordinates import Angle, SkyCoord
+from astropy.wcs import WCS
+
+from imephu.annotation.general import GroupAnnotation
+from imephu.salt.annotation import salticam, telescope
+
+
+@dataclass
+class MagnitudeRange:
+    """A magnitude range.
+
+    Attributes
+    ----------
+    bandpass: `str`
+        The bandpass for which the magnitudes are given.
+    min_magnitude: `float`
+        The minimum (brightest) magnitude.
+    max_magnitude: `float`
+        The maximum (faintest) magnitude.
+    """
+
+    bandpass: str
+    min_magnitude: float
+    max_magnitude: float
+
+
+@dataclass
+class Target:
+    """Target properties.
+
+    Attributes
+    ----------
+    name: `str`
+        The target name.
+    position: `~astropy.coordinates.SkyCoord`
+        The target position, as a right ascension and declination. This is taken to be
+        the center of the finder chart.
+    magnitude_range: `MagnitudeRange`
+        The magnitude range of the target.
+    """
+
+    name: str
+    position: SkyCoord
+    magnitude_range: MagnitudeRange
+
+
+@dataclass
+class GeneralProperties:
+    """Properties which are not specific to a particular instrument.
+
+    Attributes
+    ----------
+    target: `Target`
+        The target to find using this finder chart. Its position is taken to be the
+        center of the finder chart.
+    position_angle: `~astropy.coordinates.Angle`
+        The position angle, as angle on the sky measured from north to east.
+    automated_position_angle: `bool`
+        Whether the position angle has been calculated automatically.
+    proposal_code: `str`
+        The proposal code.
+    pi_family_name: `str`
+        The family name of the Principal Investigator.
+    survey: `str`
+        The name of the survey from which the finder chart image was taken.
+    wcs: `~astropy.wcs.WCS`
+        WCS object.
+    """
+
+    target: Target
+    position_angle: Angle
+    automated_position_angle: bool
+    proposal_code: str
+    pi_family_name: str
+    survey: str
+    wcs: WCS
+
+
+def salticam_annotation(
+    general: GeneralProperties, is_slot_mode: bool = False
+) -> GroupAnnotation:
+    """Return the annotation for a Salticam observation.
+
+    Parameters
+    ----------
+    general: `GeneralProperties`
+        Properties which are not specific to the instrument.
+    is_slot_mode: `bool`, default: False
+        Whether the observation is a slot mode one.
+    """
+    salticam_annotation_ = _base_annotations(general)
+    magnitude_range = general.target.magnitude_range
+    magnitude_annotation = telescope.magnitude_range_annotation(
+        bandpass=magnitude_range.bandpass,
+        min_magnitude=magnitude_range.min_magnitude,
+        max_magnitude=magnitude_range.max_magnitude,
+        fits_center=general.target.position,
+        wcs=general.wcs,
+    )
+    salticam_annotation_.add_item(magnitude_annotation)
+    if is_slot_mode:
+        center = general.target.position
+        slot_annotation = salticam.slot_annotation(
+            center, general.position_angle, general.wcs
+        )
+        salticam_annotation_.add_item(slot_annotation)
+    return salticam_annotation_
+
+
+def _base_annotations(general: GeneralProperties) -> GroupAnnotation:
+    return telescope.base_annotations(
+        target=general.target.name,
+        proposal_code=general.proposal_code,
+        pi_family_name=general.pi_family_name,
+        position_angle=general.position_angle,
+        automated_position_angle=general.position_angle,
+        survey_name=general.survey,
+        fits_center=general.target.position,
+        wcs=general.wcs,
+    )

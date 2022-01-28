@@ -83,7 +83,8 @@ def test_magnitude_range_annotation(
     )
     legend = TextAnnotation(
         SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
-        f"bandpass: {bandpass}, min magnitude: {min_magnitude}, max magnitude: {max_magnitude}",
+        f"bandpass: {bandpass}, min magnitude: {min_magnitude}, "
+        f"max magnitude: {max_magnitude}",
         wcs=finder_chart.wcs,
         color="blue",
         horizontalalignment="left",
