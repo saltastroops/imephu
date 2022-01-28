@@ -147,6 +147,41 @@ def survey_annotation(survey_name: str, wcs: WCS) -> TextAnnotation:
     )
 
 
+def magnitude_range_annotation(bandpass: str, min_magnitude: float, max_magnitude: float, fits_center: SkyCoord, wcs: WCS) -> TextAnnotation:
+    """Return a text annotation with the magnitude range.
+
+    The magnitude range is given as a string of the form "bandpass = min magnitude -
+    max magnitude", where the magnitudes have one fractional digit. If the difference
+    between the minimum and maximum magnitude is less than 0.1, only the maximum
+    magnitude is included.
+
+    Parameters
+    ----------
+    bandpass: `str`
+        Bandpass for which the magnitude range is given.
+    min_magnitude: `float`
+        Minimum (brightest) magnitude.
+    max_magnitude: `float`
+        Maximum (faintest) magnitude.
+    fits_center: `~astropy.coordinates.SkyCoord`
+        Center position of the finder chart, as a right ascension and declination.
+    wcs: `~astropy.wcs.WCS`
+        WCS object.
+
+    Returns
+    -------
+    `~imephu.annotation.general.TextAnnotation`
+        The magnitude range annotation.
+    """
+    if abs(max_magnitude - min_magnitude) > 0.09999:
+        text = f"{bandpass} = {min_magnitude:.1f} - {max_magnitude:.1f}"
+    else:
+        text = f"{bandpass} = {max_magnitude:.1f}"
+    return TextAnnotation(
+        fits_center,
+        text, wcs, color=(0, 0.5, 1), style="italic", weight="bold", size="large", horizontalalignment="center", verticalalignment="baseline").translate(Angle((0, -4.8) * u.arcmin))
+
+
 def base_annotations(
     target: str,
     proposal_code: str,
@@ -157,8 +192,7 @@ def base_annotations(
     fits_center: SkyCoord,
     wcs: WCS,
 ) -> GroupAnnotation:
-    """
-    Return a group containing all the base annotations for SALT finder charts.
+    """Return a group containing all the base annotations for SALT finder charts.
 
     The base annotations include the title, directions, position angle, survey name and
     the RSS and Salticam fields of view.
