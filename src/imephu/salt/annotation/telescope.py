@@ -147,7 +147,13 @@ def survey_annotation(survey_name: str, wcs: WCS) -> TextAnnotation:
     )
 
 
-def magnitude_range_annotation(bandpass: str, min_magnitude: float, max_magnitude: float, fits_center: SkyCoord, wcs: WCS) -> TextAnnotation:
+def magnitude_range_annotation(
+    bandpass: str,
+    min_magnitude: float,
+    max_magnitude: float,
+    fits_center: SkyCoord,
+    wcs: WCS,
+) -> TextAnnotation:
     """Return a text annotation with the magnitude range.
 
     The magnitude range is given as a string of the form "bandpass = min magnitude -
@@ -179,7 +185,15 @@ def magnitude_range_annotation(bandpass: str, min_magnitude: float, max_magnitud
         text = f"{bandpass} = {max_magnitude:.1f}"
     return TextAnnotation(
         fits_center,
-        text, wcs, color=(0, 0.5, 1), style="italic", weight="bold", size="large", horizontalalignment="center", verticalalignment="baseline").translate(Angle((0, -4.8) * u.arcmin))
+        text,
+        wcs,
+        color=(0, 0.5, 1),
+        style="italic",
+        weight="bold",
+        size="large",
+        horizontalalignment="center",
+        verticalalignment="baseline",
+    ).translate(Angle((0, -4.8) * u.arcmin))
 
 
 def base_annotations(

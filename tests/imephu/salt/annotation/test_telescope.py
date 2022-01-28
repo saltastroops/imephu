@@ -23,7 +23,9 @@ def test_title_annotation(fits_file, check_finder):
 def test_directions_annotation(fits_file, fits_center, check_finder):
     """Test the directions annotation."""
     finder_chart = FinderChart(fits_file)
-    directions_annotation = telescope.directions_annotation(fits_center, finder_chart.wcs)
+    directions_annotation = telescope.directions_annotation(
+        fits_center, finder_chart.wcs
+    )
     finder_chart.add_annotation(directions_annotation)
     check_finder(finder_chart)
 
@@ -63,11 +65,22 @@ def test_survey_annotation(fits_file, check_finder):
     check_finder(finder_chart)
 
 
-@pytest.mark.parametrize("bandpass,min_magnitude,max_magnitude", [("V", 16.3, 17), ("R", 18.5, 18.5), ("I", 15.3, 15.4)])
-def test_magnitude_range_annotation(bandpass, min_magnitude, max_magnitude, fits_file, fits_center, check_finder):
+@pytest.mark.parametrize(
+    "bandpass,min_magnitude,max_magnitude",
+    [("V", 16.3, 17), ("R", 18.5, 18.5), ("I", 15.3, 15.4)],
+)
+def test_magnitude_range_annotation(
+    bandpass, min_magnitude, max_magnitude, fits_file, fits_center, check_finder
+):
     """Test magnitude range annotations."""
     finder_chart = FinderChart(fits_file)
-    magnitude_annotation = telescope.magnitude_range_annotation(bandpass=bandpass, min_magnitude=min_magnitude, max_magnitude=max_magnitude, fits_center=fits_center, wcs=finder_chart.wcs)
+    magnitude_annotation = telescope.magnitude_range_annotation(
+        bandpass=bandpass,
+        min_magnitude=min_magnitude,
+        max_magnitude=max_magnitude,
+        fits_center=fits_center,
+        wcs=finder_chart.wcs,
+    )
     legend = TextAnnotation(
         SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
         f"bandpass: {bandpass}, min magnitude: {min_magnitude}, max magnitude: {max_magnitude}",
