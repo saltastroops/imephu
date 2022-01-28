@@ -2,7 +2,11 @@ from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
-from imephu.annotation.general import GroupAnnotation, TextAnnotation
+from imephu.annotation.general import (
+    GroupAnnotation,
+    RectangleAnnotation,
+    TextAnnotation,
+)
 from imephu.salt.annotation import rss, salticam
 
 
@@ -119,12 +123,12 @@ def position_angle_annotation(
     )
 
 
-def survey_annotation(survey_name: str, wcs: WCS) -> TextAnnotation:
+def survey_annotation(survey: str, wcs: WCS) -> TextAnnotation:
     """Return a text annotation with the survey name.
 
     Parameters
     ----------
-    survey_name: str
+    survey: str
         The survey name.
     wcs: `~astropy.wcs.WCS`
         WCS object.
@@ -136,7 +140,7 @@ def survey_annotation(survey_name: str, wcs: WCS) -> TextAnnotation:
     """
     return TextAnnotation(
         (0, -0.068),
-        survey_name,
+        survey,
         wcs=wcs,
         color="black",
         horizontalalignment="left",
@@ -196,13 +200,43 @@ def magnitude_range_annotation(
     ).translate(Angle((0, -4.8) * u.arcmin))
 
 
+def slot_annotation(
+    center: SkyCoord, position_angle: Angle, wcs: WCS
+) -> RectangleAnnotation:
+    """Return an annotation showing the slot.
+
+    Parameters
+    ----------
+    center: `~astropy.coordinates.SkyCoord`
+        The center of the slot on the sky, in right ascension and declination.
+    position_angle: `~astropy.coordinates.Angle`
+        The position angle as an angle on the sky, measured from north to east.
+    wcs: `~astropy.wcs.WCS`
+        WCS object.
+
+    Returns
+    -------
+    `~imephu.annotation.general.RectangleAnnotation`
+        The slot annotation.
+    """
+    return RectangleAnnotation(
+        center=center,
+        width=1 * u.arcmin / 3,
+        height=10 * u.arcmin,
+        wcs=wcs,
+        edgecolor="red",
+        alpha=0.5,
+        linewidth=2,
+    ).rotate(center, position_angle + 90 * u.deg)
+
+
 def base_annotations(
     target: str,
     proposal_code: str,
     pi_family_name: str,
     position_angle: Angle,
     automated_position_angle: bool,
-    survey_name: str,
+    survey: str,
     fits_center: SkyCoord,
     wcs: WCS,
 ) -> GroupAnnotation:
@@ -223,7 +257,7 @@ def base_annotations(
         The position angle, as an angle on the sky from north to east.
     automated_position_angle: bool
         Whether the position angle has been calculated automatically.
-    survey_name: str
+    survey: str
         The survey name.
     fits_center: `~astropy.coordinates.SkyCoord`
         The central position of the finder chart, in right ascension and declination
@@ -243,7 +277,7 @@ def base_annotations(
                 pi_family_name=pi_family_name,
                 wcs=wcs,
             ),
-            survey_annotation(survey_name=survey_name, wcs=wcs),
+            survey_annotation(survey=survey, wcs=wcs),
             position_angle_annotation(
                 position_angle=position_angle,
                 automated_position_angle=automated_position_angle,

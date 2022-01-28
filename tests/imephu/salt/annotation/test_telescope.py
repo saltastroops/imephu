@@ -94,6 +94,25 @@ def test_magnitude_range_annotation(
     check_finder(finder_chart)
 
 
+@pytest.mark.parametrize("position_angle", [0 * u.deg, 60 * u.deg])
+def test_salticam_slot_annotation(position_angle, fits_file, fits_center, check_finder):
+    """Test the Salticam slot annotation."""
+    finder_chart = FinderChart(fits_file)
+    slot_annotation = telescope.slot_annotation(
+        fits_center, position_angle, finder_chart.wcs
+    )
+    legend = TextAnnotation(
+        SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
+        f"position angle: {position_angle}",
+        wcs=finder_chart.wcs,
+        color="blue",
+        horizontalalignment="left",
+    )
+    finder_chart.add_annotation(slot_annotation)
+    finder_chart.add_annotation(legend)
+    check_finder(finder_chart)
+
+
 def test_salt_base_annotations(fits_file, fits_center, check_finder):
     """Test SALT base annotations."""
     finder_chart = FinderChart(fits_file)

@@ -4,7 +4,7 @@ from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
 from imephu.annotation.general import GroupAnnotation
-from imephu.salt.annotation import salticam, telescope
+from imephu.salt.annotation import telescope
 
 
 @dataclass
@@ -90,7 +90,13 @@ def salticam_annotation(
     is_slot_mode: `bool`, default: False
         Whether the observation is a slot mode one.
     """
-    salticam_annotation_ = _base_annotations(general)
+    return _imaging_annotation(general, is_slot_mode)
+
+
+def _imaging_annotation(
+    general: GeneralProperties, is_slot_mode: bool = False
+) -> GroupAnnotation:
+    imaging_annotation = _base_annotations(general)
     magnitude_range = general.target.magnitude_range
     magnitude_annotation = telescope.magnitude_range_annotation(
         bandpass=magnitude_range.bandpass,
@@ -99,14 +105,14 @@ def salticam_annotation(
         fits_center=general.target.position,
         wcs=general.wcs,
     )
-    salticam_annotation_.add_item(magnitude_annotation)
+    imaging_annotation.add_item(magnitude_annotation)
     if is_slot_mode:
         center = general.target.position
-        slot_annotation = salticam.slot_annotation(
+        slot_annotation = telescope.slot_annotation(
             center, general.position_angle, general.wcs
         )
-        salticam_annotation_.add_item(slot_annotation)
-    return salticam_annotation_
+        imaging_annotation.add_item(slot_annotation)
+    return imaging_annotation
 
 
 def _base_annotations(general: GeneralProperties) -> GroupAnnotation:
@@ -116,7 +122,7 @@ def _base_annotations(general: GeneralProperties) -> GroupAnnotation:
         pi_family_name=general.pi_family_name,
         position_angle=general.position_angle,
         automated_position_angle=general.position_angle,
-        survey_name=general.survey,
+        survey=general.survey,
         fits_center=general.target.position,
         wcs=general.wcs,
     )
