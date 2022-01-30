@@ -4,7 +4,7 @@ from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
 from imephu.annotation.general import GroupAnnotation
-from imephu.salt.annotation import telescope
+from imephu.salt.annotation import rss, telescope
 
 
 @dataclass
@@ -117,6 +117,28 @@ def rss_imaging_annotation(
     """
     return _imaging_annotation(general, is_slot_mode)
 
+
+def rss_longslit_annotation(general: GeneralProperties, slit_width: Angle, slit_height: Angle) -> GroupAnnotation:
+    """Return the annotation for an RSS longslit observation.
+
+    Parameters
+    ----------
+    general: `GeneralProperties`
+        Properties which are not specific to the instrument.
+    slit_width: `~astropy.coordinates.Angle`
+        The slit width, as an angle on the sky.
+    slit_height: `~astropy.coordinates.Angle`
+        The slit height, as an angle on the sky.
+
+    Returns
+    -------
+    `~imephu.annotation.general.GroupAnnotation`
+        The annotation for an RSS longslit observation.
+    """
+    observation_annotation = _base_annotations(general)
+    longslit_annotation = rss.longslit_annotation(fits_center=general.target.position, slit_width=slit_width, slit_height=slit_height, position_angle=general.position_angle, wcs= general.wcs)
+    observation_annotation.add_item(longslit_annotation)
+    return observation_annotation
 
 def rss_fabry_perot_annotation(general: GeneralProperties) -> GroupAnnotation:
     """Return the annotation for an RSS Fabry-Pérot observation.

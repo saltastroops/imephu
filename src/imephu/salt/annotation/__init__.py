@@ -4,6 +4,7 @@ from imephu.salt.annotation.complete import (
     Target,
     rss_fabry_perot_annotation,
     rss_imaging_annotation,
+    rss_longslit_annotation,
     salticam_annotation,
 )
 
@@ -12,6 +13,7 @@ __all__ = [
     "MagnitudeRange",
     "rss_fabry_perot_annotation",
     "rss_imaging_annotation",
+    "rss_longslit_annotation",
     "salticam_annotation",
     "Target",
 ]
