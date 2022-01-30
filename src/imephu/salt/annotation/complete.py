@@ -118,7 +118,9 @@ def rss_imaging_annotation(
     return _imaging_annotation(general, is_slot_mode)
 
 
-def rss_longslit_annotation(general: GeneralProperties, slit_width: Angle, slit_height: Angle) -> GroupAnnotation:
+def rss_longslit_annotation(
+    general: GeneralProperties, slit_width: Angle, slit_height: Angle
+) -> GroupAnnotation:
     """Return the annotation for an RSS longslit observation.
 
     Parameters
@@ -136,9 +138,16 @@ def rss_longslit_annotation(general: GeneralProperties, slit_width: Angle, slit_
         The annotation for an RSS longslit observation.
     """
     observation_annotation = _base_annotations(general)
-    longslit_annotation = rss.longslit_annotation(fits_center=general.target.position, slit_width=slit_width, slit_height=slit_height, position_angle=general.position_angle, wcs= general.wcs)
+    longslit_annotation = rss.longslit_annotation(
+        fits_center=general.target.position,
+        slit_width=slit_width,
+        slit_height=slit_height,
+        position_angle=general.position_angle,
+        wcs=general.wcs,
+    )
     observation_annotation.add_item(longslit_annotation)
     return observation_annotation
+
 
 def rss_fabry_perot_annotation(general: GeneralProperties) -> GroupAnnotation:
     """Return the annotation for an RSS Fabry-Pérot observation.

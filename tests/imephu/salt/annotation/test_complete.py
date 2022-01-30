@@ -56,7 +56,11 @@ def test_rss_imaging_annotation(is_slot_mode, fits_file, fits_center, check_find
 def test_rss_longslit_annotation(fits_file, fits_center, check_finder):
     """Test the annotation for RSS longslit observations."""
     finder_chart = FinderChart(fits_file)
-    rss = rss_longslit_annotation(general=_general_properties(fits_center, finder_chart.wcs), slit_width=4 * u.arcsec, slit_height=8 * u.arcmin)
+    rss = rss_longslit_annotation(
+        general=_general_properties(fits_center, finder_chart.wcs),
+        slit_width=4 * u.arcsec,
+        slit_height=8 * u.arcmin,
+    )
     finder_chart.add_annotation(rss)
     check_finder(finder_chart)
 
