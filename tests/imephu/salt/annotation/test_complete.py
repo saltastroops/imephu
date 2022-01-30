@@ -18,9 +18,9 @@ def _general_properties(target_position, wcs):
     magnitude_range = MagnitudeRange("V", 16.4, 17.1)
     return GeneralProperties(
         target=Target(
-            name="Target 42", position=target_position, magnitude_range=magnitude_range
+            name="Magrathea", position=target_position, magnitude_range=magnitude_range
         ),
-        position_angle=Angle(45 * u.deg),
+        position_angle=Angle(20 * u.deg),
         automated_position_angle=False,
         proposal_code="2022-1-SCI-042",
         pi_family_name="Adams",
