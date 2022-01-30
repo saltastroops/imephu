@@ -89,12 +89,53 @@ def salticam_annotation(
         Properties which are not specific to the instrument.
     is_slot_mode: `bool`, default: False
         Whether the observation is a slot mode one.
+
+    Returns
+    -------
+    `~imephu.annotation.general.GroupAnnotation`
+        The annotation for a Salticam observation.
     """
     return _imaging_annotation(general, is_slot_mode)
 
 
-def _imaging_annotation(
+def rss_imaging_annotation(
     general: GeneralProperties, is_slot_mode: bool = False
+) -> GroupAnnotation:
+    """Return the annotation for an RSS imaging observation.
+
+    Parameters
+    ----------
+    general: `GeneralProperties`
+        Properties which are not specific to the instrument.
+    is_slot_mode: `bool`, default: False
+        Whether the observation is a slot mode one.
+
+    Returns
+    -------
+    `~imephu.annotation.general.GroupAnnotation`
+        The annotation for an RSS imaging observation.
+    """
+    return _imaging_annotation(general, is_slot_mode)
+
+
+def rss_fabry_perot_annotation(general: GeneralProperties) -> GroupAnnotation:
+    """Return the annotation for an RSS Fabry-Pérot observation.
+
+    Parameters
+    ----------
+    general: `GeneralProperties`
+        Properties which are not specific to the instrument.
+
+    Returns
+    -------
+    `~imephu.annotation.general.GroupAnnotation`
+        The annotation for an RSS Fabry-Pérot observation.
+    """
+    return _imaging_annotation(general, False)
+
+
+def _imaging_annotation(
+    general: GeneralProperties, is_slot_mode: bool
 ) -> GroupAnnotation:
     imaging_annotation = _base_annotations(general)
     magnitude_range = general.target.magnitude_range

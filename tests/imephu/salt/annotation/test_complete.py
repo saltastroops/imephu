@@ -7,6 +7,8 @@ from imephu.salt.annotation import (
     GeneralProperties,
     MagnitudeRange,
     Target,
+    rss_fabry_perot_annotation,
+    rss_imaging_annotation,
     salticam_annotation,
 )
 
@@ -35,4 +37,26 @@ def test_salticam_annotation(is_slot_mode, fits_file, fits_center, check_finder)
         is_slot_mode=is_slot_mode,
     )
     finder_chart.add_annotation(salticam)
+    check_finder(finder_chart)
+
+
+@pytest.mark.parametrize("is_slot_mode", [False, True])
+def test_rss_imaging_annotation(is_slot_mode, fits_file, fits_center, check_finder):
+    """Test the annotation for RSS imaging observations."""
+    finder_chart = FinderChart(fits_file)
+    rss = rss_imaging_annotation(
+        general=_general_properties(fits_center, finder_chart.wcs),
+        is_slot_mode=is_slot_mode,
+    )
+    finder_chart.add_annotation(rss)
+    check_finder(finder_chart)
+
+
+def test_rss_fabry_perot_annotation(fits_file, fits_center, check_finder):
+    """Test the annotation for RSS Fabry-Pérot observations."""
+    finder_chart = FinderChart(fits_file)
+    rss = rss_fabry_perot_annotation(
+        general=_general_properties(fits_center, finder_chart.wcs),
+    )
+    finder_chart.add_annotation(rss)
     check_finder(finder_chart)
