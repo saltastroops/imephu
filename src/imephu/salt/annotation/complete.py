@@ -184,7 +184,7 @@ def _base_annotations(general: GeneralProperties) -> GroupAnnotation:
         proposal_code=general.proposal_code,
         pi_family_name=general.pi_family_name,
         position_angle=general.position_angle,
-        automated_position_angle=general.position_angle,
+        automated_position_angle=general.automated_position_angle,
         survey=general.survey,
         fits_center=general.target.position,
         wcs=general.wcs,
