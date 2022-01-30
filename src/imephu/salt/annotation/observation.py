@@ -78,7 +78,7 @@ class GeneralProperties:
     wcs: WCS
 
 
-def salticam_annotation(
+def salticam_observation_annotation(
     general: GeneralProperties, is_slot_mode: bool = False
 ) -> GroupAnnotation:
     """Return the annotation for a Salticam observation.
@@ -98,7 +98,7 @@ def salticam_annotation(
     return _imaging_annotation(general, is_slot_mode)
 
 
-def rss_imaging_annotation(
+def rss_imaging_observation_annotation(
     general: GeneralProperties, is_slot_mode: bool = False
 ) -> GroupAnnotation:
     """Return the annotation for an RSS imaging observation.
@@ -118,7 +118,7 @@ def rss_imaging_annotation(
     return _imaging_annotation(general, is_slot_mode)
 
 
-def rss_longslit_annotation(
+def rss_longslit_observation_annotation(
     general: GeneralProperties, slit_width: Angle, slit_height: Angle
 ) -> GroupAnnotation:
     """Return the annotation for an RSS longslit observation.
@@ -149,7 +149,9 @@ def rss_longslit_annotation(
     return observation_annotation
 
 
-def rss_fabry_perot_annotation(general: GeneralProperties) -> GroupAnnotation:
+def rss_fabry_perot_observation_annotation(
+    general: GeneralProperties,
+) -> GroupAnnotation:
     """Return the annotation for an RSS Fabry-Pérot observation.
 
     Parameters
@@ -168,7 +170,7 @@ def rss_fabry_perot_annotation(general: GeneralProperties) -> GroupAnnotation:
 def _imaging_annotation(
     general: GeneralProperties, is_slot_mode: bool
 ) -> GroupAnnotation:
-    imaging_annotation = _base_annotations(general)
+    observation_annotation = _base_annotations(general)
     magnitude_range = general.target.magnitude_range
     magnitude_annotation = telescope.magnitude_range_annotation(
         bandpass=magnitude_range.bandpass,
@@ -177,14 +179,14 @@ def _imaging_annotation(
         fits_center=general.target.position,
         wcs=general.wcs,
     )
-    imaging_annotation.add_item(magnitude_annotation)
+    observation_annotation.add_item(magnitude_annotation)
     if is_slot_mode:
         center = general.target.position
         slot_annotation = telescope.slot_annotation(
             center, general.position_angle, general.wcs
         )
-        imaging_annotation.add_item(slot_annotation)
-    return imaging_annotation
+        observation_annotation.add_item(slot_annotation)
+    return observation_annotation
 
 
 def _base_annotations(general: GeneralProperties) -> GroupAnnotation:

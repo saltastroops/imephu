@@ -7,10 +7,10 @@ from imephu.salt.annotation import (
     GeneralProperties,
     MagnitudeRange,
     Target,
-    rss_fabry_perot_annotation,
-    rss_imaging_annotation,
-    rss_longslit_annotation,
-    salticam_annotation,
+    rss_fabry_perot_observation_annotation,
+    rss_imaging_observation_annotation,
+    rss_longslit_observation_annotation,
+    salticam_observation_annotation,
 )
 
 
@@ -30,10 +30,12 @@ def _general_properties(target_position, wcs):
 
 
 @pytest.mark.parametrize("is_slot_mode", [False, True])
-def test_salticam_annotation(is_slot_mode, fits_file, fits_center, check_finder):
+def test_salticam_observation_annotation(
+    is_slot_mode, fits_file, fits_center, check_finder
+):
     """Test the annotation for Salticam observations."""
     finder_chart = FinderChart(fits_file)
-    salticam = salticam_annotation(
+    salticam = salticam_observation_annotation(
         general=_general_properties(fits_center, finder_chart.wcs),
         is_slot_mode=is_slot_mode,
     )
@@ -42,10 +44,12 @@ def test_salticam_annotation(is_slot_mode, fits_file, fits_center, check_finder)
 
 
 @pytest.mark.parametrize("is_slot_mode", [False, True])
-def test_rss_imaging_annotation(is_slot_mode, fits_file, fits_center, check_finder):
+def test_rss_imaging_observation_annotation(
+    is_slot_mode, fits_file, fits_center, check_finder
+):
     """Test the annotation for RSS imaging observations."""
     finder_chart = FinderChart(fits_file)
-    rss = rss_imaging_annotation(
+    rss = rss_imaging_observation_annotation(
         general=_general_properties(fits_center, finder_chart.wcs),
         is_slot_mode=is_slot_mode,
     )
@@ -53,10 +57,10 @@ def test_rss_imaging_annotation(is_slot_mode, fits_file, fits_center, check_find
     check_finder(finder_chart)
 
 
-def test_rss_longslit_annotation(fits_file, fits_center, check_finder):
+def test_rss_longslit_observation_annotation(fits_file, fits_center, check_finder):
     """Test the annotation for RSS longslit observations."""
     finder_chart = FinderChart(fits_file)
-    rss = rss_longslit_annotation(
+    rss = rss_longslit_observation_annotation(
         general=_general_properties(fits_center, finder_chart.wcs),
         slit_width=4 * u.arcsec,
         slit_height=8 * u.arcmin,
@@ -65,10 +69,10 @@ def test_rss_longslit_annotation(fits_file, fits_center, check_finder):
     check_finder(finder_chart)
 
 
-def test_rss_fabry_perot_annotation(fits_file, fits_center, check_finder):
+def test_rss_fabry_perot_observation_annotation(fits_file, fits_center, check_finder):
     """Test the annotation for RSS Fabry-Pérot observations."""
     finder_chart = FinderChart(fits_file)
-    rss = rss_fabry_perot_annotation(
+    rss = rss_fabry_perot_observation_annotation(
         general=_general_properties(fits_center, finder_chart.wcs),
     )
     finder_chart.add_annotation(rss)

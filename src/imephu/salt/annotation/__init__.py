@@ -1,19 +1,19 @@
-from imephu.salt.annotation.complete import (
+from imephu.salt.annotation.observation import (
     GeneralProperties,
     MagnitudeRange,
     Target,
-    rss_fabry_perot_annotation,
-    rss_imaging_annotation,
-    rss_longslit_annotation,
-    salticam_annotation,
+    rss_fabry_perot_observation_annotation,
+    rss_imaging_observation_annotation,
+    rss_longslit_observation_annotation,
+    salticam_observation_annotation,
 )
 
 __all__ = [
     "GeneralProperties",
     "MagnitudeRange",
-    "rss_fabry_perot_annotation",
-    "rss_imaging_annotation",
-    "rss_longslit_annotation",
-    "salticam_annotation",
+    "rss_fabry_perot_observation_annotation",
+    "rss_imaging_observation_annotation",
+    "rss_longslit_observation_annotation",
+    "salticam_observation_annotation",
     "Target",
 ]
