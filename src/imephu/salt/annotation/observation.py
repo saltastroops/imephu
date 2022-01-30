@@ -1,10 +1,12 @@
 from dataclasses import dataclass
 
+from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
 from imephu.annotation.general import GroupAnnotation
 from imephu.salt.annotation import rss, telescope
+from imephu.salt.utils import MosMask
 
 
 @dataclass
@@ -146,6 +148,30 @@ def rss_longslit_observation_annotation(
         wcs=general.wcs,
     )
     observation_annotation.add_item(longslit_annotation)
+    return observation_annotation
+
+
+def rss_mos_observation_annotation(general: GeneralProperties, mos_mask: MosMask, reference_star_box_width: Angle=Angle(5 * u.arcsec)) -> GroupAnnotation:
+    """Return the annotation for an RSS MOS observation.
+
+    Parameters
+    ----------
+    general: `GeneralProperties`
+        Properties which are not specific to the instrument.
+    mos_mask: `~imephu.salt.utils.MosMask`
+        The MOS mask.
+    reference_star_box_width: `~astropy.coordinates.Angle`, default: 5 arcseconds
+        The width (and height) of the boxes around reference stars, as an angle on the
+        sky.
+
+    Returns
+    -------
+    `~imephu.annotation.general.GroupAnnotation`
+        The annotation for an RSS MOS observation.
+    """
+    observation_annotation = _base_annotations(general)
+    mask_annotation = rss.mos_mask_annotation(mos_mask=mos_mask, wcs=general.wcs, reference_star_box_width=reference_star_box_width)
+    observation_annotation.add_item(mask_annotation)
     return observation_annotation
 
 

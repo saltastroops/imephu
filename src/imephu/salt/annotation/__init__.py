@@ -5,6 +5,7 @@ from imephu.salt.annotation.observation import (
     rss_fabry_perot_observation_annotation,
     rss_imaging_observation_annotation,
     rss_longslit_observation_annotation,
+    rss_mos_observation_annotation,
     salticam_observation_annotation,
 )
 
@@ -14,6 +15,7 @@ __all__ = [
     "rss_fabry_perot_observation_annotation",
     "rss_imaging_observation_annotation",
     "rss_longslit_observation_annotation",
+    "rss_mos_observation_annotation",
     "salticam_observation_annotation",
     "Target",
 ]

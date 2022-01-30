@@ -88,7 +88,7 @@ def mos_mask_annotation(
         The MOS mask.
     wcs: `~astropy.wcs.WCS`
         WCS object.
-    reference_star_box_width: `~astropy.coordinates.Angle`
+    reference_star_box_width: `~astropy.coordinates.Angle`, default: 5 arcseconds
         The width (and height) of the boxes around reference stars, as an angle on the
         sky.
 
