@@ -74,7 +74,9 @@ def test_rss_longslit_observation_annotation(fits_file, fits_center, check_finde
     check_finder(finder_chart)
 
 
-def test_rss_mos_observation_annotation(fits_file, fits_center, mos_mask_xml, check_finder):
+def test_rss_mos_observation_annotation(
+    fits_file, fits_center, mos_mask_xml, check_finder
+):
     """Test the annotation for RSS MOS observations."""
     finder_chart = FinderChart(fits_file)
     reference_stars = [
@@ -102,8 +104,9 @@ def test_rss_mos_observation_annotation(fits_file, fits_center, mos_mask_xml, ch
         slits=slits,
     )
     mos_mask = MosMask(xml)
-    rss = rss_mos_observation_annotation(general=_general_properties(fits_center, finder_chart.wcs),
-                                         mos_mask=mos_mask)
+    rss = rss_mos_observation_annotation(
+        general=_general_properties(fits_center, finder_chart.wcs), mos_mask=mos_mask
+    )
     finder_chart.add_annotation(rss)
     check_finder(finder_chart)
 

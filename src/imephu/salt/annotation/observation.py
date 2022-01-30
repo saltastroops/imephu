@@ -151,7 +151,11 @@ def rss_longslit_observation_annotation(
     return observation_annotation
 
 
-def rss_mos_observation_annotation(general: GeneralProperties, mos_mask: MosMask, reference_star_box_width: Angle=Angle(5 * u.arcsec)) -> GroupAnnotation:
+def rss_mos_observation_annotation(
+    general: GeneralProperties,
+    mos_mask: MosMask,
+    reference_star_box_width: Angle = Angle(5 * u.arcsec),
+) -> GroupAnnotation:
     """Return the annotation for an RSS MOS observation.
 
     Parameters
@@ -170,7 +174,11 @@ def rss_mos_observation_annotation(general: GeneralProperties, mos_mask: MosMask
         The annotation for an RSS MOS observation.
     """
     observation_annotation = _base_annotations(general)
-    mask_annotation = rss.mos_mask_annotation(mos_mask=mos_mask, wcs=general.wcs, reference_star_box_width=reference_star_box_width)
+    mask_annotation = rss.mos_mask_annotation(
+        mos_mask=mos_mask,
+        wcs=general.wcs,
+        reference_star_box_width=reference_star_box_width,
+    )
     observation_annotation.add_item(mask_annotation)
     return observation_annotation
 
