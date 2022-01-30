@@ -7,6 +7,7 @@ from imephu.salt.annotation import (
     GeneralProperties,
     MagnitudeRange,
     Target,
+    hrs_observation_annotation,
     rss_fabry_perot_observation_annotation,
     rss_imaging_observation_annotation,
     rss_longslit_observation_annotation,
@@ -114,4 +115,12 @@ def test_rss_fabry_perot_observation_annotation(fits_file, fits_center, check_fi
         general=_general_properties(fits_center, finder_chart.wcs),
     )
     finder_chart.add_annotation(rss)
+    check_finder(finder_chart)
+
+
+def test_hrs_observation_annotation(fits_file, fits_center, check_finder):
+    """Test the annotation for an HRS observation."""
+    finder_chart = FinderChart(fits_file)
+    hrs = hrs_observation_annotation(_general_properties(fits_center, finder_chart.wcs))
+    finder_chart.add_annotation(hrs)
     check_finder(finder_chart)

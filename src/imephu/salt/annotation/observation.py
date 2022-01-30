@@ -193,6 +193,22 @@ def rss_fabry_perot_observation_annotation(
     return _imaging_annotation(general, False)
 
 
+def hrs_observation_annotation(general: GeneralProperties) -> GroupAnnotation:
+    """Return the annotation for an HRS observation.
+
+    Parameters
+    ----------
+    general: `GeneralProperties`
+    Properties which are not specific to the instrument.
+
+    Returns
+    -------
+    `~imephu.annotation.general.GroupAnnotation`
+    The annotation for an HRS observation.
+    """
+    return _imaging_annotation(general, False)
+
+
 def _imaging_annotation(
     general: GeneralProperties, is_slot_mode: bool
 ) -> GroupAnnotation:
