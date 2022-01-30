@@ -122,7 +122,7 @@ def test_salt_base_annotations(fits_file, fits_center, check_finder):
         pi_family_name="Adams",
         position_angle=Angle(60.75 * u.deg),
         automated_position_angle=False,
-        survey_name="POSS2/UKSTU Blue",
+        survey="POSS2/UKSTU Blue",
         fits_center=fits_center,
         wcs=finder_chart.wcs,
     )
