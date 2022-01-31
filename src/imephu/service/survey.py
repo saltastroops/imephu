@@ -1,0 +1,174 @@
+from io import BytesIO
+from typing import Protocol, BinaryIO
+
+import requests
+from astropy import units as u
+from astropy.coordinates import Angle, SkyCoord
+
+
+class SurveyError(BaseException):
+    """An exception arising when querying a sky survey."""
+
+    pass
+
+
+class SkySurvey(Protocol):
+    """A sky survey from which fits files can be requested."""
+
+    def load_fits(self, survey: str, fits_center: SkyCoord, size: Angle) -> BinaryIO:
+        """Load a FITS file for a given position from the sky survey.
+
+        The size of the returned FITS file is determined by the class implementing this
+        protocol (or the web service used).
+
+        Parameters
+        ----------
+        survey: `str`
+            The name of the survey to query for the FITS file.
+        fits_center: `~astropy.coordinates.SkyCoord`
+            The center position of the loaded FITS file.
+        size: `~astropy.coordinates.Angle`
+            The width and height of the FITS file image, as an angle on the sky.
+        """
+        raise NotImplementedError
+
+
+class DigitizedSkySurvey(SkySurvey):
+    """A class for loading FITS files from the Digitized Sky Survey (DSS).
+
+    See the `DSS archive website <https://archive.stsci.edu/dss/index.html>` for more
+    details.
+    """
+
+    _SURVEY_IDENTIFIERS = {
+        "POSS2/UKSTU Red": "poss2ukstu_red",
+        "POSS2/UKSTU Blue": "poss2ukstu_blue",
+        "POSS2/UKSTU IR": "poss2ukstu_ir",
+        "POSS1 Red": "poss1_red",
+        "POSS1 Blue": "poss1_blue",
+        "Quick-V": "quickv",
+        "HST Phase2 (GSC2)": "phase2_gsc2",
+        "HST Phase2 (GSC1)": "phase2_gsc1",
+    }
+
+    def __init__(self) -> None:
+        self._survey_identifiers = {
+            key.lower(): value
+            for key, value in DigitizedSkySurvey._SURVEY_IDENTIFIERS.items()
+        }
+
+    def load_fits(self, survey: str, fits_center: SkyCoord, size: Angle) -> BinaryIO:
+        """Load a FITS file for a given position from the sky survey.
+
+        The following surveys can be queried for FITS images:
+
+        - POSS2/UKSTU Red
+        - POSS2/UKSTU Blue
+        - POSS2/UKSTU IR
+        - POSS1 Red
+        - POSS1 Blue
+        - Quick-V
+        - HST Phase2 (GSC2)
+        - HST Phase2 (GSC1)
+
+        See the `DSS survey page <http://gsss.stsci.edu/SkySurveys/Surveys.htm>` for
+        details about these surveys.
+
+        Parameters
+        ----------
+        survey: `str`
+            The name of the survey to query for the FITS file.
+        fits_center: `~astropy.coordinates.SkyCoord`
+            The center position of the loaded FITS file.
+        size: `~astropy.coordinates.Angle`
+            The width and height of the FITS file image, as an angle on the sky.
+        """
+        url = "https://archive.stsci.edu/cgi-bin/dss_search"
+        params = {
+            "v": self._survey_identifier(survey),
+            "r": fits_center.ra.to_value(u.deg),
+            "d": fits_center.dec.to_value(u.deg),
+            "e": "J2000",
+            "h": size.to_value(u.arcmin),
+            "w": size.to_value(u.arcmin),
+            "f": "fits",
+            "c": "none",
+        }
+        response = requests.get(url, params=params)
+        if response.status_code != 200:
+            raise SurveyError("No FITS file could be loaded.")
+        return BytesIO(response.content)
+
+    def _survey_identifier(self, survey: str) -> str:
+        if survey.lower() not in self._survey_identifiers:
+            raise ValueError(f"Unknown survey: {survey}")
+
+        return self._survey_identifiers[survey.lower()]
+
+
+class SkyView(SkySurvey):
+    """A class for loading FITS files from SkyView.
+
+    See the `SkyView site <https://skyview.gsfc.nasa.gov/current/cgi/titlepage.pl>` for
+    more details about SkyView.
+
+    Parameters
+    ----------
+    pixels: `int`, default: 300
+        The image size in pixels.
+    """
+
+    _SURVEY_IDENTIFIERS = {
+        "2MASS-H": "2mass-h",
+        "2MASS-J": "2mass-j",
+        "2MASS-K": "2mass-k",
+    }
+
+    def __init__(self, pixels: int = 300) -> None:
+        self._pixels = pixels
+        self._survey_identifiers = {
+            key.lower(): value for key, value in SkyView._SURVEY_IDENTIFIERS.items()
+        }
+
+    def load_fits(self, survey: str, fits_center: SkyCoord, size: Angle) -> BinaryIO:
+        """Load a FITS file for a given position from the sky survey.
+
+        The following subset of surveys supported by SkyView can be queried:
+
+        - 2MASS-H
+        - 2MASS-J
+        - 2MASS-K
+
+        See the `SkyView survey page
+        <https://skyview.gsfc.nasa.gov/current/cgi/survey.pl>` for details about these
+        surveys.
+
+        Parameters
+        ----------
+        survey: `str`
+            The name of the survey to query for the FITS file.
+        fits_center: `~astropy.coordinates.SkyCoord`
+            The center position of the loaded FITS file.
+        size: `~astropy.coordinates.Angle`
+            The width and height of the FITS file image, as an angle on the sky.
+        """
+        url = "https://skyview.gsfc.nasa.gov/current/cgi/runquery.pl"
+        params = {
+            "Position": f"{fits_center.ra.to_value(u.deg)}, "
+            f"{fits_center.dec.to_value(u.deg)}",
+            "Survey": self._survey_identifier(survey),
+            "Coordinates": "ICRS",
+            "Return": "FITS",
+            "Pixels": self._pixels,
+            "Size": size.to_value(u.deg),
+        }
+        response = requests.get(url, params=params)
+        if response.status_code != 200:
+            raise SurveyError("No FITS file could be loaded.")
+        return BytesIO(response.content)
+
+    def _survey_identifier(self, survey: str) -> str:
+        if survey.lower() not in self._survey_identifiers:
+            raise ValueError(f"Unknown survey: {survey}")
+
+        return self._survey_identifiers[survey.lower()]

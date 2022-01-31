@@ -9,6 +9,25 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 
 
+@pytest.fixture(autouse=True)
+def no_http_requests(monkeypatch):
+    """Prevent any real HTTP requests.
+
+    Taken (with wording slightly adapted) from
+    https://blog.jerrycodes.com/no-http-requests/.
+    """
+
+    def urlopen_mock(self, method, url, *args, **kwargs):
+        raise RuntimeError(
+            f"The test was about to make a {method} request to "
+            f"{self.scheme}://{self.host}{url}"
+        )
+
+    monkeypatch.setattr(
+        "urllib3.connectionpool.HTTPConnectionPool.urlopen", urlopen_mock
+    )
+
+
 @pytest.fixture()
 def check_finder(file_regression):
     """

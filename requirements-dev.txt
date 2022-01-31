@@ -9,6 +9,9 @@ numpydoc
 pytest
 pytest-cov
 pytest-regressions
+responses
 sphinx
 sphinx-autodoc-typehints
 sphinx-book-theme
+types-requests
+
