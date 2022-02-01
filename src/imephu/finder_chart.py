@@ -5,6 +5,7 @@ from typing import Any, BinaryIO, List, Optional, Union
 
 import matplotlib.pyplot as plt
 from astropy.io import fits
+from astropy.coordinates import Angle, SkyCoord
 from astropy.visualization.interval import AsymmetricPercentileInterval
 from astropy.visualization.mpl_normalize import simple_norm
 from astropy.visualization.wcsaxes.core import WCSAxesSubplot
@@ -12,6 +13,7 @@ from astropy.wcs import WCS
 from matplotlib.figure import Figure
 
 from imephu.annotation import Annotation
+from imephu.service.survey import load_fits
 
 """A finder chart."""
 
@@ -45,6 +47,22 @@ class FinderChart:
         self._data = self._hdu.data
         self._wcs = WCS(self._hdu)
         self._annotations: List[Annotation] = []
+
+    @staticmethod
+    def from_survey(survey: str, fits_center: SkyCoord, size: Angle) -> "FinderChart":
+        """Create a finder chart from a sky survey FITS image.
+
+        Parameters
+        ----------
+        survey: `str`
+            The name of the survey to query for the FITS file.
+        fits_center: `~astropy.coordinates.SkyCoord`
+            The center position of the loaded FITS file.
+        size: `~astropy.coordinates.Angle`
+            The width and height of the FITS file image, as an angle on the sky.
+        """
+        fits_image = load_fits(survey, fits_center, size)
+        return FinderChart(fits_image)
 
     @property
     def wcs(self) -> WCS:

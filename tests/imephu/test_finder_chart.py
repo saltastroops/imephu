@@ -1,9 +1,12 @@
 import io
 import pathlib
+from unittest import mock
 
 import numpy as np
 import pytest
+from astropy import units as u
 
+import imephu.service.survey
 from imephu.finder_chart import FinderChart
 
 
@@ -39,3 +42,17 @@ def test_finder_chart_export_formats(format, file_regression, fits_file):
     contents = io.BytesIO()
     finder_chart.save(contents, format=format)
     file_regression.check(contents.getvalue(), binary=True, extension=f".{format}")
+
+
+def test_finder_chart_from_survey_returns_finder_chart(
+    fits_file, fits_center, check_finder
+):
+    """Test that the from_survey method returns a finder chart."""
+    with mock.patch.object(
+        imephu.finder_chart, "load_fits", autospec=True
+    ) as mock_load_fits:
+        mock_load_fits.return_value = open(fits_file, "rb")
+        finder_chart = FinderChart.from_survey(
+            "POSS2/UKSTU Red", fits_center, 10 * u.arcmin
+        )
+        check_finder(finder_chart)
