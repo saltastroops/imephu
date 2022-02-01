@@ -3,12 +3,12 @@ from unittest import mock
 
 import pytest
 import responses
-from responses import matchers
 from astropy import units as u
 from astropy.coordinates import SkyCoord
+from responses import matchers
 
 import imephu.service.survey
-from imephu.service.survey import DigitizedSkySurvey, SurveyError, SkyView, load_fits
+from imephu.service.survey import DigitizedSkySurvey, SkyView, SurveyError, load_fits
 
 DSS_URL = "https://archive.stsci.edu/cgi-bin/dss_search"
 

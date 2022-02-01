@@ -4,8 +4,8 @@ import os
 from typing import Any, BinaryIO, List, Optional, Union
 
 import matplotlib.pyplot as plt
-from astropy.io import fits
 from astropy.coordinates import Angle, SkyCoord
+from astropy.io import fits
 from astropy.visualization.interval import AsymmetricPercentileInterval
 from astropy.visualization.mpl_normalize import simple_norm
 from astropy.visualization.wcsaxes.core import WCSAxesSubplot

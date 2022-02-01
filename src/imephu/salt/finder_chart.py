@@ -9,7 +9,6 @@ from imephu.finder_chart import FinderChart
 from imephu.salt.annotation import rss, telescope
 from imephu.salt.utils import MosMask
 
-
 _FINDER_CHART_SIZE = 10 * u.arcmin
 
 
@@ -81,9 +80,7 @@ class GeneralProperties:
     survey: str
 
 
-def salticam_finder_chart(
-    general: GeneralProperties, is_slot_mode: bool = False
-):
+def salticam_finder_chart(general: GeneralProperties, is_slot_mode: bool = False) -> FinderChart:
     """Return the finder chart for a Salticam observation.
 
     Parameters
@@ -98,14 +95,18 @@ def salticam_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for a Salticam observation.
     """
-    finder_chart = FinderChart.from_survey(general.survey, general.target.position, _FINDER_CHART_SIZE)
-    annotation = _salticam_observation_annotation(general=general, is_slot_mode=is_slot_mode, wcs=finder_chart.wcs)
+    finder_chart = FinderChart.from_survey(
+        general.survey, general.target.position, _FINDER_CHART_SIZE
+    )
+    annotation = _salticam_observation_annotation(
+        general=general, is_slot_mode=is_slot_mode, wcs=finder_chart.wcs
+    )
     finder_chart.add_annotation(annotation)
     return finder_chart
 
 
 def rss_imaging_finder_chart(
-        general: GeneralProperties, is_slot_mode: bool = False
+    general: GeneralProperties, is_slot_mode: bool = False
 ) -> FinderChart:
     """Return the finder chart for an RSS imaging observation.
 
@@ -121,14 +122,18 @@ def rss_imaging_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an RSS imaging observation.
     """
-    finder_chart = FinderChart.from_survey(general.survey, general.target.position, _FINDER_CHART_SIZE)
-    annotation = _rss_imaging_observation_annotation(general=general, is_slot_mode=is_slot_mode, wcs=finder_chart.wcs)
+    finder_chart = FinderChart.from_survey(
+        general.survey, general.target.position, _FINDER_CHART_SIZE
+    )
+    annotation = _rss_imaging_observation_annotation(
+        general=general, is_slot_mode=is_slot_mode, wcs=finder_chart.wcs
+    )
     finder_chart.add_annotation(annotation)
     return finder_chart
 
 
 def rss_longslit_finder_chart(
-        general: GeneralProperties, slit_width: Angle, slit_height: Angle
+    general: GeneralProperties, slit_width: Angle, slit_height: Angle
 ) -> FinderChart:
     """Return the finder chart for an RSS longslit observation.
 
@@ -146,16 +151,23 @@ def rss_longslit_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an RSS longslit observation.
     """
-    finder_chart = FinderChart.from_survey(general.survey, general.target.position, _FINDER_CHART_SIZE)
-    annotation = _rss_longslit_observation_annotation(general=general, slit_width=slit_width, slit_height=slit_height, wcs=finder_chart.wcs)
+    finder_chart = FinderChart.from_survey(
+        general.survey, general.target.position, _FINDER_CHART_SIZE
+    )
+    annotation = _rss_longslit_observation_annotation(
+        general=general,
+        slit_width=slit_width,
+        slit_height=slit_height,
+        wcs=finder_chart.wcs,
+    )
     finder_chart.add_annotation(annotation)
     return finder_chart
 
 
 def rss_mos_finder_chart(
-        general: GeneralProperties,
-        mos_mask: MosMask,
-        reference_star_box_width: Angle = Angle(5 * u.arcsec),
+    general: GeneralProperties,
+    mos_mask: MosMask,
+    reference_star_box_width: Angle = Angle(5 * u.arcsec),
 ) -> FinderChart:
     """Return the finder chart for an RSS MOS observation.
 
@@ -174,14 +186,21 @@ def rss_mos_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an RSS MOS observation.
     """
-    finder_chart = FinderChart.from_survey(general.survey, general.target.position, _FINDER_CHART_SIZE)
-    annotation = _rss_mos_observation_annotation(general=general, mos_mask=mos_mask, reference_star_box_width=reference_star_box_width, wcs=finder_chart.wcs)
+    finder_chart = FinderChart.from_survey(
+        general.survey, general.target.position, _FINDER_CHART_SIZE
+    )
+    annotation = _rss_mos_observation_annotation(
+        general=general,
+        mos_mask=mos_mask,
+        reference_star_box_width=reference_star_box_width,
+        wcs=finder_chart.wcs,
+    )
     finder_chart.add_annotation(annotation)
     return finder_chart
 
 
 def rss_fabry_perot_finder_chart(
-        general: GeneralProperties,
+    general: GeneralProperties,
 ) -> FinderChart:
     """Return the finder chart for an RSS Fabry-Pérot observation.
 
@@ -195,8 +214,12 @@ def rss_fabry_perot_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The annotation for an RSS Fabry-Pérot observation.
     """
-    finder_chart = FinderChart.from_survey(general.survey, general.target.position, _FINDER_CHART_SIZE)
-    annotation = _rss_fabry_perot_observation_annotation(general=general, wcs=finder_chart.wcs)
+    finder_chart = FinderChart.from_survey(
+        general.survey, general.target.position, _FINDER_CHART_SIZE
+    )
+    annotation = _rss_fabry_perot_observation_annotation(
+        general=general, wcs=finder_chart.wcs
+    )
     finder_chart.add_annotation(annotation)
     return finder_chart
 
@@ -214,26 +237,28 @@ def hrs_finder_chart(general: GeneralProperties) -> FinderChart:
     `~imephu.finder_chart.FinderChart`
         The finder chart for an HRS observation.
     """
-    finder_chart = FinderChart.from_survey(general.survey, general.target.position, _FINDER_CHART_SIZE)
+    finder_chart = FinderChart.from_survey(
+        general.survey, general.target.position, _FINDER_CHART_SIZE
+    )
     annotation = _hrs_observation_annotation(general=general, wcs=finder_chart.wcs)
     finder_chart.add_annotation(annotation)
     return finder_chart
 
 
 def _salticam_observation_annotation(
-        general: GeneralProperties, is_slot_mode: bool, wcs: WCS
+    general: GeneralProperties, is_slot_mode: bool, wcs: WCS
 ) -> GroupAnnotation:
     return _imaging_annotation(general, is_slot_mode, wcs)
 
 
 def _rss_imaging_observation_annotation(
-        general: GeneralProperties, is_slot_mode: bool, wcs: WCS
+    general: GeneralProperties, is_slot_mode: bool, wcs: WCS
 ) -> GroupAnnotation:
     return _imaging_annotation(general, is_slot_mode, wcs)
 
 
 def _rss_longslit_observation_annotation(
-        general: GeneralProperties, slit_width: Angle, slit_height: Angle, wcs: WCS
+    general: GeneralProperties, slit_width: Angle, slit_height: Angle, wcs: WCS
 ) -> GroupAnnotation:
     observation_annotation = _base_annotations(general, wcs)
     longslit_annotation = rss.longslit_annotation(
@@ -248,10 +273,10 @@ def _rss_longslit_observation_annotation(
 
 
 def _rss_mos_observation_annotation(
-        general: GeneralProperties,
-        mos_mask: MosMask,
-        reference_star_box_width,
-        wcs: WCS,
+    general: GeneralProperties,
+    mos_mask: MosMask,
+    reference_star_box_width: Angle,
+    wcs: WCS,
 ) -> GroupAnnotation:
     observation_annotation = _base_annotations(general, wcs)
     mask_annotation = rss.mos_mask_annotation(
@@ -264,17 +289,19 @@ def _rss_mos_observation_annotation(
 
 
 def _rss_fabry_perot_observation_annotation(
-        general: GeneralProperties, wcs: WCS
+    general: GeneralProperties, wcs: WCS
 ) -> GroupAnnotation:
     return _imaging_annotation(general=general, is_slot_mode=False, wcs=wcs)
 
 
-def _hrs_observation_annotation(general: GeneralProperties, wcs: WCS) -> GroupAnnotation:
+def _hrs_observation_annotation(
+    general: GeneralProperties, wcs: WCS
+) -> GroupAnnotation:
     return _imaging_annotation(general=general, is_slot_mode=False, wcs=wcs)
 
 
 def _imaging_annotation(
-        general: GeneralProperties, is_slot_mode: bool, wcs: WCS
+    general: GeneralProperties, is_slot_mode: bool, wcs: WCS
 ) -> GroupAnnotation:
     observation_annotation = _base_annotations(general, wcs)
     magnitude_range = general.target.magnitude_range
@@ -288,9 +315,7 @@ def _imaging_annotation(
     observation_annotation.add_item(magnitude_annotation)
     if is_slot_mode:
         center = general.target.position
-        slot_annotation = telescope.slot_annotation(
-            center, general.position_angle, wcs
-        )
+        slot_annotation = telescope.slot_annotation(center, general.position_angle, wcs)
         observation_annotation.add_item(slot_annotation)
     return observation_annotation
 
@@ -304,5 +329,5 @@ def _base_annotations(general: GeneralProperties, wcs: WCS) -> GroupAnnotation:
         automated_position_angle=general.automated_position_angle,
         survey=general.survey,
         fits_center=general.target.position,
-        wcs=wcs
+        wcs=wcs,
     )

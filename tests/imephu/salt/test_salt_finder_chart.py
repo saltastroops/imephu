@@ -2,12 +2,18 @@ import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 
-from imephu.finder_chart import FinderChart
-from imephu.salt.finder_chart import salticam_finder_chart, rss_imaging_finder_chart, rss_longslit_finder_chart, rss_mos_finder_chart, rss_fabry_perot_finder_chart, hrs_finder_chart, MagnitudeRange, \
-    GeneralProperties, Target
-from imephu.salt.utils import MosMaskSlit, MosMask
-
-
+from imephu.salt.finder_chart import (
+    GeneralProperties,
+    MagnitudeRange,
+    Target,
+    hrs_finder_chart,
+    rss_fabry_perot_finder_chart,
+    rss_imaging_finder_chart,
+    rss_longslit_finder_chart,
+    rss_mos_finder_chart,
+    salticam_finder_chart,
+)
+from imephu.salt.utils import MosMask, MosMaskSlit
 
 POSITION_ANGLE = Angle(20 * u.deg)
 
@@ -28,7 +34,7 @@ def _general_properties(target_position):
 
 @pytest.mark.parametrize("is_slot_mode", [False, True])
 def test_salticam_finder_chart(
-        is_slot_mode, fits_file, fits_center, check_finder, mock_salt_load_fits
+    is_slot_mode, fits_file, fits_center, check_finder, mock_salt_load_fits
 ):
     """Test the finder chart for Salticam observations."""
     finder_chart = salticam_finder_chart(
@@ -40,7 +46,7 @@ def test_salticam_finder_chart(
 
 @pytest.mark.parametrize("is_slot_mode", [False, True])
 def test_rss_imaging_observation_annotation(
-        is_slot_mode, fits_file, fits_center, check_finder, mock_salt_load_fits
+    is_slot_mode, fits_file, fits_center, check_finder, mock_salt_load_fits
 ):
     """Test the finder chart for RSS imaging observations."""
     finder_chart = rss_imaging_finder_chart(
@@ -50,7 +56,9 @@ def test_rss_imaging_observation_annotation(
     check_finder(finder_chart)
 
 
-def test_rss_longslit_finder_chart(fits_file, fits_center, check_finder, mock_salt_load_fits):
+def test_rss_longslit_finder_chart(
+    fits_file, fits_center, check_finder, mock_salt_load_fits
+):
     """Test the finder chart for RSS longslit observations."""
     finder_chart = rss_longslit_finder_chart(
         general=_general_properties(fits_center),
@@ -61,7 +69,7 @@ def test_rss_longslit_finder_chart(fits_file, fits_center, check_finder, mock_sa
 
 
 def test_rss_mos_finder_chart(
-        fits_file, fits_center, mos_mask_xml, check_finder, mock_salt_load_fits
+    fits_file, fits_center, mos_mask_xml, check_finder, mock_salt_load_fits
 ):
     """Test the finder chart for RSS MOS observations."""
     reference_stars = [
@@ -95,7 +103,9 @@ def test_rss_mos_finder_chart(
     check_finder(finder_chart)
 
 
-def test_rss_fabry_perot_finder_chart(fits_file, fits_center, check_finder, mock_salt_load_fits):
+def test_rss_fabry_perot_finder_chart(
+    fits_file, fits_center, check_finder, mock_salt_load_fits
+):
     """Test the finder chart for RSS Fabry-Pérot observations."""
     finder_chart = rss_fabry_perot_finder_chart(
         general=_general_properties(fits_center),

@@ -1,5 +1,5 @@
 from io import BytesIO
-from typing import Protocol, BinaryIO
+from typing import BinaryIO, Protocol
 
 import requests
 from astropy import units as u
