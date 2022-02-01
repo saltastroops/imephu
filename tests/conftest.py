@@ -2,11 +2,14 @@
 
 import io
 import pathlib
+from unittest import mock
 
 import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
+
+from imephu.salt.finder_chart import FinderChart
 
 
 @pytest.fixture(autouse=True)
@@ -140,3 +143,22 @@ def mos_mask_xml():
         return xml
 
     return _mask_xml
+
+
+@pytest.fixture()
+def mock_salt_load_fits(fits_file):
+    """Return a fixture for mocking the load_fits function for SALT finder charts.
+
+    This fixture mocks the ``from_survey`` method of the
+    `~imephu.finder_chart.FinderChart` class. The mock method always returns the FITS
+     image of the `fits_file` fixture.
+
+    .. warning::
+
+       The mock function ignores any arguments - you always get the same FITS file. In
+       particular thus implies that you always should use the `fits_center` fixture for
+       the center of the FITS image.
+    """
+    with mock.patch.object(FinderChart, "from_survey", autospec=True) as mock_load_fits:
+        mock_load_fits.return_value = FinderChart(open(fits_file, "rb"))
+        yield mock_load_fits
