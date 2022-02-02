@@ -89,6 +89,11 @@ class DigitizedSkySurvey(SkySurvey):
             The center position of the loaded FITS file.
         size: `~astropy.coordinates.Angle`
             The width and height of the FITS image, as an angle on the sky.
+
+        Returns
+        -------
+        binary stream
+            The FITS file.
         """
         url = "https://archive.stsci.edu/cgi-bin/dss_search"
         params = {
@@ -156,7 +161,7 @@ class SkyView(SkySurvey):
         Returns
         -------
         binary stream
-            The
+            The FITS file.
         """
         url = "https://skyview.gsfc.nasa.gov/current/cgi/runquery.pl"
         params = {

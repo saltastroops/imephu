@@ -14,7 +14,7 @@ class RectangleAnnotation(LinePathAnnotation):
 
     The rectangle is defined by its center, width and height. The center must be a sky
     position in right ascension and declination, the width and height must be an angle
-    pm the sky. The width is taken to be the extension in the right ascension direction,
+    on the sky. The width is taken to be the extension in the right ascension direction,
     the height the extension in the declination direction.
 
     The corners of the rectangle are mapped to their corresponding pixel positions on

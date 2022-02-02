@@ -23,7 +23,7 @@ class CircleAnnotation(Annotation):
     center: `~astropy.coordinates.SkyCoord`
         The right ascension and declination of the circle's center.
     radius: `~astropy.coordinates.Angle`
-        The circle radius, as an angular distance on the sky in right ascension
+        The radius of the circle, as an angular distance on the sky in right ascension
         direction.
     wcs: `~astropy.wcs.WCS`
         WCS object.

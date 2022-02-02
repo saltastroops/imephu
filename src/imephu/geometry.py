@@ -19,7 +19,7 @@ def rotate(v: SkyCoord, pivot: SkyCoord, angle: Angle, wcs: WCS) -> SkyCoord:
     finder chart will differ from this angle.
 
     The angle is measured from north to south. Hence it depends on the orientation of
-    coordinate aces whether a positive angle corresponds to a clockwise or
+    the coordinate axes whether a positive angle corresponds to a clockwise or
     anti-clockwise orientation.
 
     Parameters
@@ -68,7 +68,7 @@ def rotate(v: SkyCoord, pivot: SkyCoord, angle: Angle, wcs: WCS) -> SkyCoord:
 
 
 def translate(v: SkyCoord, displacement: Angle) -> SkyCoord:
-    """Move a point on the by a displacement vector.
+    """Move a point by a displacement vector.
 
     The point to move is assumed to be given as right ascension and declination. The
     displacement vector is assumed to be a vector on the sky, with real angles, as
@@ -190,8 +190,8 @@ def _is_positive_angle_anti_clockwise(wcs: WCS) -> bool:
     """
     Return whether for a given WCS positive angles are anti-clockwise when plotted.
 
-    Angles on the sky are measured from north to east, and depending on the axis
-    orientation on the finder chart this may correspond to a mathematically positive
+    Angles on the sky are measured from north to east, and depending on the orientation
+    of the axes on the finder chart this may correspond to a mathematically positive
     ("anti-clockwise") or negative ("clockwise") angle.
 
     Parameters

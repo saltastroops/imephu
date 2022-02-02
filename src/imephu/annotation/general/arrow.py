@@ -13,7 +13,7 @@ class ArrowAnnotation(GroupAnnotation):
     """An annotation for plotting an arrow from a start to an end position.
 
     The start of the arrow's tail and the tip of the arrow's head are given as sky
-    positions (in right ascension and declination. The width and height of the arrow
+    positions (in right ascension and declination). The width and height of the arrow
     head are given as an angle on the sky, and this angle is converted to pixels using
     the pixel scale in right ascension direction.
 
