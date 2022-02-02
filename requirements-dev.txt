@@ -13,5 +13,6 @@ responses
 sphinx
 sphinx-autodoc-typehints
 sphinx-book-theme
+tox
 types-requests
 
