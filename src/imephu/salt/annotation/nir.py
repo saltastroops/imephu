@@ -14,41 +14,10 @@ def nir_annotation(center: SkyCoord, wcs: WCS) -> GroupAnnotation:
 
 
 def _science_fiber_bundle_annotation(center: SkyCoord, wcs: WCS) -> GroupAnnotation:
-    fiber_diameter = 1.3 * u.arcsec
-    rows = 13
-    columns = 18
-    max_row_width = 29 * u.arcsec
-    max_column_height = 18 * u.arcsec
-    fiber_distance_in_ra = (max_row_width - fiber_diameter) / (columns - 1)
-    fiber_distance_in_dec = (max_column_height - fiber_diameter) / (rows - 1)
-
-    fiber_centers = []
-    for row in range(0, rows):
-        if row in (0, rows - 1):
-            index_range = range(2, columns - 2)
-        elif row in (1, rows - 2):
-            index_range = range(1, columns - 2)
-        elif row in (2, rows - 3):
-            index_range = range(1, columns - 1)
-        elif row % 2 == 0:
-            index_range = range(0, columns)
-        else:
-            index_range = range(0, columns - 1)
-
-        for column in index_range:
-            displacement_ra = (column - columns // 2) * fiber_distance_in_ra
-            if row % 2 == 0:
-                displacement_ra -= 0.5 * fiber_distance_in_ra
-            displacement_dec = (row - rows // 2) * fiber_distance_in_dec
-            displacement_ra_arcsec = displacement_ra.to_value(u.arcsec)
-            displacement_dec_arcsec = displacement_dec.to_value(u.arcsec)
-            fiber_center = translate(center, (displacement_ra_arcsec, displacement_dec_arcsec) * u.arcsec)
-            fiber_centers.append(fiber_center)
-
-    return fiber_bundle_annotation(center=center, min_width=7 * u.arcmin, max_width=8 * u.arcmin, max_height=8 * u.arcmin, fiber_centers=fiber_centers, fiber_diameter=fiber_diameter, wcs=wcs)
+    return fiber_bundle_annotation(center=center, min_width=22 * u.arcsec, max_width=29 * u.arcsec, max_height=18 * u.arcsec, wcs=wcs)
 
 
-def fiber_bundle_annotation(center: SkyCoord, min_width: Angle, max_width: Angle, max_height: Angle, fiber_centers: List[SkyCoord], fiber_diameter: Angle, wcs: WCS) -> GroupAnnotation:
+def fiber_bundle_annotation(center: SkyCoord, min_width: Angle, max_width: Angle, max_height: Angle, wcs: WCS) -> GroupAnnotation:
     """
     Return the annotation for an NIR fiber bundle.
 
@@ -58,8 +27,7 @@ def fiber_bundle_annotation(center: SkyCoord, min_width: Angle, max_width: Angle
     ascension and declination, respectively.
 
     The outline of this hexagon is shown together with all the fibers. At the center of
-    the hexagon crosshairs are added, the size of which equals a fiber's diameter. The
-    outline of all the fibers is shown as well.
+    the hexagon crosshairs are added.
 
     Parameters
     ----------
@@ -75,11 +43,6 @@ def fiber_bundle_annotation(center: SkyCoord, min_width: Angle, max_width: Angle
     max_height: `~astropy.coordinates.Angle`
         The maximum bundle height (in the direction of declination), as an angle on the
         sky.
-    fiber_centers: list of `astropy.coordinates.SkyCoord`
-        The list of the center positions of all the fibers in the bundle, as positions
-        on the sky, in right ascension and declination.
-    fiber_diameter: `~astropy.coordinates.Angle`
-        The diameter of a fiber, as an angle on the sky.
     wcs: `~astropy.wcs.WCS`
         WCS object.
 
@@ -90,9 +53,7 @@ def fiber_bundle_annotation(center: SkyCoord, min_width: Angle, max_width: Angle
     """
     bundle_annotation = GroupAnnotation([])
     bundle_annotation.add_item(_fiber_bundle_outline(center=center, min_width=min_width, max_width=max_width, height=max_height, wcs=wcs))
-    bundle_annotation.add_item(CrosshairsAnnotation(center=center, size=fiber_diameter, wcs=wcs, color="red"))
-    for fiber in fiber_centers:
-        bundle_annotation.add_item(CircleAnnotation(center=fiber, radius=fiber_diameter / 2, wcs=wcs, edgecolor="none", facecolor="yellow", alpha=0.2))
+    bundle_annotation.add_item(CrosshairsAnnotation(center=center, size=10 * u.arcsec, wcs=wcs, color="red"))
     return bundle_annotation
 
 
