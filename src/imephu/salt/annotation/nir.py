@@ -9,15 +9,57 @@ from imephu.annotation.general import LinePathAnnotation, GroupAnnotation, \
 from imephu.geometry import translate
 
 
-def nir_annotation(center: SkyCoord, wcs: WCS) -> GroupAnnotation:
-    return _science_fiber_bundle_annotation(center, wcs)
+def nir_annotation(science_bundle_center: SkyCoord, bundle_separation: Angle, position_angle: Angle, wcs: WCS) -> GroupAnnotation:
+    """Return the annotation for an NIR setup.
+
+    The annotation contains the outline of the science fiber bundle (with its center
+    marked by crosshairs) and the outlines of the sky fiber bundles.
+
+    Parameters
+    ----------
+    science_bundle_center: `~astropy.coordinates.SkyCoord`
+        The center position of the sky fiber bundle, as a position on the sky, in
+        right ascension and declination.
+    bundle_separation: ~astropy.coordinates.Angle`
+        The separation between the science fiber bundle and the sky fiber bundles, as an
+        angle on the sky. The separation is measured between the center of the science
+        bundle and the midpoint of the line between the centers of the sky bundles.
+    position_angle: `~astropy.coordinates.Angle`
+        The position angle, as an angle on the sky measured from north to east.
+    wcs:`astropy.wcs.WCS`
+        WCS object.
+
+    Returns
+    -------
+    `imephu.annotation.general.GroupAnnotation`
+        The annotation for an NIR setup.
+    """
+    science_bundle = _science_fiber_bundle_annotation(science_bundle_center, wcs)
+
+    bundle_separation_arcsec = bundle_separation.to_value(u.arcsec)
+    sky_bundle_separation = 20 * u.arcsec
+    sky_bundle_separation_arcsec = sky_bundle_separation.to_value(u.arcsec)
+    sky_bundle1_center = translate(science_bundle_center, (-sky_bundle_separation_arcsec / 2, bundle_separation_arcsec) * u.arcsec)
+    sky_bundle1 = _sky_fiber_bundle_annotation(sky_bundle1_center, wcs)
+
+    sky_bundle2_center = translate(science_bundle_center, (sky_bundle_separation_arcsec / 2, bundle_separation_arcsec) * u.arcsec)
+    sky_bundle2 = _sky_fiber_bundle_annotation(sky_bundle2_center, wcs)
+
+    annotation = GroupAnnotation([science_bundle, sky_bundle1, sky_bundle2])
+    return annotation.rotate(science_bundle_center, position_angle)
 
 
 def _science_fiber_bundle_annotation(center: SkyCoord, wcs: WCS) -> GroupAnnotation:
-    return fiber_bundle_annotation(center=center, min_width=22 * u.arcsec, max_width=29 * u.arcsec, max_height=18 * u.arcsec, wcs=wcs)
+    return fiber_bundle_annotation(center=center, min_width=22 * u.arcsec, max_width=29 * u.arcsec, max_height=18 * u.arcsec, with_crosshairs=True, wcs=wcs)
 
 
-def fiber_bundle_annotation(center: SkyCoord, min_width: Angle, max_width: Angle, max_height: Angle, wcs: WCS) -> GroupAnnotation:
+def _sky_fiber_bundle_annotation(center: SkyCoord, wcs: WCS) -> GroupAnnotation:
+    bundle_annotation = fiber_bundle_annotation(center, min_width=10 *u.arcsec, max_width=13 * u.arcsec, max_height=8 * u.arcsec, with_crosshairs=False, wcs=wcs)
+    return bundle_annotation.rotate(center, 90 * u.deg)
+
+
+
+def fiber_bundle_annotation(center: SkyCoord, min_width: Angle, max_width: Angle, max_height: Angle, with_crosshairs: bool, wcs: WCS) -> GroupAnnotation:
     """
     Return the annotation for an NIR fiber bundle.
 
@@ -27,7 +69,7 @@ def fiber_bundle_annotation(center: SkyCoord, min_width: Angle, max_width: Angle
     ascension and declination, respectively.
 
     The outline of this hexagon is shown together with all the fibers. At the center of
-    the hexagon crosshairs are added.
+    the hexagon optionally crosshairs are added.
 
     Parameters
     ----------
@@ -43,6 +85,8 @@ def fiber_bundle_annotation(center: SkyCoord, min_width: Angle, max_width: Angle
     max_height: `~astropy.coordinates.Angle`
         The maximum bundle height (in the direction of declination), as an angle on the
         sky.
+    with_crosshairs: `bool`
+        Whether to add crosshairs at the center.
     wcs: `~astropy.wcs.WCS`
         WCS object.
 
@@ -53,7 +97,8 @@ def fiber_bundle_annotation(center: SkyCoord, min_width: Angle, max_width: Angle
     """
     bundle_annotation = GroupAnnotation([])
     bundle_annotation.add_item(_fiber_bundle_outline(center=center, min_width=min_width, max_width=max_width, height=max_height, wcs=wcs))
-    bundle_annotation.add_item(CrosshairsAnnotation(center=center, size=10 * u.arcsec, wcs=wcs, color="red"))
+    if with_crosshairs:
+        bundle_annotation.add_item(CrosshairsAnnotation(center=center, size=10 * u.arcsec, wcs=wcs, color="red"))
     return bundle_annotation
 
 
