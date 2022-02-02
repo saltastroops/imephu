@@ -292,4 +292,4 @@ def base_annotations(
 
 
 def _crosshairs_annotation(fits_center: SkyCoord, wcs: WCS) -> CrosshairsAnnotation:
-    return CrosshairsAnnotation(center=fits_center, size=4 * u.arcmin, wcs=wcs, color="green")
+    return CrosshairsAnnotation(center=fits_center, size=8 * u.arcmin, wcs=wcs, color="green")
