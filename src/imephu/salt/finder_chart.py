@@ -80,7 +80,9 @@ class GeneralProperties:
     survey: str
 
 
-def salticam_finder_chart(general: GeneralProperties, is_slot_mode: bool = False) -> FinderChart:
+def salticam_finder_chart(
+    general: GeneralProperties, is_slot_mode: bool = False
+) -> FinderChart:
     """Return the finder chart for a Salticam observation.
 
     Parameters
