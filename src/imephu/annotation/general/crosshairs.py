@@ -58,8 +58,8 @@ class CrosshairsAnnotation(GroupAnnotation):
         size_arcsec = size.to_value(u.arcsec)
         line_ra = LinePathAnnotation(
             vertices=[
-                translate(center, Angle((-size_arcsec, 0) * u.arcsec)),
-                translate(center, Angle((size_arcsec, 0) * u.arcsec)),
+                translate(center, Angle((-size_arcsec / 2, 0) * u.arcsec)),
+                translate(center, Angle((size_arcsec / 2, 0) * u.arcsec)),
             ],
             wcs=wcs,
             edgecolor=color,
@@ -67,8 +67,8 @@ class CrosshairsAnnotation(GroupAnnotation):
         )
         line_dec = LinePathAnnotation(
             vertices=[
-                translate(center, Angle((0, -size_arcsec) * u.arcsec)),
-                translate(center, Angle((0, size_arcsec) * u.arcsec)),
+                translate(center, Angle((0, -size_arcsec / 2) * u.arcsec)),
+                translate(center, Angle((0, size_arcsec / 2) * u.arcsec)),
             ],
             wcs=wcs,
             edgecolor=color,
