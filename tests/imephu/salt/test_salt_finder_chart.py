@@ -7,6 +7,7 @@ from imephu.salt.finder_chart import (
     MagnitudeRange,
     Target,
     hrs_finder_chart,
+    nir_finder_chart,
     rss_fabry_perot_finder_chart,
     rss_imaging_finder_chart,
     rss_longslit_finder_chart,
@@ -109,6 +110,22 @@ def test_rss_fabry_perot_finder_chart(
     """Test the finder chart for RSS Fabry-Pérot observations."""
     finder_chart = rss_fabry_perot_finder_chart(
         general=_general_properties(fits_center),
+    )
+    check_finder(finder_chart)
+
+
+@pytest.mark.parametrize("position_angle", [0 * u.deg, 30 * u.deg, -90 * u.deg])
+def test_nir_finder_chart(
+    position_angle, fits_file, fits_center, check_finder, mock_salt_load_fits
+):
+    """Test the finder chart for an NIR observation."""
+    general = _general_properties(fits_center)
+    general.position_angle = position_angle
+    finder_chart = nir_finder_chart(
+        general=general,
+        science_bundle_center=fits_center,
+        bundle_separation=1 * u.arcmin,
+        position_angle=general.position_angle,
     )
     check_finder(finder_chart)
 

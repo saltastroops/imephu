@@ -6,7 +6,7 @@ from astropy.wcs import WCS
 
 from imephu.annotation.general import GroupAnnotation
 from imephu.finder_chart import FinderChart
-from imephu.salt.annotation import rss, telescope
+from imephu.salt.annotation import nir, rss, telescope
 from imephu.salt.utils import MosMask
 
 _FINDER_CHART_SIZE = 10 * u.arcmin
@@ -214,13 +214,52 @@ def rss_fabry_perot_finder_chart(
     Returns
     -------
     `~imephu.finder_chart.FinderChart`
-        The annotation for an RSS Fabry-Pérot observation.
+        The finder chart for an RSS Fabry-Pérot observation.
     """
     finder_chart = FinderChart.from_survey(
         general.survey, general.target.position, _FINDER_CHART_SIZE
     )
     annotation = _rss_fabry_perot_observation_annotation(
         general=general, wcs=finder_chart.wcs
+    )
+    finder_chart.add_annotation(annotation)
+    return finder_chart
+
+
+def nir_finder_chart(
+    general: GeneralProperties,
+    science_bundle_center: SkyCoord,
+    bundle_separation: Angle,
+    position_angle: Angle,
+) -> FinderChart:
+    """Return the finder chart for an NIR observation.
+
+    Parameters
+    ----------
+    science_bundle_center: `~astropy.coordinates.SkyCoord`
+        The center position of the sky fiber bundle, as a position on the sky, in
+        right ascension and declination.
+    bundle_separation: ~astropy.coordinates.Angle`
+        The separation between the science fiber bundle and the sky fiber bundles, as an
+        angle on the sky. The separation is measured between the center of the science
+        bundle and the midpoint of the line between the centers of the sky bundles.
+    position_angle: `~astropy.coordinates.Angle`
+        The position angle, as an angle on the sky measured from north to east.
+
+    Returns
+    -------
+    `~imephu.finder_chart.FinderChart`
+        The finder chart for an NIR observation.
+    """
+    finder_chart = FinderChart.from_survey(
+        general.survey, general.target.position, _FINDER_CHART_SIZE
+    )
+    annotation = _nir_observation_annotation(
+        general=general,
+        science_bundle_center=science_bundle_center,
+        bundle_separation=bundle_separation,
+        position_angle=position_angle,
+        wcs=finder_chart.wcs,
     )
     finder_chart.add_annotation(annotation)
     return finder_chart
@@ -294,6 +333,24 @@ def _rss_fabry_perot_observation_annotation(
     general: GeneralProperties, wcs: WCS
 ) -> GroupAnnotation:
     return _imaging_annotation(general=general, is_slot_mode=False, wcs=wcs)
+
+
+def _nir_observation_annotation(
+    general: GeneralProperties,
+    science_bundle_center: SkyCoord,
+    bundle_separation: Angle,
+    position_angle: Angle,
+    wcs: WCS,
+) -> GroupAnnotation:
+    observation_annotation = _base_annotations(general, wcs)
+    bundles_annotation = nir.bundles_annotation(
+        science_bundle_center=science_bundle_center,
+        bundle_separation=bundle_separation,
+        position_angle=position_angle,
+        wcs=wcs,
+    )
+    observation_annotation.add_item(bundles_annotation)
+    return observation_annotation
 
 
 def _hrs_observation_annotation(

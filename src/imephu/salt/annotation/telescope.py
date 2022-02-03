@@ -3,9 +3,10 @@ from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
 from imephu.annotation.general import (
+    CrosshairsAnnotation,
     GroupAnnotation,
     RectangleAnnotation,
-    TextAnnotation, CrosshairsAnnotation,
+    TextAnnotation,
 )
 from imephu.salt.annotation import rss, salticam
 
@@ -292,4 +293,6 @@ def base_annotations(
 
 
 def _crosshairs_annotation(fits_center: SkyCoord, wcs: WCS) -> CrosshairsAnnotation:
-    return CrosshairsAnnotation(center=fits_center, size=8 * u.arcmin, wcs=wcs, color="green")
+    return CrosshairsAnnotation(
+        center=fits_center, size=8 * u.arcmin, wcs=wcs, color="green"
+    )
