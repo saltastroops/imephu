@@ -62,7 +62,7 @@ def check_finder(file_regression):
             contents = io.BytesIO()
             finder_chart.save(contents, format="png")
             file_regression.check(contents.getvalue(), binary=True, extension=".png")
-        except:
+        finally:
             np.random.seed()
 
     return _check_finder

@@ -3,6 +3,7 @@ import pathlib
 from unittest import mock
 
 import numpy as np
+import pikepdf
 import pytest
 from astropy import units as u
 
@@ -56,3 +57,17 @@ def test_finder_chart_from_survey_returns_finder_chart(
             "POSS2/UKSTU Red", fits_center, 10 * u.arcmin
         )
         check_finder(finder_chart)
+
+
+def test_metadata_is_added_to_finder_chart_pdf(fits_file):
+    """Test that metadata is added to finder chart pdf files."""
+    # save the pdf...
+    finder_chart = FinderChart(fits_file)
+    pdf = io.BytesIO()
+    finder_chart.save(name=pdf, format="pdf")
+
+    # ... and check that the metadata has been added
+    document = pikepdf.open(io.BytesIO(pdf.getvalue()))
+    meta = document.open_metadata()
+    assert meta["dc:title"] == "Finder Chart"
+    assert meta["xmp:CreatorTool"] == f"imephu {imephu.__version__}"

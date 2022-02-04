@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import os
+from io import BytesIO
 from typing import Any, BinaryIO, List, Optional, Union
 
 import matplotlib.pyplot as plt
+import pikepdf
 from astropy.coordinates import Angle, SkyCoord
 from astropy.io import fits
 from astropy.visualization.interval import AsymmetricPercentileInterval
@@ -12,6 +14,7 @@ from astropy.visualization.wcsaxes.core import WCSAxesSubplot
 from astropy.wcs import WCS
 from matplotlib.figure import Figure
 
+import imephu
 from imephu.annotation import Annotation
 from imephu.service.survey import load_fits
 
@@ -25,9 +28,7 @@ class FinderChart:
     shows the region with an overlaid coordinate grid. The axes show WCS coordinates.
     Use the `add_annotation` method to add more content to the finder chart.
 
-    You can display the finder chart on the screen or save it as a file. If you save it
-    as a pdf, metadata is added to the file if it has been added with the `add_metadata`
-    method.
+    You can display the finder chart on the screen or save it as a file.
 
     This class uses Matplotlib for generating the finder chart.
 
@@ -92,7 +93,7 @@ class FinderChart:
 
     def save(
         self,
-        name: Union[str, BinaryIO, os.PathLike[Any]],
+        name: Union[str, BinaryIO, os.PathLike[str], os.PathLike[bytes]],
         format: Optional[str] = None,
     ) -> None:
         """Save the finder chart in a file.
@@ -102,9 +103,6 @@ class FinderChart:
         Matplotlib's `matplotlib.pyplot.savefig` function for more details regarding
         the format.
 
-        In case of a pdf the finder chart's metadata is stored as pdf metadata in the
-        generated file.
-
         Parameters
         ----------
         name: `str`, `path-like` or `binary file-like`
@@ -113,7 +111,17 @@ class FinderChart:
             The format in which to store the finder chart.
         """
         figure = self._create_plot()
-        plt.savefig(name, format=format, bbox_inches="tight")
+        if format and format.lower() == "pdf":
+            pdf = BytesIO()
+            plt.savefig(pdf, format=format, bbox_inches="tight")
+            pdf_with_metadata = FinderChart._update_pdf_metadata(pdf.getvalue())
+            if hasattr(name, "write"):
+                name.write(pdf_with_metadata)  # type: ignore
+            else:
+                with open(name, "wb") as f:  # type: ignore
+                    f.write(pdf_with_metadata)
+        else:
+            plt.savefig(name, format=format, bbox_inches="tight")
         plt.close(figure)
 
     def _create_plot(self) -> Figure:
@@ -186,3 +194,37 @@ class FinderChart:
 
         x.set_ticks(size=7)
         y.set_ticks(size=7)
+
+    @staticmethod
+    def _update_pdf_metadata(pdf: bytes) -> bytes:
+        """Update a pdf by setting some metadata values.
+
+        The following metadata values are set:
+
+        - ``dc:title``: The string ``imephu x.y.z`` is assigned (where ``x.y.z`` is the
+          version).
+        - ``xmp:CreatorTool``: A string of the form "imephu x.y.z" is assigned.
+
+        The resulting pdf is returned; the original pdf remains unchanged.
+
+        See the Core properties chapter of the `XMP specification
+        <https://wwwimages2.adobe.com/content/dam/acom/en/devnet/xmp/pdfs/XMP%20SDK%20Release%20cc-2016-08/XMPSpecificationPart1.pdf>`_
+        for more details about the metadata properties.
+
+        Parameters
+        ----------
+        pdf: `bytes`
+            The pdf whose ``xml:creatorTool`` metadata value should be set.
+
+        Returns
+        -------
+        `bytes`
+            The updated pdf content.
+        """
+        with pikepdf.open(BytesIO(pdf)) as document:
+            with document.open_metadata() as meta:
+                meta["dc:title"] = "Finder Chart"
+                meta["xmp:CreatorTool"] = f"imephu {imephu.__version__}"
+            updated_pdf = BytesIO()
+            document.save(updated_pdf)
+            return updated_pdf.getvalue()
