@@ -56,13 +56,16 @@ def check_finder(file_regression):
         The function for checking a finder chart.
     """
 
-    def _check_fits(finder_chart):
+    def _check_finder(finder_chart):
         np.random.seed(0)
-        contents = io.BytesIO()
-        finder_chart.save(contents, format="png")
-        file_regression.check(contents.getvalue(), binary=True, extension=".png")
+        try:
+            contents = io.BytesIO()
+            finder_chart.save(contents, format="png")
+            file_regression.check(contents.getvalue(), binary=True, extension=".png")
+        except:
+            np.random.seed()
 
-    return _check_fits
+    return _check_finder
 
 
 @pytest.fixture()
