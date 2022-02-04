@@ -142,7 +142,7 @@ def pixel_scales(wcs: WCS) -> Tuple[Angle, Angle]:
     astropy.wcs.utils.proj_plane_pixel_area
 
     """
-    scale_factors = np.sqrt((wcs.pixel_scale_matrix ** 2).sum(axis=0, dtype=float))
+    scale_factors = np.sqrt((wcs.pixel_scale_matrix**2).sum(axis=0, dtype=float))
     return (
         Angle(scale_factors[0], wcs.world_axis_units[0]),
         Angle(scale_factors[1], wcs.world_axis_units[1]),
