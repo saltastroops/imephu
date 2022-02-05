@@ -9,6 +9,7 @@ import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 
+from imephu.annotation.general import TextAnnotation
 from imephu.salt.finder_chart import FinderChart
 
 
@@ -165,3 +166,19 @@ def mock_salt_load_fits(fits_file):
     with mock.patch.object(FinderChart, "from_survey", autospec=True) as mock_load_fits:
         mock_load_fits.return_value = FinderChart(open(fits_file, "rb"))
         yield mock_load_fits
+
+
+@pytest.fixture()
+def legend():
+    """Return a fixture for adding a legend to a finder chart."""
+
+    def _legend(text, wcs):
+        return TextAnnotation(
+            SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
+            text,
+            wcs=wcs,
+            color="blue",
+            horizontalalignment="left",
+        )
+
+    return _legend

@@ -2,11 +2,7 @@ import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 
-from imephu.annotation.general import (
-    CircleAnnotation,
-    LinePathAnnotation,
-    TextAnnotation,
-)
+from imephu.annotation.general import CircleAnnotation, LinePathAnnotation
 from imephu.finder_chart import FinderChart
 
 
@@ -45,7 +41,7 @@ def test_line_path_annotation(fits_file, check_finder):
         (SkyCoord(ra="00h39m40s", dec=-60 * u.deg), -90 * u.deg),
     ],
 )
-def test_line_path_annotation_rotated(pivot, angle, fits_file, check_finder):
+def test_line_path_annotation_rotated(pivot, angle, fits_file, check_finder, legend):
     """Test rotated circle annotations."""
     finder_chart = FinderChart(fits_file)
     line_path_annotation = LinePathAnnotation(
@@ -61,13 +57,6 @@ def test_line_path_annotation_rotated(pivot, angle, fits_file, check_finder):
     )
     rotated_circle_annotation = line_path_annotation.rotate(pivot, angle)
     rotated_circle_annotation._kwargs["color"] = "blue"
-    legend = TextAnnotation(
-        SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
-        f"Rotated by {angle.to_value(u.deg)} deg",
-        wcs=finder_chart.wcs,
-        color="blue",
-        horizontalalignment="left",
-    )
     pivot_marker = CircleAnnotation(
         pivot,
         12 * u.arcsec,
@@ -79,13 +68,15 @@ def test_line_path_annotation_rotated(pivot, angle, fits_file, check_finder):
     finder_chart.add_annotation(pivot_marker)
     finder_chart.add_annotation(line_path_annotation)
     finder_chart.add_annotation(rotated_circle_annotation)
-    finder_chart.add_annotation(legend)
+    finder_chart.add_annotation(
+        legend(f"Rotated by {angle.to_value(u.deg)} deg", wcs=finder_chart.wcs)
+    )
     check_finder(finder_chart)
 
 
 @pytest.mark.parametrize("displacement", [(0, 0) * u.arcmin, (2.5, -4) * u.arcmin])
 def test_line_path_annotation_translated(
-    displacement, fits_file, fits_center, check_finder
+    displacement, fits_file, fits_center, check_finder, legend
 ):
     """Test translated circle annotations."""
     finder_chart = FinderChart(fits_file)
@@ -101,14 +92,12 @@ def test_line_path_annotation_translated(
     )
     translated_line_path_annotation = line_path_annotation.translate(displacement)
     translated_line_path_annotation._kwargs["color"] = "blue"
-    legend = TextAnnotation(
-        SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
-        f"Translated by {displacement.to_value(u.arcmin)} arcmin",
-        wcs=finder_chart.wcs,
-        color="blue",
-        horizontalalignment="left",
-    )
     finder_chart.add_annotation(line_path_annotation)
     finder_chart.add_annotation(translated_line_path_annotation)
-    finder_chart.add_annotation(legend)
+    finder_chart.add_annotation(
+        legend(
+            f"Translated by {displacement.to_value(u.arcmin)} arcmin",
+            wcs=finder_chart.wcs,
+        )
+    )
     check_finder(finder_chart)

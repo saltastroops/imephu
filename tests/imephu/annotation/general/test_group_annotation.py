@@ -6,7 +6,6 @@ from imephu.annotation.general import (
     CircleAnnotation,
     GroupAnnotation,
     RectangleAnnotation,
-    TextAnnotation,
 )
 from imephu.finder_chart import FinderChart
 
@@ -48,7 +47,7 @@ def test_group_annotation(fits_file, check_finder):
 
 
 @pytest.mark.parametrize("angle", [0 * u.deg, 90 * u.deg])
-def test_group_annotation_rotated(angle, fits_file, fits_center, check_finder):
+def test_group_annotation_rotated(angle, fits_file, fits_center, check_finder, legend):
     """Test rotated group annotations."""
     finder_chart = FinderChart(fits_file)
     rectangle1_annotation = RectangleAnnotation(
@@ -82,13 +81,6 @@ def test_group_annotation_rotated(angle, fits_file, fits_center, check_finder):
         [rectangle1_annotation, rectangle2_annotation, circle_annotation]
     )
     rotated_group_annotation = group_annotation.rotate(fits_center, angle)
-    legend = TextAnnotation(
-        SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
-        f"Rotated by {angle.to_value(u.deg)} deg",
-        wcs=finder_chart.wcs,
-        color="blue",
-        horizontalalignment="left",
-    )
     pivot_marker = CircleAnnotation(
         fits_center,
         12 * u.arcsec,
@@ -100,14 +92,19 @@ def test_group_annotation_rotated(angle, fits_file, fits_center, check_finder):
     finder_chart.add_annotation(pivot_marker)
     finder_chart.add_annotation(group_annotation)
     finder_chart.add_annotation(rotated_group_annotation)
-    finder_chart.add_annotation(legend)
+    finder_chart.add_annotation(
+        legend(
+            f"Rotated by {angle.to_value(u.deg)} deg",
+            wcs=finder_chart.wcs,
+        )
+    )
     check_finder(finder_chart)
 
 
 @pytest.mark.parametrize(
     "displacement", [Angle([0, 0] * u.arcmin), Angle([-5, -2] * u.arcmin)]
 )
-def test_group_annotation_translated(displacement, fits_file, check_finder):
+def test_group_annotation_translated(displacement, fits_file, check_finder, legend):
     """Test translated group annotations."""
     finder_chart = FinderChart(fits_file)
     rectangle1_annotation = RectangleAnnotation(
@@ -141,14 +138,12 @@ def test_group_annotation_translated(displacement, fits_file, check_finder):
         [rectangle1_annotation, rectangle2_annotation, circle_annotation]
     )
     translated_group_annotation = group_annotation.translate(displacement)
-    legend = TextAnnotation(
-        SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
-        f"Translated by {displacement.to_value(u.arcmin)} arcmin",
-        wcs=finder_chart.wcs,
-        color="blue",
-        horizontalalignment="left",
-    )
     finder_chart.add_annotation(group_annotation)
     finder_chart.add_annotation(translated_group_annotation)
-    finder_chart.add_annotation(legend)
+    finder_chart.add_annotation(
+        legend(
+            f"Translated by {displacement.to_value(u.arcmin)} arcmin",
+            wcs=finder_chart.wcs,
+        )
+    )
     check_finder(finder_chart)

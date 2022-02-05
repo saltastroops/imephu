@@ -2,11 +2,7 @@ import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 
-from imephu.annotation.general import (
-    CircleAnnotation,
-    RectangleAnnotation,
-    TextAnnotation,
-)
+from imephu.annotation.general import CircleAnnotation, RectangleAnnotation
 from imephu.finder_chart import FinderChart
 
 
@@ -27,7 +23,9 @@ def test_rectangle_annotation(fits_file, check_finder):
 
 
 @pytest.mark.parametrize("angle", [0 * u.deg, 45 * u.deg])
-def test_rectangle_annotation_rotated(angle, fits_file, fits_center, check_finder):
+def test_rectangle_annotation_rotated(
+    angle, fits_file, fits_center, check_finder, legend
+):
     """Test rotated rectangle annotations."""
     finder_chart = FinderChart(fits_file)
     rectangle_annotation = RectangleAnnotation(
@@ -41,13 +39,6 @@ def test_rectangle_annotation_rotated(angle, fits_file, fits_center, check_finde
     )
     rotated_rectangle_annotation = rectangle_annotation.rotate(fits_center, angle)
     rotated_rectangle_annotation._kwargs["facecolor"] = "blue"
-    legend = TextAnnotation(
-        SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
-        f"Rotated by {angle.to_value(u.deg)} deg",
-        wcs=finder_chart.wcs,
-        color="blue",
-        horizontalalignment="left",
-    )
     pivot_marker = CircleAnnotation(
         fits_center,
         12 * u.arcsec,
@@ -59,13 +50,15 @@ def test_rectangle_annotation_rotated(angle, fits_file, fits_center, check_finde
     finder_chart.add_annotation(pivot_marker)
     finder_chart.add_annotation(rectangle_annotation)
     finder_chart.add_annotation(rotated_rectangle_annotation)
-    finder_chart.add_annotation(legend)
+    finder_chart.add_annotation(
+        legend(f"Rotated by {angle.to_value(u.deg)} deg", wcs=finder_chart.wcs)
+    )
     check_finder(finder_chart)
 
 
 @pytest.mark.parametrize("displacement", [(0, 0) * u.arcmin, (2.5, -2) * u.arcmin])
 def test_rectangle_annotation_translated(
-    displacement, fits_file, fits_center, check_finder
+    displacement, fits_file, fits_center, check_finder, legend
 ):
     """Test translated rectangle annotations."""
     finder_chart = FinderChart(fits_file)
@@ -80,14 +73,12 @@ def test_rectangle_annotation_translated(
     )
     translated_rectangle_annotation = rectangle_annotation.translate(displacement)
     translated_rectangle_annotation._kwargs["facecolor"] = "blue"
-    legend = TextAnnotation(
-        SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
-        f"Translated by {displacement.to_value(u.arcmin)} arcmin",
-        wcs=finder_chart.wcs,
-        color="blue",
-        horizontalalignment="left",
-    )
     finder_chart.add_annotation(rectangle_annotation)
     finder_chart.add_annotation(translated_rectangle_annotation)
-    finder_chart.add_annotation(legend)
+    finder_chart.add_annotation(
+        legend(
+            f"Translated by {displacement.to_value(u.arcmin)} arcmin",
+            wcs=finder_chart.wcs,
+        )
+    )
     check_finder(finder_chart)
