@@ -1,8 +1,7 @@
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
-import pytz
 from astropy.coordinates import SkyCoord
 
 from imephu.utils import Ephemeris
@@ -17,7 +16,7 @@ def _does_not_raise():
     "epoch,expectation",
     [
         (datetime(2022, 2, 5), pytest.raises(ValueError)),
-        (datetime(2022, 2, 5, tzinfo=pytz.utc), _does_not_raise()),
+        (datetime(2022, 2, 5, tzinfo=timezone.utc), _does_not_raise()),
     ],
 )
 def test_ephemeris_epoch_must_be_timezone_aware(epoch, expectation):
