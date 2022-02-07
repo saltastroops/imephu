@@ -116,13 +116,13 @@ def _small_motion_annotation(
     # mid position on the line between initial and final position on the finder chart,
     # which may be slightly different from the actual mid position on a great circle
     # between the points on the sky
-    initial_position_px = sky_position_to_pixel(sorted_ephemerides[0].position, wcs)
-    final_position_px = sky_position_to_pixel(sorted_ephemerides[-1].position, wcs)
     mid_position = _mid_point_on_chart(sorted_ephemerides, wcs)
     mid_position_px = sky_position_to_pixel(mid_position, wcs)
 
     # calculate an arrow start and end so that the arrow head will be placed at the
-    # right direction abd will point in the right direction
+    # right direction and will point in the right direction
+    initial_position_px = sky_position_to_pixel(sorted_ephemerides[0].position, wcs)
+    final_position_px = sky_position_to_pixel(sorted_ephemerides[-1].position, wcs)
     direction = final_position_px - initial_position_px
     direction_unit = direction / np.linalg.norm(direction)
     arrow_start_px = mid_position_px - (_MAX_SMALL_MOTION_PIXELS / 2) * direction_unit
@@ -236,7 +236,7 @@ def _small_motion_epoch_label(
 def _angle_per_pixel(wcs: WCS) -> Angle:
     """Return the angle per pixel for a WCS object.
 
-    The angle per pixel is averaged over right ascension abd declination.
+    The angle per pixel is averaged over right ascension and declination.
     """
     sx, sy = pixel_scales(wcs)
     return (sx + sy) / 2
