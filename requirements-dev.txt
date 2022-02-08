@@ -1,4 +1,5 @@
 astropy
+astroquery
 black
 defusedxml
 flake8
@@ -13,6 +14,7 @@ pikepdf
 pytest
 pytest-cov
 pytest-regressions
+python-dateutil
 requests
 responses
 sphinx

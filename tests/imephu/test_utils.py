@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import pytest
 from astropy.coordinates import SkyCoord
 
+from imephu.salt.finder_chart import MagnitudeRange
 from imephu.utils import Ephemeris
 
 
@@ -22,4 +23,10 @@ def _does_not_raise():
 def test_ephemeris_epoch_must_be_timezone_aware(epoch, expectation):
     """Test that ephemeris epochs must be timezone-aware."""
     with expectation:
-        Ephemeris(epoch=epoch, position=SkyCoord(ra="0h00m00s", dec="0d00m00s"))
+        Ephemeris(
+            epoch=epoch,
+            position=SkyCoord(ra="0h00m00s", dec="0d00m00s"),
+            magnitude_range=MagnitudeRange(
+                min_magnitude=18, max_magnitude=18, bandpass="V"
+            ),
+        )

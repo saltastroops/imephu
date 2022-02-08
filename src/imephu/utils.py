@@ -1,12 +1,15 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
 
 from astropy.coordinates import SkyCoord
+
+from imephu.salt.finder_chart import MagnitudeRange
 
 
 @dataclass
 class Ephemeris:
-    """An ephemeris with an epoch and a position.
+    """An ephemeris with an epoch, position and magnitude range.
 
     Parameters
     ----------
@@ -15,11 +18,15 @@ class Ephemeris:
         a timezone-aware datetime.
     position: `~astropy.coordinates.SkyCoord`
         The position, in right ascension and declination.
+    magnitude_range: `~imephu.utils.Ephemeris`
+        The magnitude range.
     """
 
     epoch: datetime
 
     position: SkyCoord
+
+    magnitude_range: Optional[MagnitudeRange]
 
     def __post_init__(self) -> None:
         """Check that the epoch is timezone-aware."""

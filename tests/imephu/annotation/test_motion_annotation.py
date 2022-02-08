@@ -7,6 +7,7 @@ from astropy.coordinates import SkyCoord
 from imephu.annotation.motion import motion_annotation
 from imephu.finder_chart import FinderChart
 from imephu.geometry import rotate
+from imephu.salt.finder_chart import MagnitudeRange
 from imephu.utils import Ephemeris
 
 
@@ -35,10 +36,16 @@ def test_large_motion_annotation(angle, fits_file, fits_center, check_finder, le
     initial_ephemeris = Ephemeris(
         epoch=datetime(2022, 2, 5, 22, 0, 0, 0, tzinfo=timezone.utc),
         position=initial_position,
+        magnitude_range=MagnitudeRange(
+            min_magnitude=18, max_magnitude=18, bandpass="V"
+        ),
     )
     middle_ephemeris = Ephemeris(
         epoch=datetime(2022, 2, 6, 0, 0, 0, 0, tzinfo=timezone.utc),
         position=fits_center,
+        magnitude_range=MagnitudeRange(
+            min_magnitude=18, max_magnitude=18, bandpass="V"
+        ),
     )
     final_position = rotate(
         v=SkyCoord(ra="00h39m50s", dec="-60d00m00s"),
@@ -49,7 +56,11 @@ def test_large_motion_annotation(angle, fits_file, fits_center, check_finder, le
     sast = timezone(timedelta(hours=2), "SAST")
     # note the different timezone for the final ephemeris
     final_ephemeris = Ephemeris(
-        epoch=datetime(2022, 2, 6, 4, 0, 0, 0, tzinfo=sast), position=final_position
+        epoch=datetime(2022, 2, 6, 4, 0, 0, 0, tzinfo=sast),
+        position=final_position,
+        magnitude_range=MagnitudeRange(
+            min_magnitude=18, max_magnitude=18, bandpass="V"
+        ),
     )
     # ephemerides need not be sorted by epoch
     ephemerides = [middle_ephemeris, initial_ephemeris, final_ephemeris]
@@ -87,10 +98,16 @@ def test_small_motion_annotation(angle, fits_file, fits_center, check_finder, le
     initial_ephemeris = Ephemeris(
         epoch=datetime(2022, 2, 5, 22, 0, 0, 0, tzinfo=timezone.utc),
         position=initial_position,
+        magnitude_range=MagnitudeRange(
+            min_magnitude=18, max_magnitude=18, bandpass="V"
+        ),
     )
     middle_ephemeris = Ephemeris(
         epoch=datetime(2022, 2, 6, 0, 0, 0, 0, tzinfo=timezone.utc),
         position=fits_center,
+        magnitude_range=MagnitudeRange(
+            min_magnitude=18, max_magnitude=18, bandpass="V"
+        ),
     )
     final_position = rotate(
         v=SkyCoord(ra="00h39m59.5s", dec="-60d00m00s"),
@@ -101,7 +118,11 @@ def test_small_motion_annotation(angle, fits_file, fits_center, check_finder, le
     sast = timezone(timedelta(hours=2), "SAST")
     # note the different timezone for the final ephemeris
     final_ephemeris = Ephemeris(
-        epoch=datetime(2022, 2, 6, 4, 0, 0, 0, tzinfo=sast), position=final_position
+        epoch=datetime(2022, 2, 6, 4, 0, 0, 0, tzinfo=sast),
+        position=final_position,
+        magnitude_range=MagnitudeRange(
+            min_magnitude=18, max_magnitude=18, bandpass="V"
+        ),
     )
     # ephemerides need not be sorted by epoch
     ephemerides = [middle_ephemeris, initial_ephemeris, final_ephemeris]
