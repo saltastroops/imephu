@@ -1,0 +1,1026 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API &#8212; imephu  documentation</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Development" href="development.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+    
+        <nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Content
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="quickstart.html">
+   Quickstart
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   API
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="development.html">
+   Development
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/api.md.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-imephu.annotation">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     imephu.annotation
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-imephu.annotation.general">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     imephu.annotation.general
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#module-imephu.geometry">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       imephu.geometry
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-imephu.finder_chart">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     imephu.finder_chart
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>API</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-imephu.annotation">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     imephu.annotation
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-imephu.annotation.general">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     imephu.annotation.general
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#module-imephu.geometry">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       imephu.geometry
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-imephu.finder_chart">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     imephu.finder_chart
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-imephu.annotation">
+<span id="imephu-annotation"></span><h2><code class="docutils literal notranslate"><span class="pre">imephu.annotation</span></code><a class="headerlink" href="#module-imephu.annotation" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="imephu.annotation.Annotation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imephu.annotation.</span></span><span class="sig-name descname"><span class="pre">Annotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imephu/annotation.html#Annotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.Annotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An annotation to add to a finder chart.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.Annotation.add_to">
+<span class="sig-name descname"><span class="pre">add_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.visualization.wcsaxes.core.WCSAxes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation.html#Annotation.add_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.Annotation.add_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add this annotation to a finder chart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ax</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.visualization.wcsaxes.WCSAxes.html#astropy.visualization.wcsaxes.WCSAxes" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCSAxes</span></code></a>) – Plot axes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.Annotation.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pivot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.Annotation" title="imephu.annotation.Annotation"><span class="pre">imephu.annotation.Annotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation.html#Annotation.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.Annotation.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate this annotation around a pivot and return the result.</p>
+<p>The rotation angle is an angle on the sky, measured from north to east.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pivot</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – Point around which to rotate the annotation.</p></li>
+<li><p><strong>angle</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – Angle of rotation, measured from north towards the east.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the rotation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.Annotation" title="imephu.annotation.Annotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Annotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.Annotation.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">displacement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.Annotation" title="imephu.annotation.Annotation"><span class="pre">imephu.annotation.Annotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation.html#Annotation.translate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.Annotation.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move this annotation along a displacement vector and return the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>displacement</strong> (<em>2D array of angles</em>) – The displacement by which to move the annotation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the translation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.Annotation" title="imephu.annotation.Annotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Annotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-imephu.annotation.general">
+<span id="imephu-annotation-general"></span><h2><code class="docutils literal notranslate"><span class="pre">imephu.annotation.general</span></code><a class="headerlink" href="#module-imephu.annotation.general" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="imephu.annotation.general.ArrowAnnotation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imephu.annotation.general.</span></span><span class="sig-name descname"><span class="pre">ArrowAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.wcs.wcs.WCS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_filled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tail_shown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imephu/annotation/general/arrow.html#ArrowAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.ArrowAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An annotation for plotting an arrow from a start to an end position.</p>
+<p>The start of the arrow’s tail and the tip of the arrow’s head are given as sky
+positions (in right ascension and declination). The width and height of the arrow
+head are given as an angle on the sky, and this angle is converted to pixels using
+the pixel scale in right ascension direction.</p>
+<blockquote>
+<div><p>By default the arrow is not filled, but you can change this behavior with the
+<code class="docutils literal notranslate"><span class="pre">head_filled</span></code> parameter.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – Position of the arrow tail’s start.</p></li>
+<li><p><strong>end</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – Position of the arrow head’s tip.</p></li>
+<li><p><strong>wcs</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a>) – WCS object.</p></li>
+<li><p><strong>head_width</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – Width of the arrow head.</p></li>
+<li><p><strong>head_height</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – Height of the arrow head.</p></li>
+<li><p><strong>head_filled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, default: False) – Whether the arrow head is filled.</p></li>
+<li><p><strong>tail_shown</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, default: True) – Whether the tail should be shown. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, only the head is displayed.</p></li>
+<li><p><strong>color</strong> (<em>color</em><em>, </em><em>default: &quot;black&quot;</em>) – The arrow color.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments, which will be passed to the
+<a class="reference internal" href="#imephu.annotation.general.LinePathAnnotation" title="imephu.annotation.general.LinePathAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LinePathAnnotation</span></code></a> constructor for both tail and
+head.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="imephu.annotation.general.CircleAnnotation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imephu.annotation.general.</span></span><span class="sig-name descname"><span class="pre">CircleAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.wcs.wcs.WCS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edgecolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facecolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imephu/annotation/general/circle.html#CircleAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.CircleAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An annotation for adding a circle to a plot.</p>
+<p>The radius of the circle is given as an angular distance on the sky, in the
+direction of the right ascension. A circle is drawn irrespective of the pixel scales
+for right ascension and declination. Hence the circle in general is not a circle on
+the sky but just on the finder chart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – The right ascension and declination of the circle’s center.</p></li>
+<li><p><strong>radius</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – The radius of the circle, as an angular distance on the sky in right ascension
+direction.</p></li>
+<li><p><strong>wcs</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a>) – WCS object.</p></li>
+<li><p><strong>edgecolor</strong> (<em>color</em><em>, </em><em>default: &quot;black&quot;</em>) – The edge color.</p></li>
+<li><p><strong>facecolor</strong> (<em>color</em><em>, </em><em>default: &quot;none&quot;</em>) – The filling color.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments, which will be passed to Matplotlib’s
+<a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.patches.Circle.html#matplotlib.patches.Circle" title="(in Matplotlib v3.5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Circle</span></code></a> patch constructor.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.CircleAnnotation.add_to">
+<span class="sig-name descname"><span class="pre">add_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.visualization.wcsaxes.core.WCSAxes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/circle.html#CircleAnnotation.add_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.CircleAnnotation.add_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the circle to a finder chart.</p>
+<dl class="simple">
+<dt>ax: <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.visualization.wcsaxes.WCSAxes.html#astropy.visualization.wcsaxes.WCSAxes" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCSAxes</span></code></a></dt><dd><p>WCS axes object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.CircleAnnotation.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pivot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.general.CircleAnnotation" title="imephu.annotation.general.circle.CircleAnnotation"><span class="pre">imephu.annotation.general.circle.CircleAnnotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/circle.html#CircleAnnotation.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.CircleAnnotation.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate this annotation around a pivot and return the result.</p>
+<p>The rotation angle is an angle on the sky, measured from north to east.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pivot</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – Point around which to rotate the annotation.</p></li>
+<li><p><strong>angle</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – Angle of rotation, measured from north to east.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the rotation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.general.CircleAnnotation" title="imephu.annotation.general.CircleAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CircleAnnotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.CircleAnnotation.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">displacement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.general.CircleAnnotation" title="imephu.annotation.general.circle.CircleAnnotation"><span class="pre">imephu.annotation.general.circle.CircleAnnotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/circle.html#CircleAnnotation.translate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.CircleAnnotation.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move this annotation along a displacement vector and return the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>displacement</strong> (<em>2D array of angles</em>) – The displacement by which to move the annotation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the translation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.general.CircleAnnotation" title="imephu.annotation.general.CircleAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CircleAnnotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="imephu.annotation.general.CrosshairsAnnotation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imephu.annotation.general.</span></span><span class="sig-name descname"><span class="pre">CrosshairsAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.wcs.wcs.WCS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imephu/annotation/general/crosshairs.html#CrosshairsAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.CrosshairsAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An annotation for plotting crosshairs.</p>
+<p>The crosshairs are defined by their center (i.e. where the two lines intersect), the
+size (i.e. the length of the lines) and the angle of rotation around the center.</p>
+<p>The lines bisect each other. The crosshair lines are in the direction of right
+ascension and declination.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – The center of the crosshairs, i.e. the point of intersection of the two lines,
+as a position on the sky (in right ascension and declination).</p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – The length of each line, as an angle on the sky.</p></li>
+<li><p><strong>wcs</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a>) – WCS object.</p></li>
+<li><p><strong>color</strong> (<em>color</em><em>, </em><em>default: &quot;black&quot;</em>) – The line color.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments, which will be passed to Matplotlib’s
+<a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.patches.PathPatch.html#matplotlib.patches.PathPatch" title="(in Matplotlib v3.5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathPatch</span></code></a> patch constructor.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="imephu.annotation.general.GroupAnnotation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imephu.annotation.general.</span></span><span class="sig-name descname"><span class="pre">GroupAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.10)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#imephu.annotation.Annotation" title="imephu.annotation.Annotation"><span class="pre">imephu.annotation.Annotation</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imephu/annotation/general/group.html#GroupAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.GroupAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An annotation made of a group of annotations.</p>
+<p>The annotation comprises a list of annotation items. Any of the
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">Annotation</span></code> methods are applied to all the items in the list,
+in the order the items appear in the list. So, for example, the <code class="docutils literal notranslate"><span class="pre">apply_to</span></code> method
+calls the <code class="docutils literal notranslate"><span class="pre">apply_to</span></code> method for all list items, starting from the first item in
+the list and finishing with the last item.</p>
+<p>Annotations can be added to the group when calling the constructor or by using the
+<code class="docutils literal notranslate"><span class="pre">add_item</span></code> method afterwards.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>items</strong> (sequence of <a class="reference internal" href="#imephu.annotation.Annotation" title="imephu.annotation.Annotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Annotation</span></code></a>) – The initial list of group items.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.GroupAnnotation.add_item">
+<span class="sig-name descname"><span class="pre">add_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#imephu.annotation.Annotation" title="imephu.annotation.Annotation"><span class="pre">imephu.annotation.Annotation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/group.html#GroupAnnotation.add_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.GroupAnnotation.add_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an annotation to this group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> (<a class="reference internal" href="#imephu.annotation.Annotation" title="imephu.annotation.Annotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Annotation</span></code></a>) – Annotation to add to this group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.GroupAnnotation.add_to">
+<span class="sig-name descname"><span class="pre">add_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.visualization.wcsaxes.core.WCSAxes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/group.html#GroupAnnotation.add_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.GroupAnnotation.add_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add this annotation to a finder chart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ax</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.visualization.wcsaxes.WCSAxes.html#astropy.visualization.wcsaxes.WCSAxes" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCSAxes</span></code></a>) – Plot axes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.GroupAnnotation.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pivot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.general.GroupAnnotation" title="imephu.annotation.general.group.GroupAnnotation"><span class="pre">imephu.annotation.general.group.GroupAnnotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/group.html#GroupAnnotation.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.GroupAnnotation.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate this annotation around a pivot and return the result.</p>
+<p>The rotation angle is an angle on the sky, measured from north to east.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pivot</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – Point around which to rotate the annotation.</p></li>
+<li><p><strong>angle</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – Angle of rotation, measured from north towards the east.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the rotation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.general.GroupAnnotation" title="imephu.annotation.general.GroupAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GroupAnnotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.GroupAnnotation.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">displacement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.general.GroupAnnotation" title="imephu.annotation.general.group.GroupAnnotation"><span class="pre">imephu.annotation.general.group.GroupAnnotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/group.html#GroupAnnotation.translate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.GroupAnnotation.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move this annotation along a displacement vector and return the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>displacement</strong> (<em>2D array of angles</em>) – The displacement by which to move the annotation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the translation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.general.GroupAnnotation" title="imephu.annotation.general.GroupAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GroupAnnotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="imephu.annotation.general.LinePathAnnotation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imephu.annotation.general.</span></span><span class="sig-name descname"><span class="pre">LinePathAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.10)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.wcs.wcs.WCS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edgecolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facecolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imephu/annotation/general/line_path.html#LinePathAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.LinePathAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An annotation consisting of straight lines between vertices.</p>
+<p>The path displayed by this annotation is defined by a set of vertices, which are
+connected by straight lines on the finder chart. (The connecting lines in general
+will refer to curved lines on the sky.)</p>
+<p>By default the path is assumed to be closed, i.e. the last vertex is connected to
+the first by a line. This behavior may be changed with the <code class="docutils literal notranslate"><span class="pre">closed</span></code> parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> (sequence of <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – The path vertices, as an array or sequence of sky coordinates (with right
+ascension abd declination).</p></li>
+<li><p><strong>wcs</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a>) – WCS object.</p></li>
+<li><p><strong>closed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>default: True</em>) – Whether the the path is closed, i.e. whether the last vertex is connected to the
+first by a line.</p></li>
+<li><p><strong>edgecolor</strong> (<em>color</em><em>, </em><em>default: &quot;black&quot;</em>) – The edge color.</p></li>
+<li><p><strong>facecolor</strong> (<em>color</em><em>, </em><em>default: &quot;none&quot;</em>) – The filling color.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments, which will be passed to Matplotlib’s
+<a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.patches.PathPatch.html#matplotlib.patches.PathPatch" title="(in Matplotlib v3.5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathPatch</span></code></a> patch constructor.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.LinePathAnnotation.add_to">
+<span class="sig-name descname"><span class="pre">add_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.visualization.wcsaxes.core.WCSAxes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/line_path.html#LinePathAnnotation.add_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.LinePathAnnotation.add_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the line path to a finder chart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ax</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.visualization.wcsaxes.WCSAxes.html#astropy.visualization.wcsaxes.WCSAxes" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCSAxes</span></code></a>) – Plot axes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.LinePathAnnotation.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pivot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.general.LinePathAnnotation" title="imephu.annotation.general.line_path.LinePathAnnotation"><span class="pre">imephu.annotation.general.line_path.LinePathAnnotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/line_path.html#LinePathAnnotation.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.LinePathAnnotation.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate this annotation around a pivot and return the result.</p>
+<p>The rotation angle is an angle on the sky, measured from north to east.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pivot</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – Point around which to rotate the annotation.</p></li>
+<li><p><strong>angle</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – Angle of rotation, measured from north towards the east.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the rotation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.general.LinePathAnnotation" title="imephu.annotation.general.LinePathAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LinePathAnnotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.LinePathAnnotation.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">displacement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.general.LinePathAnnotation" title="imephu.annotation.general.line_path.LinePathAnnotation"><span class="pre">imephu.annotation.general.line_path.LinePathAnnotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/line_path.html#LinePathAnnotation.translate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.LinePathAnnotation.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move this annotation along a displacement vector and return the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>displacement</strong> (<em>2D array of angles</em>) – The displacement by which to move the annotation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the translation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.general.LinePathAnnotation" title="imephu.annotation.general.LinePathAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LinePathAnnotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="imephu.annotation.general.RectangleAnnotation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imephu.annotation.general.</span></span><span class="sig-name descname"><span class="pre">RectangleAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.wcs.wcs.WCS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edgecolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facecolor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imephu/annotation/general/rectangle.html#RectangleAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.RectangleAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An annotation for plotting a rectangle on a finder chart.</p>
+<p>The rectangle is defined by its center, width and height. The center must be a sky
+position in right ascension and declination, the width and height must be an angle
+on the sky. The width is taken to be the extension in the right ascension direction,
+the height the extension in the declination direction.</p>
+<p>The corners of the rectangle are mapped to their corresponding pixel positions on
+the finder chart. This implies that in general the figure plotted on the finder
+chart will be a quadrilateral, but not exactly a rectangle.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The center rather than “bottom left” corner is specified, as this is more
+convenient in the context of finder charts.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – The center of the rectangle, in right ascension and declination.</p></li>
+<li><p><strong>width</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – The width of the rectangle as an angle on the sky in the direction of the
+right ascension.</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – The height of the rectangle as an angle on the sky in the direction of the
+declination.</p></li>
+<li><p><strong>wcs</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a>) – WCS object.</p></li>
+<li><p><strong>edgecolor</strong> (<em>color</em><em>, </em><em>default: &quot;black&quot;</em>) – The edge color.</p></li>
+<li><p><strong>facecolor</strong> (<em>color</em><em>, </em><em>default: &quot;none&quot;</em>) – The filling color.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments, which will be passed to Matplotlib’s
+<a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.patches.PathPatch.html#matplotlib.patches.PathPatch" title="(in Matplotlib v3.5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathPatch</span></code></a> patch constructor.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.RectangleAnnotation.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pivot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.general.RectangleAnnotation" title="imephu.annotation.general.rectangle.RectangleAnnotation"><span class="pre">imephu.annotation.general.rectangle.RectangleAnnotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/rectangle.html#RectangleAnnotation.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.RectangleAnnotation.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate this annotation around a pivot and return the result.</p>
+<p>The rotation angle is an angle on the sky, measured from north to east.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pivot</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – Point around which to rotate the annotation.</p></li>
+<li><p><strong>angle</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – Angle of rotation, measured from north towards the east.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the rotation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.general.RectangleAnnotation" title="imephu.annotation.general.RectangleAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectangleAnnotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.RectangleAnnotation.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">displacement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.general.RectangleAnnotation" title="imephu.annotation.general.rectangle.RectangleAnnotation"><span class="pre">imephu.annotation.general.rectangle.RectangleAnnotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/rectangle.html#RectangleAnnotation.translate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.RectangleAnnotation.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move this annotation along a displacement vector and return the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>displacement</strong> (<em>2D array of angles</em>) – The displacement by which to move the annotation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the translation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.general.RectangleAnnotation" title="imephu.annotation.general.RectangleAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RectangleAnnotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="imephu.annotation.general.TextAnnotation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imephu.annotation.general.</span></span><span class="sig-name descname"><span class="pre">TextAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.10)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.22)"><span class="pre">numpy.dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.wcs.wcs.WCS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontalalignment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.10)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'center'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'left'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'right'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verticalalignment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.10)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'baseline'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'bottom'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'center'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'center_baseline'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'top'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imephu/annotation/general/text.html#TextAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.TextAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An annotation for adding text to a plot.</p>
+<p>The text position can be specified as a position on the sky (as an instance of
+<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) or as a point in axes coordinates (as an array of
+<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a> values. Axes coordinates range from (0, 0) (bottom left of the axes) to
+(1, 1) (top right of the axes).</p>
+<p>You can only rotate and translate the annotation if the text position is specified
+as a position on the sky.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#imephu.annotation.general.TextAnnotation.rotate" title="imephu.annotation.general.TextAnnotation.rotate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotate</span></code></a> method rotates the text position, but not the text itself. If you
+want to rotate the text rather than the text position, you should use the
+<code class="docutils literal notranslate"><span class="pre">rotation</span></code> parameter with the angle in degrees.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a> or) – The right ascension and declination of the point where to put the text.</p></li>
+<li><p><strong>s</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The text.</p></li>
+<li><p><strong>wcs</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a>) – WCS object.</p></li>
+<li><p><strong>color</strong> (<em>color</em><em>, </em><em>default: &quot;black&quot;</em>) – The text color.</p></li>
+<li><p><strong>horizontalalignment</strong> (<em>{&quot;center&quot;</em><em>, </em><em>&quot;left&quot;</em><em>, </em><em>&quot;right&quot;}</em><em>, </em><em>default: &quot;center&quot;</em>) – The horizontal alignment of the text.</p></li>
+<li><p><strong>verticalalignment</strong> (<em>{&quot;baseline&quot;</em><em>, </em><em>&quot;bottom&quot;</em><em>, </em><em>&quot;center&quot;</em><em>, </em><em>&quot;center_baseline&quot;</em><em>, </em><em>&quot;top&quot;}</em><em>, </em><em>default: &quot;center&quot;</em>) – The vertical alignment of the text.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments, which will be passed to Matplotlib’s
+<a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.text.html#matplotlib.axes.Axes.text" title="(in Matplotlib v3.5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">text</span></code></a> method for adding text to plot Axes.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.TextAnnotation.add_to">
+<span class="sig-name descname"><span class="pre">add_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.visualization.wcsaxes.core.WCSAxes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/text.html#TextAnnotation.add_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.TextAnnotation.add_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the text to a finder chart.</p>
+<dl class="simple">
+<dt>ax:  <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.visualization.wcsaxes.WCSAxes.html#astropy.visualization.wcsaxes.WCSAxes" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCSAxes</span></code></a></dt><dd><p>WCS axes object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.TextAnnotation.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pivot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.general.TextAnnotation" title="imephu.annotation.general.text.TextAnnotation"><span class="pre">imephu.annotation.general.text.TextAnnotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/text.html#TextAnnotation.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.TextAnnotation.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate this annotation around a pivot and return the result.</p>
+<p>The rotation angle is an angle on the sky, measured from north to east.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pivot</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – Point around which to rotate the annotation.</p></li>
+<li><p><strong>angle</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – Angle of rotation, measured from north to east.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the rotation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.general.TextAnnotation" title="imephu.annotation.general.TextAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TextAnnotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.annotation.general.TextAnnotation.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">displacement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.annotation.general.TextAnnotation" title="imephu.annotation.general.text.TextAnnotation"><span class="pre">imephu.annotation.general.text.TextAnnotation</span></a></span></span><a class="reference internal" href="_modules/imephu/annotation/general/text.html#TextAnnotation.translate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.annotation.general.TextAnnotation.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move this annotation along a displacement vector and return the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>displacement</strong> (<em>2D array of angles</em>) – The displacement by which to move the annotation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The annotation resulting from the translation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#imephu.annotation.general.TextAnnotation" title="imephu.annotation.general.TextAnnotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TextAnnotation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="module-imephu.geometry">
+<span id="imephu-geometry"></span><h3><code class="docutils literal notranslate"><span class="pre">imephu.geometry</span></code><a class="headerlink" href="#module-imephu.geometry" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="imephu.geometry.pixel_scales">
+<span class="sig-prename descclassname"><span class="pre">imephu.geometry.</span></span><span class="sig-name descname"><span class="pre">pixel_scales</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.wcs.wcs.WCS</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">astropy.coordinates.angles.Angle</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">astropy.coordinates.angles.Angle</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/imephu/geometry.html#pixel_scales"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.geometry.pixel_scales" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the pixel scales of a WCS object.</p>
+<p>For a WCS returns pixel scales along each axis of the image pixel at
+the <code class="docutils literal notranslate"><span class="pre">CRPIX</span></code> location once it is projected onto the
+“plane of intermediate world coordinates” as defined in
+<a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2002A%26A...395.1061G">Greisen &amp; Calabretta 2002, A&amp;A, 395, 1061</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is concerned <strong>only</strong> about the transformation
+“image plane”-&gt;”projection plane” and <strong>not</strong> about the
+transformation “celestial sphere”-&gt;”projection plane”-&gt;”image plane”.
+Therefore, this function ignores distortions arising due to
+non-linear nature of most projections.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In order to compute the scales corresponding to celestial axes only,
+make sure that the input <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a> object contains
+celestial axes only, e.g., by passing in the
+<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS.celestial" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">celestial</span></code></a> WCS object.</p>
+</div>
+<p>The code has been adapted from APLpy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>wcs</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a>) – A world coordinate system object.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>scale</strong> – A vector (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a>) of projection plane increments
+corresponding to each pixel side (axis). The units of the returned
+results are the same as the units of <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.Wcsprm.html#astropy.wcs.Wcsprm.cdelt" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cdelt</span></code></a>,
+<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.Wcsprm.html#astropy.wcs.Wcsprm.crval" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crval</span></code></a>, and <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.Wcsprm.html#astropy.wcs.Wcsprm.cd" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cd</span></code></a> for
+the celestial WCS and can be obtained by inquiring the value
+of <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.Wcsprm.html#astropy.wcs.Wcsprm.cunit" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cunit</span></code></a> property of the input
+<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a> WCS object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple of <a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.utils.proj_plane_pixel_area.html#astropy.wcs.utils.proj_plane_pixel_area" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">astropy.wcs.utils.proj_plane_pixel_area</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="imephu.geometry.pixel_to_sky_position">
+<span class="sig-prename descclassname"><span class="pre">imephu.geometry.</span></span><span class="sig-name descname"><span class="pre">pixel_to_sky_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position_px</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.22)"><span class="pre">numpy.dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.wcs.wcs.WCS</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></span><a class="reference internal" href="_modules/imephu/geometry.html#pixel_to_sky_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.geometry.pixel_to_sky_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert pixel coordinates to the corresponding sky position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position_px</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – Pixel coordinates.</p></li>
+<li><p><strong>wcs</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a>) – WCS object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The sky coordinates.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="imephu.geometry.rotate">
+<span class="sig-prename descclassname"><span class="pre">imephu.geometry.</span></span><span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pivot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.wcs.wcs.WCS</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></span><a class="reference internal" href="_modules/imephu/geometry.html#rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.geometry.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate a point around a pivot.</p>
+<p>Both the pivot and the point to rotate are assumed to be given as right ascension
+and declination. The rotation angle is taken to be the angle on the sky. If the
+pixel scales for right ascension and declination differ, the angle seen on the
+finder chart will differ from this angle.</p>
+<p>The angle is measured from north to south. Hence it depends on the orientation of
+the coordinate axes whether a positive angle corresponds to a clockwise or
+anti-clockwise orientation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – The point to rotate.</p></li>
+<li><p><strong>pivot</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – The point around which the point <code class="docutils literal notranslate"><span class="pre">v</span></code> is rotated.</p></li>
+<li><p><strong>angle</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – The angle of rotation, measured from north to east.</p></li>
+<li><p><strong>wcs</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a>) – WCS object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The point after the rotation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="imephu.geometry.sky_position_to_pixel">
+<span class="sig-prename descclassname"><span class="pre">imephu.geometry.</span></span><span class="sig-name descname"><span class="pre">sky_position_to_pixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.wcs.wcs.WCS</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.22)"><span class="pre">numpy.dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/imephu/geometry.html#sky_position_to_pixel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.geometry.sky_position_to_pixel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a sky position to the corresponding pixel coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – Sky position as right ascension and declination.</p></li>
+<li><p><strong>wcs</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a>) – WCS object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The pixel coordinates.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="imephu.geometry.translate">
+<span class="sig-prename descclassname"><span class="pre">imephu.geometry.</span></span><span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">displacement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></span><a class="reference internal" href="_modules/imephu/geometry.html#translate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.geometry.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move a point by a displacement vector.</p>
+<p>The point to move is assumed to be given as right ascension and declination. The
+displacement vector is assumed to be a vector on the sky, with real angles, as
+described for the <code class="xref py py-obj docutils literal notranslate"><span class="pre">sky_vector_to_pixel</span></code> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – Point to move.</p></li>
+<li><p><strong>displacement</strong> (<em>2D array of angles</em>) – Vector by which to move the point.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The point after moving.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-imephu.finder_chart">
+<span id="imephu-finder-chart"></span><h2><code class="docutils literal notranslate"><span class="pre">imephu.finder_chart</span></code><a class="headerlink" href="#module-imephu.finder_chart" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="imephu.finder_chart.FinderChart">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imephu.finder_chart.</span></span><span class="sig-name descname"><span class="pre">FinderChart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.10)"><span class="pre">BinaryIO</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.10)"><span class="pre">os.PathLike</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imephu/finder_chart.html#FinderChart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.finder_chart.FinderChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>A finder chart for an astronomical observation.</p>
+<p>The finder chart is generated from a FITS file. By default the finder chart just
+shows the region with an overlaid coordinate grid. The axes show WCS coordinates.
+Use the <a class="reference internal" href="#imephu.finder_chart.FinderChart.add_annotation" title="imephu.finder_chart.FinderChart.add_annotation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_annotation</span></code></a> method to add more content to the finder chart.</p>
+<p>You can display the finder chart on the screen or save it as a file.</p>
+<p>This class uses Matplotlib for generating the finder chart.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Be careful when working with several finder charts as all the finder
+charts use the same Matplotlib figure.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">path-like</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">binary</span> <span class="pre">file-like</span></code>) – FITS file to display.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.finder_chart.FinderChart.add_annotation">
+<span class="sig-name descname"><span class="pre">add_annotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#imephu.annotation.Annotation" title="imephu.annotation.Annotation"><span class="pre">imephu.annotation.Annotation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/imephu/finder_chart.html#FinderChart.add_annotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.finder_chart.FinderChart.add_annotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an annotation to the finder chart.</p>
+<p>Annotations will be plotted onto the finder chart in the order they have been
+added. So, for example, the annotation added last will be output on top of all
+the other annotations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.finder_chart.FinderChart.from_survey">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_survey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">survey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fits_center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.sky_coordinate.SkyCoord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">astropy.coordinates.angles.Angle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#imephu.finder_chart.FinderChart" title="imephu.finder_chart.FinderChart"><span class="pre">imephu.finder_chart.FinderChart</span></a></span></span><a class="reference internal" href="_modules/imephu/finder_chart.html#FinderChart.from_survey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.finder_chart.FinderChart.from_survey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a finder chart from a sky survey FITS image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>survey</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the survey to query for the FITS file.</p></li>
+<li><p><strong>fits_center</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkyCoord</span></code></a>) – The center position of the loaded FITS file.</p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.coordinates.Angle.html#astropy.coordinates.Angle" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Angle</span></code></a>) – The width and height of the FITS file image, as an angle on the sky.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.finder_chart.FinderChart.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.10)"><span class="pre">BinaryIO</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.10)"><span class="pre">os.PathLike</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.10)"><span class="pre">os.PathLike</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.10)"><span class="pre">bytes</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/imephu/finder_chart.html#FinderChart.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.finder_chart.FinderChart.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the finder chart in a file.</p>
+<p>If <a class="reference external" href="https://docs.python.org/3/library/functions.html#format" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format</span></code></a> is not set, the file extension of <code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code> is used to figure out the
+file or, if there is no extension, Matplotlib’s default is used. See
+Matplotlib’s <a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html#matplotlib.pyplot.savefig" title="(in Matplotlib v3.5.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matplotlib.pyplot.savefig</span></code></a> function for more details regarding
+the format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">path-like</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">binary</span> <span class="pre">file-like</span></code>) – The file to which the finder chart is saved. An existing file is replaced.</p></li>
+<li><p><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – The format in which to store the finder chart.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="imephu.finder_chart.FinderChart.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/imephu/finder_chart.html#FinderChart.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#imephu.finder_chart.FinderChart.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the finder chart on the screen.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="imephu.finder_chart.FinderChart.wcs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wcs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">astropy.wcs.wcs.WCS</span></em><a class="headerlink" href="#imephu.finder_chart.FinderChart.wcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a deep copy of the WCS object of the finder chart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A deep copy of the WCS object.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html#astropy.wcs.WCS" title="(in Astropy v5.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WCS</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="quickstart.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Quickstart</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="development.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Development</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Southern African Large Telescope (SALT)<br/>
+    
+        &copy; Copyright 2022, Southern African Large Telescope (SALT).<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

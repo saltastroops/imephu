@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>imephu.annotation.general.arrow &#8212; imephu  documentation</title>
+    
+  <link href="../../../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    
+  <link rel="preload" as="script" href="../../../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+    
+        <nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Content
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../quickstart.html">
+   Quickstart
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../api.html">
+   API
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../development.html">
+   Development
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
+            
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <h1>Source code for imephu.annotation.general.arrow</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="kn">import</span> <span class="n">Angle</span><span class="p">,</span> <span class="n">SkyCoord</span>
+<span class="kn">from</span> <span class="nn">astropy.wcs</span> <span class="kn">import</span> <span class="n">WCS</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">typing</span> <span class="k">as</span> <span class="n">npt</span>
+
+<span class="kn">from</span> <span class="nn">imephu.annotation.general</span> <span class="kn">import</span> <span class="n">GroupAnnotation</span><span class="p">,</span> <span class="n">LinePathAnnotation</span>
+<span class="kn">from</span> <span class="nn">imephu.geometry</span> <span class="kn">import</span> <span class="n">pixel_scales</span><span class="p">,</span> <span class="n">pixel_to_sky_position</span><span class="p">,</span> <span class="n">sky_position_to_pixel</span>
+
+
+<div class="viewcode-block" id="ArrowAnnotation"><a class="viewcode-back" href="../../../../api.html#imephu.annotation.general.ArrowAnnotation">[docs]</a><span class="k">class</span> <span class="nc">ArrowAnnotation</span><span class="p">(</span><span class="n">GroupAnnotation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An annotation for plotting an arrow from a start to an end position.</span>
+
+<span class="sd">    The start of the arrow&#39;s tail and the tip of the arrow&#39;s head are given as sky</span>
+<span class="sd">    positions (in right ascension and declination). The width and height of the arrow</span>
+<span class="sd">    head are given as an angle on the sky, and this angle is converted to pixels using</span>
+<span class="sd">    the pixel scale in right ascension direction.</span>
+
+<span class="sd">     By default the arrow is not filled, but you can change this behavior with the</span>
+<span class="sd">     ``head_filled`` parameter.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    start: `~astropy.coordinates.SkyCoord`</span>
+<span class="sd">        Position of the arrow tail&#39;s start.</span>
+<span class="sd">    end: `~astropy.coordinates.SkyCoord`</span>
+<span class="sd">        Position of the arrow head&#39;s tip.</span>
+<span class="sd">    wcs: `~astropy.wcs.WCS`</span>
+<span class="sd">        WCS object.</span>
+<span class="sd">    head_width: `~astropy.coordinates.Angle`</span>
+<span class="sd">        Width of the arrow head.</span>
+<span class="sd">    head_height: `~astropy.coordinates.Angle`</span>
+<span class="sd">        Height of the arrow head.</span>
+<span class="sd">    head_filled: `bool`, default: False</span>
+<span class="sd">        Whether the arrow head is filled.</span>
+<span class="sd">    tail_shown: `bool`, default: True</span>
+<span class="sd">        Whether the tail should be shown. If ``False``, only the head is displayed.</span>
+<span class="sd">    color: color, default: &quot;black&quot;</span>
+<span class="sd">        The arrow color.</span>
+<span class="sd">    **kwargs: dict, optional</span>
+<span class="sd">        Additional keyword arguments, which will be passed to the</span>
+<span class="sd">        `~imephu.annotation.general.LinePathAnnotation` constructor for both tail and</span>
+<span class="sd">        head.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">:</span> <span class="n">SkyCoord</span><span class="p">,</span>
+        <span class="n">end</span><span class="p">:</span> <span class="n">SkyCoord</span><span class="p">,</span>
+        <span class="n">wcs</span><span class="p">:</span> <span class="n">WCS</span><span class="p">,</span>
+        <span class="n">head_width</span><span class="p">:</span> <span class="n">Angle</span><span class="p">,</span>
+        <span class="n">head_height</span><span class="p">:</span> <span class="n">Angle</span><span class="p">,</span>
+        <span class="n">head_filled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">tail_shown</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">([])</span>
+        <span class="k">if</span> <span class="n">tail_shown</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">ArrowAnnotation</span><span class="o">.</span><span class="n">_tail</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">wcs</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span>
+            <span class="n">ArrowAnnotation</span><span class="o">.</span><span class="n">_head</span><span class="p">(</span>
+                <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">wcs</span><span class="p">,</span> <span class="n">head_width</span><span class="p">,</span> <span class="n">head_height</span><span class="p">,</span> <span class="n">head_filled</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_tail</span><span class="p">(</span>
+        <span class="n">start</span><span class="p">:</span> <span class="n">SkyCoord</span><span class="p">,</span>
+        <span class="n">end</span><span class="p">:</span> <span class="n">SkyCoord</span><span class="p">,</span>
+        <span class="n">wcs</span><span class="p">:</span> <span class="n">WCS</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LinePathAnnotation</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">LinePathAnnotation</span><span class="p">(</span>
+            <span class="n">vertices</span><span class="o">=</span><span class="p">[</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">],</span> <span class="n">wcs</span><span class="o">=</span><span class="n">wcs</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_head</span><span class="p">(</span>
+        <span class="n">start</span><span class="p">:</span> <span class="n">SkyCoord</span><span class="p">,</span>
+        <span class="n">end</span><span class="p">:</span> <span class="n">SkyCoord</span><span class="p">,</span>
+        <span class="n">wcs</span><span class="p">:</span> <span class="n">WCS</span><span class="p">,</span>
+        <span class="n">head_width</span><span class="p">:</span> <span class="n">Angle</span><span class="p">,</span>
+        <span class="n">head_height</span><span class="p">:</span> <span class="n">Angle</span><span class="p">,</span>
+        <span class="n">head_filled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LinePathAnnotation</span><span class="p">:</span>
+        <span class="c1"># Let S, be the start of the arrow&#39;s tail, T be the tip of the arrow and A, B</span>
+        <span class="c1"># the other two vertices of the head. Then AA&#39; is bisected by the line ST, and</span>
+        <span class="c1"># AB and ST are perpendicular to each other.</span>
+        <span class="c1"># Let&#39;s get the unit vector n_TS from head to tail in pixels.</span>
+        <span class="n">start_px</span> <span class="o">=</span> <span class="n">sky_position_to_pixel</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+        <span class="n">end_px</span> <span class="o">=</span> <span class="n">sky_position_to_pixel</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+        <span class="n">end_to_start_px</span> <span class="o">=</span> <span class="n">start_px</span> <span class="o">-</span> <span class="n">end_px</span>  <span class="c1"># noqa</span>
+        <span class="n">n_TS_px</span> <span class="o">=</span> <span class="n">end_to_start_px</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">end_to_start_px</span><span class="p">)</span>
+
+        <span class="c1"># We can use the vector to get the point of intersection of AA&#39; and ST.</span>
+        <span class="n">sx</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pixel_scales</span><span class="p">(</span><span class="n">wcs</span><span class="p">)</span>
+        <span class="n">head_height_px</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">head_height</span> <span class="o">/</span> <span class="n">sx</span><span class="p">)</span>
+        <span class="n">point_of_intersection</span> <span class="o">=</span> <span class="n">end_px</span> <span class="o">+</span> <span class="n">head_height_px</span> <span class="o">*</span> <span class="n">n_TS_px</span>  <span class="c1"># noqa</span>
+
+        <span class="c1"># We can also use it to get a unit vector n_AB along AB.</span>
+        <span class="n">n_AB_px</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n_TS_px</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">n_TS_px</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+
+        <span class="c1"># And hence we can calculate A and B.</span>
+        <span class="n">head_width_px</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">head_width</span> <span class="o">/</span> <span class="n">sx</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">v_A_px</span> <span class="o">=</span> <span class="n">point_of_intersection</span> <span class="o">-</span> <span class="n">head_width_px</span> <span class="o">*</span> <span class="n">n_AB_px</span>  <span class="c1"># noqa</span>
+        <span class="n">v_B_px</span> <span class="o">=</span> <span class="n">point_of_intersection</span> <span class="o">+</span> <span class="n">head_width_px</span> <span class="o">*</span> <span class="n">n_AB_px</span>  <span class="c1"># noqa</span>
+        <span class="n">v_A</span> <span class="o">=</span> <span class="n">pixel_to_sky_position</span><span class="p">(</span><span class="n">v_A_px</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+        <span class="n">v_B</span> <span class="o">=</span> <span class="n">pixel_to_sky_position</span><span class="p">(</span><span class="n">v_B_px</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">LinePathAnnotation</span><span class="p">(</span>
+            <span class="n">vertices</span><span class="o">=</span><span class="p">[</span><span class="n">v_A</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">v_B</span><span class="p">],</span>
+            <span class="n">wcs</span><span class="o">=</span><span class="n">wcs</span><span class="p">,</span>
+            <span class="n">closed</span><span class="o">=</span><span class="n">head_filled</span><span class="p">,</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+            <span class="n">facecolor</span><span class="o">=</span><span class="n">color</span> <span class="k">if</span> <span class="n">head_filled</span> <span class="k">else</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Southern African Large Telescope (SALT)<br/>
+    
+        &copy; Copyright 2022, Southern African Large Telescope (SALT).<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,443 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>imephu.geometry &#8212; imephu  documentation</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+    
+        <nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Content
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../quickstart.html">
+   Quickstart
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../api.html">
+   API
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../development.html">
+   Development
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
+            
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <h1>Source code for imephu.geometry</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">atan2</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="kn">import</span> <span class="n">Angle</span><span class="p">,</span> <span class="n">SkyCoord</span>
+<span class="kn">from</span> <span class="nn">astropy.wcs</span> <span class="kn">import</span> <span class="n">WCS</span>
+<span class="kn">from</span> <span class="nn">astropy.wcs.utils</span> <span class="kn">import</span> <span class="n">pixel_to_skycoord</span><span class="p">,</span> <span class="n">skycoord_to_pixel</span>
+
+
+<div class="viewcode-block" id="rotate"><a class="viewcode-back" href="../../api.html#imephu.geometry.rotate">[docs]</a><span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">SkyCoord</span><span class="p">,</span> <span class="n">pivot</span><span class="p">:</span> <span class="n">SkyCoord</span><span class="p">,</span> <span class="n">angle</span><span class="p">:</span> <span class="n">Angle</span><span class="p">,</span> <span class="n">wcs</span><span class="p">:</span> <span class="n">WCS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SkyCoord</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Rotate a point around a pivot.</span>
+
+<span class="sd">    Both the pivot and the point to rotate are assumed to be given as right ascension</span>
+<span class="sd">    and declination. The rotation angle is taken to be the angle on the sky. If the</span>
+<span class="sd">    pixel scales for right ascension and declination differ, the angle seen on the</span>
+<span class="sd">    finder chart will differ from this angle.</span>
+
+<span class="sd">    The angle is measured from north to south. Hence it depends on the orientation of</span>
+<span class="sd">    the coordinate axes whether a positive angle corresponds to a clockwise or</span>
+<span class="sd">    anti-clockwise orientation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v: `~astropy.coordinates.SkyCoord`</span>
+<span class="sd">        The point to rotate.</span>
+<span class="sd">    pivot: `~astropy.coordinates.SkyCoord`</span>
+<span class="sd">        The point around which the point ``v`` is rotated.</span>
+<span class="sd">    angle: `~astropy.coordinates.Angle`</span>
+<span class="sd">        The angle of rotation, measured from north to east.</span>
+<span class="sd">    wcs: `~astropy.wcs.WCS`</span>
+<span class="sd">        WCS object.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    `~astropy.coordinates.SkyCoord`</span>
+<span class="sd">        The point after the rotation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert from world coordinates to pixels</span>
+    <span class="n">v_px</span> <span class="o">=</span> <span class="n">sky_position_to_pixel</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+    <span class="n">pivot_px</span> <span class="o">=</span> <span class="n">sky_position_to_pixel</span><span class="p">(</span><span class="n">pivot</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+
+    <span class="c1"># Correct the angle for different pixel scales</span>
+    <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span> <span class="o">=</span> <span class="n">pixel_scales</span><span class="p">(</span><span class="n">wcs</span><span class="p">)</span>
+    <span class="n">angle_rad</span> <span class="o">=</span> <span class="n">angle</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">rad</span><span class="p">)</span>
+    <span class="n">x_angle_sky</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">angle_rad</span><span class="p">)</span>
+    <span class="n">y_angle_sky</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">angle_rad</span><span class="p">)</span>
+    <span class="n">x_angle_px</span> <span class="o">=</span> <span class="n">x_angle_sky</span>
+    <span class="n">y_angle_px</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sx</span> <span class="o">/</span> <span class="n">sy</span><span class="p">)</span> <span class="o">*</span> <span class="n">y_angle_sky</span>
+    <span class="n">angle_px</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">y_angle_px</span><span class="p">,</span> <span class="n">x_angle_px</span><span class="p">)</span>
+
+    <span class="c1"># If necessary, change the sign of the angle to accommodate the orientation of the</span>
+    <span class="c1"># axes on the finder chart.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_positive_angle_anti_clockwise</span><span class="p">(</span><span class="n">wcs</span><span class="p">):</span>
+        <span class="n">angle_px</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="c1"># Perform the rotation</span>
+    <span class="n">rotation</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[[</span><span class="n">cos</span><span class="p">(</span><span class="n">angle_px</span><span class="p">),</span> <span class="o">-</span><span class="n">sin</span><span class="p">(</span><span class="n">angle_px</span><span class="p">)],</span> <span class="p">[</span><span class="n">sin</span><span class="p">(</span><span class="n">angle_px</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">angle_px</span><span class="p">)]]</span>
+    <span class="p">)</span>
+    <span class="n">diff_vector_px</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v_px</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pivot_px</span><span class="p">)</span>
+    <span class="n">rotated_v_px</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pivot_px</span><span class="p">)</span> <span class="o">+</span> <span class="n">rotation</span> <span class="o">@</span> <span class="n">diff_vector_px</span>
+
+    <span class="c1"># Convert back from pixels to world coordinates</span>
+    <span class="k">return</span> <span class="n">pixel_to_sky_position</span><span class="p">(</span><span class="n">rotated_v_px</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="translate"><a class="viewcode-back" href="../../api.html#imephu.geometry.translate">[docs]</a><span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">SkyCoord</span><span class="p">,</span> <span class="n">displacement</span><span class="p">:</span> <span class="n">Angle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SkyCoord</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Move a point by a displacement vector.</span>
+
+<span class="sd">    The point to move is assumed to be given as right ascension and declination. The</span>
+<span class="sd">    displacement vector is assumed to be a vector on the sky, with real angles, as</span>
+<span class="sd">    described for the `~sky_vector_to_pixel` method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v: `~astropy.coordinates.SkyCoord`</span>
+<span class="sd">        Point to move.</span>
+<span class="sd">    displacement: 2D array of angles</span>
+<span class="sd">        Vector by which to move the point.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    `~astropy.coordinates.SkyCoord`</span>
+<span class="sd">        The point after moving.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert from sky coordinates to real angles</span>
+    <span class="n">displacement_delta_ra</span> <span class="o">=</span> <span class="n">displacement</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">cos</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">rad</span><span class="p">))</span>
+    <span class="n">displacement_delta_dec</span> <span class="o">=</span> <span class="n">displacement</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Perform the translation</span>
+    <span class="n">translated_v_ra</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">ra</span> <span class="o">+</span> <span class="n">displacement_delta_ra</span>
+    <span class="n">translated_v_dec</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">dec</span> <span class="o">+</span> <span class="n">displacement_delta_dec</span>
+    <span class="k">return</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="n">translated_v_ra</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">translated_v_dec</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pixel_scales"><a class="viewcode-back" href="../../api.html#imephu.geometry.pixel_scales">[docs]</a><span class="k">def</span> <span class="nf">pixel_scales</span><span class="p">(</span><span class="n">wcs</span><span class="p">:</span> <span class="n">WCS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Angle</span><span class="p">,</span> <span class="n">Angle</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the pixel scales of a WCS object.</span>
+
+<span class="sd">    For a WCS returns pixel scales along each axis of the image pixel at</span>
+<span class="sd">    the ``CRPIX`` location once it is projected onto the</span>
+<span class="sd">    &quot;plane of intermediate world coordinates&quot; as defined in</span>
+<span class="sd">    `Greisen &amp; Calabretta 2002, A&amp;A, 395, 1061</span>
+<span class="sd">    &lt;https://ui.adsabs.harvard.edu/abs/2002A%26A...395.1061G&gt;`_.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        This function is concerned **only** about the transformation</span>
+<span class="sd">        &quot;image plane&quot;-&gt;&quot;projection plane&quot; and **not** about the</span>
+<span class="sd">        transformation &quot;celestial sphere&quot;-&gt;&quot;projection plane&quot;-&gt;&quot;image plane&quot;.</span>
+<span class="sd">        Therefore, this function ignores distortions arising due to</span>
+<span class="sd">        non-linear nature of most projections.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        In order to compute the scales corresponding to celestial axes only,</span>
+<span class="sd">        make sure that the input `~astropy.wcs.WCS` object contains</span>
+<span class="sd">        celestial axes only, e.g., by passing in the</span>
+<span class="sd">        `~astropy.wcs.WCS.celestial` WCS object.</span>
+
+<span class="sd">    The code has been adapted from APLpy.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    wcs : `~astropy.wcs.WCS`</span>
+<span class="sd">        A world coordinate system object.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    scale : tuple of `~astropy.coordinates.Angle`</span>
+<span class="sd">        A vector (`~numpy.ndarray`) of projection plane increments</span>
+<span class="sd">        corresponding to each pixel side (axis). The units of the returned</span>
+<span class="sd">        results are the same as the units of `~astropy.wcs.Wcsprm.cdelt`,</span>
+<span class="sd">        `~astropy.wcs.Wcsprm.crval`, and `~astropy.wcs.Wcsprm.cd` for</span>
+<span class="sd">        the celestial WCS and can be obtained by inquiring the value</span>
+<span class="sd">        of `~astropy.wcs.Wcsprm.cunit` property of the input</span>
+<span class="sd">        `~astropy.wcs.WCS` WCS object.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    astropy.wcs.utils.proj_plane_pixel_area</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">scale_factors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">wcs</span><span class="o">.</span><span class="n">pixel_scale_matrix</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">Angle</span><span class="p">(</span><span class="n">scale_factors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wcs</span><span class="o">.</span><span class="n">world_axis_units</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="n">Angle</span><span class="p">(</span><span class="n">scale_factors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">wcs</span><span class="o">.</span><span class="n">world_axis_units</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="sky_position_to_pixel"><a class="viewcode-back" href="../../api.html#imephu.geometry.sky_position_to_pixel">[docs]</a><span class="k">def</span> <span class="nf">sky_position_to_pixel</span><span class="p">(</span><span class="n">position</span><span class="p">:</span> <span class="n">SkyCoord</span><span class="p">,</span> <span class="n">wcs</span><span class="p">:</span> <span class="n">WCS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Convert a sky position to the corresponding pixel coordinates.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    position: `~astropy.coordinates.SkyCoord`</span>
+<span class="sd">        Sky position as right ascension and declination.</span>
+<span class="sd">    wcs: `~astropy.wcs.WCS`</span>
+<span class="sd">        WCS object.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    `~numpy.ndarray` of `float`</span>
+<span class="sd">        The pixel coordinates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pixel_coords</span> <span class="o">=</span> <span class="n">skycoord_to_pixel</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="n">position</span><span class="p">,</span> <span class="n">wcs</span><span class="o">=</span><span class="n">wcs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">pixel_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">pixel_coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">())])</span></div>
+
+
+<div class="viewcode-block" id="pixel_to_sky_position"><a class="viewcode-back" href="../../api.html#imephu.geometry.pixel_to_sky_position">[docs]</a><span class="k">def</span> <span class="nf">pixel_to_sky_position</span><span class="p">(</span><span class="n">position_px</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">],</span> <span class="n">wcs</span><span class="p">:</span> <span class="n">WCS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SkyCoord</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Convert pixel coordinates to the corresponding sky position.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    position_px: `~numpy.ndarray` of `float`</span>
+<span class="sd">        Pixel coordinates.</span>
+<span class="sd">    wcs: `~astropy.wcs.WCS`</span>
+<span class="sd">        WCS object.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    `~astropy.coordinates.SkyCoord`</span>
+<span class="sd">        The sky coordinates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">pixel_to_skycoord</span><span class="p">(</span><span class="n">position_px</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">position_px</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">wcs</span><span class="o">=</span><span class="n">wcs</span><span class="p">)</span>  <span class="c1"># noqa</span></div>
+
+
+<span class="k">def</span> <span class="nf">_is_positive_angle_anti_clockwise</span><span class="p">(</span><span class="n">wcs</span><span class="p">:</span> <span class="n">WCS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return whether for a given WCS positive angles are anti-clockwise when plotted.</span>
+
+<span class="sd">    Angles on the sky are measured from north to east, and depending on the orientation</span>
+<span class="sd">    of the axes on the finder chart this may correspond to a mathematically positive</span>
+<span class="sd">    (&quot;anti-clockwise&quot;) or negative (&quot;clockwise&quot;) angle.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    wcs: `~astropy.wcs.WCS`</span>
+<span class="sd">        WCS object.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        ``True`` if angles from north to east correspond to mathematically positive</span>
+<span class="sd">        (&quot;anti-clockwise&quot;) angles on a finder chart, ``False`` otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">origin_px</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+    <span class="n">origin_on_sky</span> <span class="o">=</span> <span class="n">pixel_to_sky_position</span><span class="p">(</span><span class="n">origin_px</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+    <span class="n">origin_ra</span> <span class="o">=</span> <span class="n">origin_on_sky</span><span class="o">.</span><span class="n">ra</span>
+    <span class="n">origin_dec</span> <span class="o">=</span> <span class="n">origin_on_sky</span><span class="o">.</span><span class="n">dec</span>
+
+    <span class="c1"># A &quot;point to the north&quot; on a finder chart</span>
+    <span class="n">point_to_north_ra</span> <span class="o">=</span> <span class="n">origin_ra</span>
+    <span class="n">point_to_north_dec</span> <span class="o">=</span> <span class="n">origin_dec</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">arcmin</span>
+    <span class="n">point_to_north</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="n">point_to_north_ra</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">point_to_north_dec</span><span class="p">)</span>
+    <span class="n">point_to_north_px</span> <span class="o">=</span> <span class="n">sky_position_to_pixel</span><span class="p">(</span><span class="n">point_to_north</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+
+    <span class="c1"># A &quot;point to the north-east&quot; on a finder chart</span>
+    <span class="n">point_to_north_east_ra</span> <span class="o">=</span> <span class="n">origin_ra</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">arcmin</span>
+    <span class="n">point_to_north_east_dec</span> <span class="o">=</span> <span class="n">origin_dec</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">arcmin</span>
+    <span class="n">point_to_north_east</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span>
+        <span class="n">ra</span><span class="o">=</span><span class="n">point_to_north_east_ra</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">point_to_north_east_dec</span>
+    <span class="p">)</span>
+    <span class="n">point_to_north_east_px</span> <span class="o">=</span> <span class="n">sky_position_to_pixel</span><span class="p">(</span><span class="n">point_to_north_east</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+
+    <span class="c1"># A &quot;point to the north-east&quot; on a finder chart</span>
+    <span class="n">point_to_north_west_ra</span> <span class="o">=</span> <span class="n">origin_ra</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">arcmin</span>
+    <span class="n">point_to_north_west_dec</span> <span class="o">=</span> <span class="n">origin_dec</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">arcmin</span>
+    <span class="n">point_to_north_west</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span>
+        <span class="n">ra</span><span class="o">=</span><span class="n">point_to_north_west_ra</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">point_to_north_west_dec</span>
+    <span class="p">)</span>
+    <span class="n">point_to_north_west_px</span> <span class="o">=</span> <span class="n">sky_position_to_pixel</span><span class="p">(</span><span class="n">point_to_north_west</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+
+    <span class="c1"># The difference between the point to the north and the origin gives a vector</span>
+    <span class="c1"># pointing north - but as the origin is (0, 0) this is just the point to the north.</span>
+    <span class="c1"># The same argument applies for the vector pointing north-east.</span>
+    <span class="n">north_vector_px</span> <span class="o">=</span> <span class="n">point_to_north_px</span>
+    <span class="n">north_east_vector_px</span> <span class="o">=</span> <span class="n">point_to_north_east_px</span>
+    <span class="n">north_west_vector_px</span> <span class="o">=</span> <span class="n">point_to_north_west_px</span>
+
+    <span class="c1"># Get the angle between the vectors to the north and to the north-east. Due to</span>
+    <span class="c1"># symmetry, this is the same as the angle between the vectors to the north and to</span>
+    <span class="c1"># north-west</span>
+    <span class="n">cos_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">north_vector_px</span><span class="p">,</span> <span class="n">north_east_vector_px</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">north_vector_px</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">north_east_vector_px</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">angle</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">acos</span><span class="p">(</span><span class="n">cos_angle</span><span class="p">)</span>
+
+    <span class="c1"># Rotate the vector to the north (in anti-clockwise direction) by this angle</span>
+    <span class="n">rotation</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[[</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span> <span class="o">-</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)],</span> <span class="p">[</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)]]</span>
+    <span class="p">)</span>
+    <span class="n">rotated_north_vector_px</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rotation</span><span class="p">,</span> <span class="n">north_vector_px</span><span class="p">)</span>
+
+    <span class="c1"># If a rotation from north to east corresponds to an anti-clockwise rotation on a</span>
+    <span class="c1"># finder chart, the rotated vector must aligned with the vector to the north-east.</span>
+    <span class="c1"># This implies that their scalar product then must be larger than that between the</span>
+    <span class="c1"># rotated vector and the vector to the north-west.</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rotated_north_vector_px</span><span class="p">,</span> <span class="n">north_east_vector_px</span><span class="p">)</span>
+        <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rotated_north_vector_px</span><span class="p">,</span> <span class="n">north_west_vector_px</span><span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Southern African Large Telescope (SALT)<br/>
+    
+        &copy; Copyright 2022, Southern African Large Telescope (SALT).<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
