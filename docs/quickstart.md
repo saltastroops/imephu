@@ -39,8 +39,8 @@ from imephu.salt.finder_chart import (
     rss_longslit_finder_chart,
     GeneralProperties,
     Target,
-    MagnitudeRange,
 )
+from imephu.utils import MagnitudeRange
 
 survey = "POSS2/UKSTU Red"
 fits_center = SkyCoord(ra="20h17m03s", dec="-35d08m14s")

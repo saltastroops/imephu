@@ -4,7 +4,24 @@ from typing import Optional
 
 from astropy.coordinates import SkyCoord
 
-from imephu.salt.finder_chart import MagnitudeRange
+
+@dataclass
+class MagnitudeRange:
+    """A magnitude range.
+
+    Attributes
+    ----------
+    bandpass: `str`
+        The bandpass for which the magnitudes are given.
+    min_magnitude: `float`
+        The minimum (brightest) magnitude.
+    max_magnitude: `float`
+        The maximum (faintest) magnitude.
+    """
+
+    bandpass: str
+    min_magnitude: float
+    max_magnitude: float
 
 
 @dataclass
@@ -18,7 +35,7 @@ class Ephemeris:
         a timezone-aware datetime.
     position: `~astropy.coordinates.SkyCoord`
         The position, in right ascension and declination.
-    magnitude_range: `~imephu.utils.Ephemeris`
+    magnitude_range: `~imephu.utils.MagnitudeRange`
         The magnitude range.
     """
 

@@ -4,8 +4,7 @@ from datetime import datetime, timezone
 import pytest
 from astropy.coordinates import SkyCoord
 
-from imephu.salt.finder_chart import MagnitudeRange
-from imephu.utils import Ephemeris
+from imephu.utils import Ephemeris, MagnitudeRange
 
 
 @contextmanager

@@ -8,8 +8,7 @@ from astropy.units import Quantity
 from astroquery.jplhorizons import Horizons
 from dateutil.parser import parse
 
-from imephu.salt.finder_chart import MagnitudeRange
-from imephu.utils import Ephemeris
+from imephu.utils import Ephemeris, MagnitudeRange
 
 
 class HorizonsService:

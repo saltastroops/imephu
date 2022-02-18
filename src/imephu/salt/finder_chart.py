@@ -8,27 +8,9 @@ from imephu.annotation.general import GroupAnnotation
 from imephu.finder_chart import FinderChart
 from imephu.salt.annotation import nir, rss, telescope
 from imephu.salt.utils import MosMask
+from imephu.utils import MagnitudeRange
 
 _FINDER_CHART_SIZE = 10 * u.arcmin
-
-
-@dataclass
-class MagnitudeRange:
-    """A magnitude range.
-
-    Attributes
-    ----------
-    bandpass: `str`
-        The bandpass for which the magnitudes are given.
-    min_magnitude: `float`
-        The minimum (brightest) magnitude.
-    max_magnitude: `float`
-        The maximum (faintest) magnitude.
-    """
-
-    bandpass: str
-    min_magnitude: float
-    max_magnitude: float
 
 
 @dataclass
@@ -42,7 +24,7 @@ class Target:
     position: `~astropy.coordinates.SkyCoord`
         The target position, as a right ascension and declination. This is taken to be
         the center of the finder chart.
-    magnitude_range: `MagnitudeRange`
+    magnitude_range: `imephu.utils.MagnitudeRange`
         The magnitude range of the target.
     """
 

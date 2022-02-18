@@ -4,7 +4,6 @@ from astropy.coordinates import Angle, SkyCoord
 
 from imephu.salt.finder_chart import (
     GeneralProperties,
-    MagnitudeRange,
     Target,
     hrs_finder_chart,
     nir_finder_chart,
@@ -14,6 +13,7 @@ from imephu.salt.finder_chart import (
     rss_mos_finder_chart,
     salticam_finder_chart,
 )
+from imephu.utils import MagnitudeRange
 from imephu.salt.utils import MosMask, MosMaskSlit
 
 POSITION_ANGLE = Angle(20 * u.deg)
