@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import bisect
 import os
+from datetime import datetime
 from io import BytesIO
-from typing import Any, BinaryIO, List, Optional, Union
+from typing import Any, BinaryIO, List, Optional, Union, Callable
 
 import matplotlib.pyplot as plt
 import pikepdf
+from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.io import fits
 from astropy.visualization.interval import AsymmetricPercentileInterval
@@ -17,6 +20,7 @@ from matplotlib.figure import Figure
 import imephu
 from imephu.annotation import Annotation
 from imephu.service.survey import load_fits
+from imephu.utils import Ephemeris
 
 """A finder chart."""
 
@@ -64,6 +68,102 @@ class FinderChart:
         """
         fits_image = load_fits(survey, fits_center, size)
         return FinderChart(fits_image)
+
+    @staticmethod
+    def for_time_interval(start: datetime, end: datetime, ephemerides: List[Ephemeris], max_track_length: Angle, create_finder_chart: Callable[[List[Ephemeris]], "FinderChart"]):
+        """Create finder charts for a time interval.
+
+        This method is intended for non-sidereal targets, which may require multiple
+        finder charts to cover their track over a time interval. It creates finder
+        charts according tio the following rules:
+
+        * Taken together, the finder charts cover the whole time interval.
+        * The track length on each finder chart does not exceed `max_track_length`.
+        * Each finder chart is created using ``create_finder_chart``.
+
+        The method is completely agnostic as to what a finder chart should look like;
+        this decision is left completely to ``create_finder_chart``. In particular, if
+        you need any annotations for the non-sidereal nature, it is up to
+        ``create_finder_chart`` to provide them.
+
+        The ``create_finder_chart`` function has to accept two arguments, in this order:
+
+        * The center of the finder chart as a position on the sky, in right ascension
+          and declination.
+        * The list of ephemerides to include on the finder chart (for example when
+          using an annotation to indicate the target motion).
+
+        Parameters
+        ----------
+        start: `~datetime.datetime`
+            The start time of the interval to be covered by the finder charts. This must
+            be a timezone-aware datetime.
+        end: `~datetime.datetime`
+            The end time of the interval to be covered by the finder charts. This must
+            be a timezone-aware datetime.
+        ephemerides: list of `~imephu.utils.Ephemeris`
+            The list of ephemerides. The time interval from ``start`` to ``end``must be
+            fully covered by the ephemerides.
+        max_track_length: float
+            The maximum length a track may have on a finder chart, as an angle on the
+            sky.
+        create_finder_chart: function
+            The function for creating a finder chart from a list of ephemerides.
+
+        Yields
+        ------
+        `~immephu.finder_chart.FinderChart`
+            `The generated finder charts.
+        """
+
+        # The start and end time must be timezone-aware
+        if start.tzinfo is None or start.tzinfo.utcoffset(None) is None:
+            raise ValueError("The start time must be timezone-aware.")
+        if end.tzinfo is None or end.tzinfo.utcoffset(None) is None:
+            raise ValueError("The end time must be timezone-aware.")
+
+        if start >= end:
+            raise ValueError("The start time must be earlier than the ebd time.")
+
+        if start < ephemerides[0].epoch:
+            raise ValueError("The start time must not be earlier than the first epoch.")
+        if end > ephemerides[-1].epoch:
+            raise ValueError("The end time must not be later than the last epoch.")
+
+        if max_track_length.to_value(u.arcmin) <= 0:
+            raise ValueError("The maximum track length must be positive.")
+
+        # Find the smallest interval covering the time interval
+        all_times = [e.epoch for e in ephemerides]
+        start_index = bisect.bisect_right(all_times, start) - 1
+        end_index = bisect.bisect(all_times, end)
+        if end_index > 0 and all_times[end_index - 1] == end:
+            end_index -= 1
+
+        # This should never happen, but let's rule out intervals with zero length
+        if start_index == end_index:
+            raise ValueError("The interval must have a positive length")
+
+        # Split the ephemerides so that the maximum track length isn't exceeded for each
+        # group. We assume a linear path, so that the track length is equal to the angle
+        # between the first and last position.
+        current_group = [ephemerides[start_index]]
+        groups = [current_group]
+        for i in range(start_index + 1, end_index + 1):
+            next_ephemeris = ephemerides[i]
+            # Subsequent positions mist not be more than max_track_length apart
+            if current_group[-1].position.separation(next_ephemeris.position) > max_track_length:
+                raise ValueError("The maximum track length on a finder chart is exceeded.")
+            track_length = current_group[0].position.separation(next_ephemeris.position)
+            if track_length <= max_track_length:
+                current_group.append(next_ephemeris)
+            else:
+                current_group = [current_group[-1], next_ephemeris]
+                groups.append(current_group)
+
+        # Create the finder charts
+        for group in groups:
+             yield create_finder_chart(group)
 
     @property
     def wcs(self) -> WCS:
