@@ -4,7 +4,7 @@ import bisect
 import os
 from datetime import datetime
 from io import BytesIO
-from typing import Any, BinaryIO, List, Optional, Union, Callable
+from typing import Any, BinaryIO, Callable, Generator, List, Optional, Union
 
 import matplotlib.pyplot as plt
 import pikepdf
@@ -70,12 +70,18 @@ class FinderChart:
         return FinderChart(fits_image)
 
     @staticmethod
-    def for_time_interval(start: datetime, end: datetime, ephemerides: List[Ephemeris], max_track_length: Angle, create_finder_chart: Callable[[List[Ephemeris]], "FinderChart"]):
+    def for_time_interval(
+        start: datetime,
+        end: datetime,
+        ephemerides: List[Ephemeris],
+        max_track_length: Angle,
+        create_finder_chart: Callable[[List[Ephemeris]], "FinderChart"],
+    ) -> Generator[FinderChart, None, None]:
         """Create finder charts for a time interval.
 
         This method is intended for non-sidereal targets, which may require multiple
         finder charts to cover their track over a time interval. It creates finder
-        charts according tio the following rules:
+        charts according to the following rules:
 
         * Taken together, the finder charts cover the whole time interval.
         * The track length on each finder chart does not exceed `max_track_length`.
@@ -102,7 +108,7 @@ class FinderChart:
             The end time of the interval to be covered by the finder charts. This must
             be a timezone-aware datetime.
         ephemerides: list of `~imephu.utils.Ephemeris`
-            The list of ephemerides. The time interval from ``start`` to ``end``must be
+            The list of ephemerides. The time interval from ``start`` to ``end`` must be
             fully covered by the ephemerides.
         max_track_length: float
             The maximum length a track may have on a finder chart, as an angle on the
@@ -113,9 +119,8 @@ class FinderChart:
         Yields
         ------
         `~immephu.finder_chart.FinderChart`
-            `The generated finder charts.
+            The generated finder charts.
         """
-
         # The start and end time must be timezone-aware
         if start.tzinfo is None or start.tzinfo.utcoffset(None) is None:
             raise ValueError("The start time must be timezone-aware.")
@@ -152,8 +157,13 @@ class FinderChart:
         for i in range(start_index + 1, end_index + 1):
             next_ephemeris = ephemerides[i]
             # Subsequent positions mist not be more than max_track_length apart
-            if current_group[-1].position.separation(next_ephemeris.position) > max_track_length:
-                raise ValueError("The maximum track length on a finder chart is exceeded.")
+            if (
+                current_group[-1].position.separation(next_ephemeris.position)
+                > max_track_length
+            ):
+                raise ValueError(
+                    "The maximum track length on a finder chart is exceeded."
+                )
             track_length = current_group[0].position.separation(next_ephemeris.position)
             if track_length <= max_track_length:
                 current_group.append(next_ephemeris)
@@ -163,7 +173,7 @@ class FinderChart:
 
         # Create the finder charts
         for group in groups:
-             yield create_finder_chart(group)
+            yield create_finder_chart(group)
 
     @property
     def wcs(self) -> WCS:
