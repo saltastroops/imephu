@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional, List
+from typing import List, Optional
 
 from astropy.coordinates import SkyCoord
 
@@ -71,7 +71,9 @@ def mid_position(start: SkyCoord, end: SkyCoord) -> SkyCoord:
     return start.directional_offset_by(pa, separation / 2)
 
 
-def ephemerides_magnitude_range(ephemerides: List[Ephemeris]) -> Optional[MagnitudeRange]:
+def ephemerides_magnitude_range(
+    ephemerides: List[Ephemeris],
+) -> Optional[MagnitudeRange]:
     """Return the magnitude range for a list of ephemerides.
 
     The minimum (maximum) magnitude is the minimum (maximum) magnitude for all
@@ -92,17 +94,24 @@ def ephemerides_magnitude_range(ephemerides: List[Ephemeris]) -> Optional[Magnit
     bandpass: Optional[str] = None
     for ephemeris in ephemerides:
         if ephemeris.magnitude_range:
-            if min_magnitude is None or ephemeris.magnitude_range.min_magnitude < min_magnitude:
+            if (
+                min_magnitude is None
+                or ephemeris.magnitude_range.min_magnitude < min_magnitude
+            ):
                 min_magnitude = ephemeris.magnitude_range.min_magnitude
-            if max_magnitude is None or ephemeris.magnitude_range.max_magnitude > max_magnitude:
+            if (
+                max_magnitude is None
+                or ephemeris.magnitude_range.max_magnitude > max_magnitude
+            ):
                 max_magnitude = ephemeris.magnitude_range.max_magnitude
             if bandpass is None:
                 bandpass = ephemeris.magnitude_range.bandpass
             elif ephemeris.magnitude_range.bandpass != bandpass:
                 raise ValueError("The bandpass must be the same for all ephemerides.")
 
-    if min_magnitude is not None:
-        return MagnitudeRange(min_magnitude=min_magnitude, max_magnitude=max_magnitude, bandpass=bandpass)
+    if min_magnitude is not None and max_magnitude is not None and bandpass is not None:
+        return MagnitudeRange(
+            min_magnitude=min_magnitude, max_magnitude=max_magnitude, bandpass=bandpass
+        )
     else:
         return None
-

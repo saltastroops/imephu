@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta, timezone
+
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
@@ -6,6 +8,7 @@ from imephu.salt.finder_chart import (
     GeneralProperties,
     Target,
     hrs_finder_chart,
+    moving_target_finder_charts,
     nir_finder_chart,
     rss_fabry_perot_finder_chart,
     rss_imaging_finder_chart,
@@ -14,7 +17,7 @@ from imephu.salt.finder_chart import (
     salticam_finder_chart,
 )
 from imephu.salt.utils import MosMask, MosMaskSlit
-from imephu.utils import MagnitudeRange
+from imephu.utils import Ephemeris, MagnitudeRange
 
 POSITION_ANGLE = Angle(20 * u.deg)
 
@@ -130,7 +133,58 @@ def test_nir_finder_chart(
     check_finder(finder_chart)
 
 
-def test_hrs_finder_chart(fits_file, fits_center, check_finder, mock_salt_load_fits):
+def test_hrs_finder_chart(fits_center, check_finder, mock_salt_load_fits):
     """Test the finder chart for an HRS observation."""
     finder_chart = hrs_finder_chart(_general_properties(fits_center))
     check_finder(finder_chart)
+
+
+@pytest.mark.parametrize("which_finder_chart", [0, 1])
+def test_moving_target_finder_charts(
+    which_finder_chart, fits_center, mock_salt_load_fits, check_finder
+):
+    """Test that the generated finder charts for a moving target are correct."""
+    t = datetime(2022, 2, 18, 0, 0, 0, tzinfo=timezone.utc)
+    hour = timedelta(hours=1)
+    ephemerides = [
+        Ephemeris(
+            epoch=t,
+            position=SkyCoord(ra="0h40m30s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + hour,
+            position=SkyCoord(ra="0h40m00s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + 2 * hour,
+            position=SkyCoord(ra="0h39m30s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + 3 * hour,
+            position=SkyCoord(ra="0h39m00s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + 4 * hour,
+            position=SkyCoord(ra="0h38m30s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+    ]
+    start = t + 0.5 * hour
+    end = t + 3.5 * hour
+    g = moving_target_finder_charts(
+        _general_properties(fits_center), start=start, end=end, ephemerides=ephemerides
+    )
+    counter = 0
+    for finder_chart in g:
+        # The regression fixture only creates a single file per test run, it seems. So
+        # to get all finder charts and ensure a deterministic result, we have to make
+        # sure it is used only once.
+        if counter == which_finder_chart:
+            check_finder(finder_chart)
+        counter += 1
+
+    assert counter == 2

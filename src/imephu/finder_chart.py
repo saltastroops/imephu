@@ -156,7 +156,7 @@ class FinderChart:
         groups = [current_group]
         for i in range(start_index + 1, end_index + 1):
             next_ephemeris = ephemerides[i]
-            # Subsequent positions mist not be more than max_track_length apart
+            # Subsequent positions must not be more than max_track_length apart
             if (
                 current_group[-1].position.separation(next_ephemeris.position)
                 > max_track_length

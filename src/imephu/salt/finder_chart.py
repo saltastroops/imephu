@@ -1,14 +1,23 @@
+import dataclasses
 from dataclasses import dataclass
+from datetime import datetime
+from typing import Generator, List, Optional
 
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
 from imephu.annotation.general import GroupAnnotation
+from imephu.annotation.motion import motion_annotation
 from imephu.finder_chart import FinderChart
 from imephu.salt.annotation import nir, rss, telescope
 from imephu.salt.utils import MosMask
-from imephu.utils import MagnitudeRange
+from imephu.utils import (
+    Ephemeris,
+    MagnitudeRange,
+    ephemerides_magnitude_range,
+    mid_position,
+)
 
 _FINDER_CHART_SIZE = 10 * u.arcmin
 
@@ -24,13 +33,13 @@ class Target:
     position: `~astropy.coordinates.SkyCoord`
         The target position, as a right ascension and declination. This is taken to be
         the center of the finder chart.
-    magnitude_range: `imephu.utils.MagnitudeRange`
+    magnitude_range: `imephu.utils.MagnitudeRange`, optional
         The magnitude range of the target.
     """
 
     name: str
     position: SkyCoord
-    magnitude_range: MagnitudeRange
+    magnitude_range: Optional[MagnitudeRange]
 
 
 @dataclass
@@ -248,7 +257,7 @@ def nir_finder_chart(
 
 
 def hrs_finder_chart(general: GeneralProperties) -> FinderChart:
-    """Return the annotation for an HRS observation.
+    """Return the finder chart for an HRS observation.
 
     Parameters
     ----------
@@ -266,6 +275,62 @@ def hrs_finder_chart(general: GeneralProperties) -> FinderChart:
     annotation = _hrs_observation_annotation(general=general, wcs=finder_chart.wcs)
     finder_chart.add_annotation(annotation)
     return finder_chart
+
+
+def moving_target_finder_charts(
+    general: GeneralProperties,
+    start: datetime,
+    end: datetime,
+    ephemerides: List[Ephemeris],
+) -> Generator[FinderChart, None, None]:
+    """Return a generator for the finder charts for a moving target in a time interval.
+
+    Parameters
+    ----------
+    general: `GeneralProperties`
+        Properties which are not specific to the instrument.
+    start: `~datetime.datetime`
+        Start time of the time interval for which finder charts are generated. This must
+        be timezone-aware.
+    end: `~datetime.datetime`
+        End time of the time interval for which finder charts are generated. This must
+        be timezone-aware.
+    ephemerides: list of `~imephu.utils.Ephemeris`
+        The ephemerides for the moving target.
+
+    Yields
+    ------
+    `~imephu.finder_chart.FinderChart`
+        The finder chart.
+    """
+
+    def _create_finder_chart(ephemerides_: List[Ephemeris]) -> FinderChart:
+        midpoint = mid_position(ephemerides_[0].position, ephemerides_[-1].position)
+        magnitude_range = ephemerides_magnitude_range(ephemerides_)
+        general_ = dataclasses.replace(
+            general,
+            target=Target(
+                name=general.target.name,
+                position=midpoint,
+                magnitude_range=magnitude_range,
+            ),
+        )
+        finder_chart = FinderChart.from_survey(
+            general_.survey, midpoint, _FINDER_CHART_SIZE
+        )
+        annotation = _non_sidereal_annotation(
+            general=general_, ephemerides=ephemerides_, wcs=finder_chart.wcs
+        )
+        finder_chart.add_annotation(annotation)
+        return finder_chart
+
+    return FinderChart.for_time_interval(
+        start=start,
+        end=end,
+        ephemerides=ephemerides,
+        max_track_length=0.8 * _FINDER_CHART_SIZE,
+        create_finder_chart=_create_finder_chart,
+    )
 
 
 def _salticam_observation_annotation(
@@ -341,19 +406,30 @@ def _hrs_observation_annotation(
     return _imaging_annotation(general=general, is_slot_mode=False, wcs=wcs)
 
 
+def _non_sidereal_annotation(
+    general: GeneralProperties, ephemerides: List[Ephemeris], wcs: WCS
+) -> GroupAnnotation:
+    imaging_annotation = _imaging_annotation(
+        general=general, is_slot_mode=False, wcs=wcs
+    )
+    track_annotation = motion_annotation(ephemerides=ephemerides, wcs=wcs)
+    return GroupAnnotation(items=[imaging_annotation, track_annotation])
+
+
 def _imaging_annotation(
     general: GeneralProperties, is_slot_mode: bool, wcs: WCS
 ) -> GroupAnnotation:
     observation_annotation = _base_annotations(general, wcs)
     magnitude_range = general.target.magnitude_range
-    magnitude_annotation = telescope.magnitude_range_annotation(
-        bandpass=magnitude_range.bandpass,
-        min_magnitude=magnitude_range.min_magnitude,
-        max_magnitude=magnitude_range.max_magnitude,
-        fits_center=general.target.position,
-        wcs=wcs,
-    )
-    observation_annotation.add_item(magnitude_annotation)
+    if magnitude_range:
+        magnitude_annotation = telescope.magnitude_range_annotation(
+            bandpass=magnitude_range.bandpass,
+            min_magnitude=magnitude_range.min_magnitude,
+            max_magnitude=magnitude_range.max_magnitude,
+            fits_center=general.target.position,
+            wcs=wcs,
+        )
+        observation_annotation.add_item(magnitude_annotation)
     if is_slot_mode:
         center = general.target.position
         slot_annotation = telescope.slot_annotation(center, general.position_angle, wcs)
