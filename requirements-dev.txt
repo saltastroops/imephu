@@ -6,6 +6,7 @@ flake8
 flake8-docstrings
 flake8-print
 isort
+jsonschema
 matplotlib
 mypy
 myst-parser
@@ -15,10 +16,13 @@ pytest
 pytest-cov
 pytest-regressions
 python-dateutil
+pyyaml
 requests
 responses
 sphinx
 sphinx-autodoc-typehints
 sphinx-book-theme
 tox
+typer[all]
+types-PyYAML
 types-requests
