@@ -128,7 +128,7 @@ class FinderChart:
             raise ValueError("The end time must be timezone-aware.")
 
         if start >= end:
-            raise ValueError("The start time must be earlier than the ebd time.")
+            raise ValueError("The start time must be earlier than the end time.")
 
         if start < ephemerides[0].epoch:
             raise ValueError("The start time must not be earlier than the first epoch.")
