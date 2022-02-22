@@ -1,10 +1,125 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "properties": {
-    "target": {
-      "type": "string"
+  "oneOf": [
+    { "$ref":  "#/$defs/salt"}
+  ],
+
+  "$defs": {
+    "non-sidereal-target": {
+      "type": "object",
+      "description": "Non-sidereal target",
+      "properties": {
+        "end-time": {
+          "type": "string",
+          "description": "End of the time interval to consider for the target"
+        },
+        "horizons-id": {
+          "type": "string",
+          "description": "Target identifier in the JPL Horizons database"
+        },
+        "start-time": {
+          "type": "string",
+          "description": "Beginning of the time interval to consider for the target, in a format understood by the dateutil package for Python",
+          "examples": ["2022-02-21T14:09:45Z"]
+        }
+      },
+      "required": ["end-time", "horizons-id", "start-time"],
+      "additionalProperties": false
+    },
+
+    "salt": {
+      "type": "object",
+      "properties": {
+        "image-survey": {
+          "type": "string",
+          "description": "Image survey to use for for the finder chart image",
+          "examples": ["POSS2/UKSTU Red"]
+        },
+        "instrument-setup": {
+          "type": "object"
+        },
+        "pi-surname": {
+          "type": "string",
+          "description": "Surname of the Principal Investigator"
+        },
+        "position_angle": {
+          "type": "number",
+          "description": "Position angle"
+        },
+        "proposal-code": {
+          "type": "string",
+          "description": "Proposal code"
+        },
+        "target": {
+          "type": "object",
+          "oneOf": [
+            { "$ref":  "#/$defs/sidereal-target" },
+            { "$ref":  "#/$defs/non-sidereal-target" }
+          ]
+        },
+        "telescope": {
+          "type": "string",
+          "description": "The telescope name, which must be \"SALT\"",
+          "pattern": "^SALT$"
+        }
+      },
+      "required": ["pi-surname", "proposal-code", "target", "telescope"],
+      "additionalProperties": false
+    },
+
+    "salticam": {
+      "type": "object",
+      "properties": {
+        "instrument": {
+          "type": "string",
+          "description": "The instrument name, which must be \"Salticam\""
+        }
+      }
+    },
+
+    "sidereal-target": {
+      "type": "object",
+      "description": "Sidereal target",
+      "properties": {
+        "dec": {
+          "type": "string",
+          "description": "Declination, in a format AstroPy understands",
+          "examples": ["-59d13m08s"]
+        },
+        "magnitude-range": {
+          "type": "object",
+          "description": "Magnitude range",
+          "properties": {
+            "bandpass": {
+              "type": "string",
+              "description": "Bandpass for which the magnitudes are given",
+              "examples": ["V", "R"]
+            },
+            "maximum": {
+              "type": "number",
+              "description": "Maximum (faintest) magnitude"
+            },
+            "minimum": {
+              "type": "number",
+              "description": "Minimum (brightest) magnitude"
+            }
+          },
+          "required": ["bandpass", "maximum" ,"minimum"],
+          "additionalProperties": false
+        },
+        "name": {
+          "type": "string",
+          "description": "Target name"
+        },
+        "ra": {
+          "type": "string",
+          "description": "Right ascension, in a format AstroPy understands",
+          "examples": ["11h07m14s"]
+        }
+      },
+      "required": ["dec", "name", "ra"],
+      "additionalProperties": false
     }
-  },
-  "required": ["target"]
+  }
 }
