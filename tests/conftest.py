@@ -1,16 +1,21 @@
 """pytest configuration."""
-
 import io
 import pathlib
+import time
 from unittest import mock
 
 import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
+from typer.testing import CliRunner
 
+import imephu
 from imephu.annotation.general import TextAnnotation
+from imephu.cli import app
 from imephu.salt.finder_chart import FinderChart
+
+runner = CliRunner()
 
 
 @pytest.fixture(autouse=True)
@@ -67,6 +72,62 @@ def check_finder(file_regression):
             np.random.seed()
 
     return _check_finder
+
+
+@pytest.fixture()
+def check_cli(fits_file, tmp_path_factory, file_regression):
+    """
+    Return a function for checking the command line interface.
+
+    Parameters
+    ----------
+    tmp_path_factory: fixture for creating as temporary directory
+        Temporary directory.
+    file_regression: fixture for regression checking
+        Fixture for file regression checking.
+
+    Returns
+    -------
+    function
+        Function for checking the command line interface.
+    """
+
+    def _check_cli(instrument_yaml):
+        configuration = f"""\
+fits-source:
+  image-survey: "POSS2/UKSTU Red"
+telescope: "SALT"
+pi-family-name: "Doe"
+proposal-code: "2022-1-SCI-042"
+position-angle: 30d
+target:
+  name: "Magrathea"
+  ra: "0h40m00s"
+  dec: "-60d"
+  magnitude-range:
+    bandpass: V
+    minimum: 17
+    maximum: 17.3
+{instrument_yaml}
+"""
+        np.random.seed(0)
+        try:
+            tmp = tmp_path_factory.mktemp(f"finder-chart-{time.time_ns()}")
+            config = tmp / "config.yaml"
+            config.write_text(configuration)
+            output = tmp / "finder_chart.png"
+            with mock.patch.object(
+                imephu.cli, "load_fits", autospec=True
+            ) as mock_load_fits:
+                fits = fits_file.read_bytes()
+                mock_load_fits.return_value = io.BytesIO(fits)
+                runner.invoke(app, ["--config", config, "--out", output])
+                finder_chart = output.read_bytes()
+                file_regression.check(finder_chart, binary=True, extension=".png")
+        finally:
+            np.random.seed()
+
+    return _check_cli
 
 
 @pytest.fixture()

@@ -32,7 +32,7 @@ def _general_properties(target_position):
         automated_position_angle=False,
         proposal_code="2022-1-SCI-042",
         pi_family_name="Adams",
-        survey="POSS2/UKSTU Red"
+        survey="POSS2/UKSTU Red",
     )
 
 

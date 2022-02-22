@@ -2,10 +2,44 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "oneOf": [
-    { "$ref":  "#/$defs/salt"}
+    {
+      "$ref": "#/$defs/salt"
+    }
   ],
-
   "$defs": {
+    "fits-source": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "image-survey": {
+              "type": "string",
+              "description": "Image survey to use for for the finder chart image",
+              "examples": [
+                "POSS2/UKSTU Red"
+              ]
+            }
+          },
+          "required": [
+            "image-survey"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "file": {
+              "type": "string",
+              "description": "Path of the FITS file for for the finder chart image"
+            }
+          },
+          "required": [
+            "file"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
     "non-sidereal-target": {
       "type": "object",
       "description": "Non-sidereal target",
@@ -21,31 +55,39 @@
         "start-time": {
           "type": "string",
           "description": "Beginning of the time interval to consider for the target, in a format understood by the dateutil package for Python",
-          "examples": ["2022-02-21T14:09:45Z"]
+          "examples": [
+            "2022-02-21T14:09:45Z"
+          ]
         }
       },
-      "required": ["end-time", "horizons-id", "start-time"],
+      "required": [
+        "end-time",
+        "horizons-id",
+        "start-time"
+      ],
       "additionalProperties": false
     },
-
     "salt": {
       "type": "object",
       "properties": {
-        "image-survey": {
+        "fits-source": {
+          "$ref": "#/$defs/fits-source"
+        },
+        "instrument": {
+          "type": "object",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/salticam"
+            }
+          ]
+        },
+        "pi-family-name": {
           "type": "string",
-          "description": "Image survey to use for for the finder chart image",
-          "examples": ["POSS2/UKSTU Red"]
+          "description": "Family name of the Principal Investigator"
         },
-        "instrument-setup": {
-          "type": "object"
-        },
-        "pi-surname": {
+        "position-angle": {
           "type": "string",
-          "description": "Surname of the Principal Investigator"
-        },
-        "position_angle": {
-          "type": "number",
-          "description": "Position angle"
+          "description": "Position angle in a format understood by Astropy, measured from north towards east"
         },
         "proposal-code": {
           "type": "string",
@@ -54,8 +96,12 @@
         "target": {
           "type": "object",
           "oneOf": [
-            { "$ref":  "#/$defs/sidereal-target" },
-            { "$ref":  "#/$defs/non-sidereal-target" }
+            {
+              "$ref": "#/$defs/sidereal-target"
+            },
+            {
+              "$ref": "#/$defs/non-sidereal-target"
+            }
           ]
         },
         "telescope": {
@@ -64,20 +110,34 @@
           "pattern": "^SALT$"
         }
       },
-      "required": ["pi-surname", "proposal-code", "target", "telescope"],
+      "required": [
+        "fits-source",
+        "instrument",
+        "pi-family-name",
+        "position-angle",
+        "proposal-code",
+        "target",
+        "telescope"
+      ],
       "additionalProperties": false
     },
-
     "salticam": {
       "type": "object",
       "properties": {
-        "instrument": {
+        "name": {
           "type": "string",
           "description": "The instrument name, which must be \"Salticam\""
+        },
+        "slot-mode": {
+          "type": "boolean",
+          "description": "Whether slot mode is used"
         }
-      }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
     },
-
     "sidereal-target": {
       "type": "object",
       "description": "Sidereal target",
@@ -85,7 +145,9 @@
         "dec": {
           "type": "string",
           "description": "Declination, in a format AstroPy understands",
-          "examples": ["-59d13m08s"]
+          "examples": [
+            "-59d13m08s"
+          ]
         },
         "magnitude-range": {
           "type": "object",
@@ -94,7 +156,10 @@
             "bandpass": {
               "type": "string",
               "description": "Bandpass for which the magnitudes are given",
-              "examples": ["V", "R"]
+              "examples": [
+                "V",
+                "R"
+              ]
             },
             "maximum": {
               "type": "number",
@@ -105,7 +170,11 @@
               "description": "Minimum (brightest) magnitude"
             }
           },
-          "required": ["bandpass", "maximum" ,"minimum"],
+          "required": [
+            "bandpass",
+            "maximum",
+            "minimum"
+          ],
           "additionalProperties": false
         },
         "name": {
@@ -115,10 +184,17 @@
         "ra": {
           "type": "string",
           "description": "Right ascension, in a format AstroPy understands",
-          "examples": ["11h07m14s"]
+          "examples": [
+            "11h07m14s"
+          ]
         }
       },
-      "required": ["dec", "name", "ra"],
+      "required": [
+        "dec",
+        "magnitude-range",
+        "name",
+        "ra"
+      ],
       "additionalProperties": false
     }
   }
