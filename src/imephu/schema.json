@@ -67,6 +67,35 @@
       ],
       "additionalProperties": false
     },
+    "rss": {
+      "oneOf": [
+        { "$ref":  "#/$defs/rss-imaging" }
+      ]
+    },
+    "rss-imaging": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/rss-name"
+        },
+        "mode": {
+          "type": "string",
+          "description": "The mode, which must be \"imaging\"",
+          "pattern": "^imaging$"
+        },
+        "slot-mode": {
+          "type": "boolean",
+          "description": "Whether slot mode is used"
+        }
+      },
+      "required": ["mode"],
+      "additionalProperties": false
+    },
+    "rss-name": {
+      "type": "string",
+      "description": "The instrument name, which must be \"RSS\"",
+      "pattern": "^RSS$"
+    },
     "salt": {
       "type": "object",
       "properties": {
@@ -76,6 +105,7 @@
         "instrument": {
           "type": "object",
           "oneOf": [
+            { "$ref": "#/$defs/rss"},
             {
               "$ref": "#/$defs/salticam"
             }
