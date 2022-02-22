@@ -32,7 +32,7 @@ def _general_properties(target_position):
         automated_position_angle=False,
         proposal_code="2022-1-SCI-042",
         pi_family_name="Adams",
-        survey="POSS2/UKSTU Red",
+        survey="POSS2/UKSTU Red"
     )
 
 
@@ -42,6 +42,7 @@ def test_salticam_finder_chart(
 ):
     """Test the finder chart for Salticam observations."""
     finder_chart = salticam_finder_chart(
+        fits=fits_file,
         general=_general_properties(fits_center),
         is_slot_mode=is_slot_mode,
     )
@@ -54,6 +55,7 @@ def test_rss_imaging_observation_annotation(
 ):
     """Test the finder chart for RSS imaging observations."""
     finder_chart = rss_imaging_finder_chart(
+        fits=fits_file,
         general=_general_properties(fits_center),
         is_slot_mode=is_slot_mode,
     )
@@ -65,6 +67,7 @@ def test_rss_longslit_finder_chart(
 ):
     """Test the finder chart for RSS longslit observations."""
     finder_chart = rss_longslit_finder_chart(
+        fits=fits_file,
         general=_general_properties(fits_center),
         slit_width=4 * u.arcsec,
         slit_height=8 * u.arcmin,
@@ -102,7 +105,7 @@ def test_rss_mos_finder_chart(
     )
     mos_mask = MosMask(xml)
     finder_chart = rss_mos_finder_chart(
-        general=_general_properties(fits_center), mos_mask=mos_mask
+        fits=fits_file, general=_general_properties(fits_center), mos_mask=mos_mask
     )
     check_finder(finder_chart)
 
@@ -112,6 +115,7 @@ def test_rss_fabry_perot_finder_chart(
 ):
     """Test the finder chart for RSS Fabry-Pérot observations."""
     finder_chart = rss_fabry_perot_finder_chart(
+        fits=fits_file,
         general=_general_properties(fits_center),
     )
     check_finder(finder_chart)
@@ -125,6 +129,7 @@ def test_nir_finder_chart(
     general = _general_properties(fits_center)
     general.position_angle = position_angle
     finder_chart = nir_finder_chart(
+        fits=fits_file,
         general=general,
         science_bundle_center=fits_center,
         bundle_separation=1 * u.arcmin,
@@ -133,9 +138,11 @@ def test_nir_finder_chart(
     check_finder(finder_chart)
 
 
-def test_hrs_finder_chart(fits_center, check_finder, mock_salt_load_fits):
+def test_hrs_finder_chart(fits_file, fits_center, check_finder, mock_salt_load_fits):
     """Test the finder chart for an HRS observation."""
-    finder_chart = hrs_finder_chart(_general_properties(fits_center))
+    finder_chart = hrs_finder_chart(
+        fits=fits_file, general=_general_properties(fits_center)
+    )
     check_finder(finder_chart)
 
 
@@ -176,7 +183,11 @@ def test_moving_target_finder_charts(
     start = t + 0.5 * hour
     end = t + 3.5 * hour
     g = moving_target_finder_charts(
-        _general_properties(fits_center), start=start, end=end, ephemerides=ephemerides
+        general=_general_properties(fits_center),
+        start=start,
+        end=end,
+        ephemerides=ephemerides,
+        survey="POSS2/UKSTU Red",
     )
     counter = 0
     for finder_chart in g:

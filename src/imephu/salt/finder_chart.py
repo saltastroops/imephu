@@ -1,7 +1,8 @@
 import dataclasses
+import os
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Generator, List, Optional
+from typing import Any, BinaryIO, Generator, List, Optional, Union
 
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
@@ -59,8 +60,8 @@ class GeneralProperties:
         The proposal code.
     pi_family_name: `str`
         The family name of the Principal Investigator.
-    survey: `str`
-        The name of the survey from which the finder chart image was taken.
+    survey: `str`, optional
+        The image survey from which the FITS image is taken.
     """
 
     target: Target
@@ -68,16 +69,20 @@ class GeneralProperties:
     automated_position_angle: bool
     proposal_code: str
     pi_family_name: str
-    survey: str
+    survey: Optional[str] = None
 
 
 def salticam_finder_chart(
-    general: GeneralProperties, is_slot_mode: bool = False
+    fits: Union[str, BinaryIO, os.PathLike[Any]],
+    general: GeneralProperties,
+    is_slot_mode: bool = False,
 ) -> FinderChart:
     """Return the finder chart for a Salticam observation.
 
     Parameters
     ----------
+    fits: `str`, `path-like` or `binary file-like`
+        FITS file to display.
     general: `GeneralProperties`
         Properties which are not specific to the instrument.
     is_slot_mode: `bool`, default: False
@@ -88,9 +93,7 @@ def salticam_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for a Salticam observation.
     """
-    finder_chart = FinderChart.from_survey(
-        general.survey, general.target.position, _FINDER_CHART_SIZE
-    )
+    finder_chart = FinderChart(fits)
     annotation = _salticam_observation_annotation(
         general=general, is_slot_mode=is_slot_mode, wcs=finder_chart.wcs
     )
@@ -99,12 +102,16 @@ def salticam_finder_chart(
 
 
 def rss_imaging_finder_chart(
-    general: GeneralProperties, is_slot_mode: bool = False
+    fits: Union[str, BinaryIO, os.PathLike[Any]],
+    general: GeneralProperties,
+    is_slot_mode: bool = False,
 ) -> FinderChart:
     """Return the finder chart for an RSS imaging observation.
 
     Parameters
     ----------
+    fits: `str`, `path-like` or `binary file-like`
+        FITS file to display.
     general: `GeneralProperties`
         Properties which are not specific to the instrument.
     is_slot_mode: `bool`, default: False
@@ -115,9 +122,7 @@ def rss_imaging_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an RSS imaging observation.
     """
-    finder_chart = FinderChart.from_survey(
-        general.survey, general.target.position, _FINDER_CHART_SIZE
-    )
+    finder_chart = FinderChart(fits)
     annotation = _rss_imaging_observation_annotation(
         general=general, is_slot_mode=is_slot_mode, wcs=finder_chart.wcs
     )
@@ -126,12 +131,17 @@ def rss_imaging_finder_chart(
 
 
 def rss_longslit_finder_chart(
-    general: GeneralProperties, slit_width: Angle, slit_height: Angle
+    fits: Union[str, BinaryIO, os.PathLike[Any]],
+    general: GeneralProperties,
+    slit_width: Angle,
+    slit_height: Angle,
 ) -> FinderChart:
     """Return the finder chart for an RSS longslit observation.
 
     Parameters
     ----------
+    fits: `str`, `path-like` or `binary file-like`
+        FITS file to display.
     general: `GeneralProperties`
         Properties which are not specific to the instrument.
     slit_width: `~astropy.coordinates.Angle`
@@ -144,9 +154,7 @@ def rss_longslit_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an RSS longslit observation.
     """
-    finder_chart = FinderChart.from_survey(
-        general.survey, general.target.position, _FINDER_CHART_SIZE
-    )
+    finder_chart = FinderChart(fits)
     annotation = _rss_longslit_observation_annotation(
         general=general,
         slit_width=slit_width,
@@ -158,6 +166,7 @@ def rss_longslit_finder_chart(
 
 
 def rss_mos_finder_chart(
+    fits: Union[str, BinaryIO, os.PathLike[Any]],
     general: GeneralProperties,
     mos_mask: MosMask,
     reference_star_box_width: Angle = Angle(5 * u.arcsec),
@@ -166,6 +175,8 @@ def rss_mos_finder_chart(
 
     Parameters
     ----------
+    fits: `str`, `path-like` or `binary file-like`
+        FITS file to display.
     general: `GeneralProperties`
         Properties which are not specific to the instrument.
     mos_mask: `~imephu.salt.utils.MosMask`
@@ -179,9 +190,7 @@ def rss_mos_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an RSS MOS observation.
     """
-    finder_chart = FinderChart.from_survey(
-        general.survey, general.target.position, _FINDER_CHART_SIZE
-    )
+    finder_chart = FinderChart(fits)
     annotation = _rss_mos_observation_annotation(
         general=general,
         mos_mask=mos_mask,
@@ -193,12 +202,15 @@ def rss_mos_finder_chart(
 
 
 def rss_fabry_perot_finder_chart(
+    fits: Union[str, BinaryIO, os.PathLike[Any]],
     general: GeneralProperties,
 ) -> FinderChart:
     """Return the finder chart for an RSS Fabry-Pérot observation.
 
     Parameters
     ----------
+    fits: `str`, `path-like` or `binary file-like`
+        FITS file to display.
     general: `GeneralProperties`
         Properties which are not specific to the instrument.
 
@@ -207,9 +219,7 @@ def rss_fabry_perot_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an RSS Fabry-Pérot observation.
     """
-    finder_chart = FinderChart.from_survey(
-        general.survey, general.target.position, _FINDER_CHART_SIZE
-    )
+    finder_chart = FinderChart(fits)
     annotation = _rss_fabry_perot_observation_annotation(
         general=general, wcs=finder_chart.wcs
     )
@@ -218,6 +228,7 @@ def rss_fabry_perot_finder_chart(
 
 
 def nir_finder_chart(
+    fits: Union[str, BinaryIO, os.PathLike[Any]],
     general: GeneralProperties,
     science_bundle_center: SkyCoord,
     bundle_separation: Angle,
@@ -227,6 +238,8 @@ def nir_finder_chart(
 
     Parameters
     ----------
+    fits: `str`, `path-like` or `binary file-like`
+        FITS file to display.
     science_bundle_center: `~astropy.coordinates.SkyCoord`
         The center position of the sky fiber bundle, as a position on the sky, in
         right ascension and declination.
@@ -242,9 +255,7 @@ def nir_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an NIR observation.
     """
-    finder_chart = FinderChart.from_survey(
-        general.survey, general.target.position, _FINDER_CHART_SIZE
-    )
+    finder_chart = FinderChart(fits)
     annotation = _nir_observation_annotation(
         general=general,
         science_bundle_center=science_bundle_center,
@@ -256,11 +267,15 @@ def nir_finder_chart(
     return finder_chart
 
 
-def hrs_finder_chart(general: GeneralProperties) -> FinderChart:
+def hrs_finder_chart(
+    fits: Union[str, BinaryIO, os.PathLike[Any]], general: GeneralProperties
+) -> FinderChart:
     """Return the finder chart for an HRS observation.
 
     Parameters
     ----------
+    fits: `str`, `path-like` or `binary file-like`
+        FITS file to display.
     general: `GeneralProperties`
         Properties which are not specific to the instrument.
 
@@ -269,9 +284,7 @@ def hrs_finder_chart(general: GeneralProperties) -> FinderChart:
     `~imephu.finder_chart.FinderChart`
         The finder chart for an HRS observation.
     """
-    finder_chart = FinderChart.from_survey(
-        general.survey, general.target.position, _FINDER_CHART_SIZE
-    )
+    finder_chart = FinderChart(fits)
     annotation = _hrs_observation_annotation(general=general, wcs=finder_chart.wcs)
     finder_chart.add_annotation(annotation)
     return finder_chart
@@ -282,6 +295,7 @@ def moving_target_finder_charts(
     start: datetime,
     end: datetime,
     ephemerides: List[Ephemeris],
+    survey: str,
 ) -> Generator[FinderChart, None, None]:
     """Return a generator for the finder charts for a moving target in a time interval.
 
@@ -297,6 +311,8 @@ def moving_target_finder_charts(
         be timezone-aware.
     ephemerides: list of `~imephu.utils.Ephemeris`
         The ephemerides for the moving target.
+    survey: `str`
+        The name of the survey from which the finder chart image should be taken.
 
     Yields
     ------
@@ -315,9 +331,7 @@ def moving_target_finder_charts(
                 magnitude_range=magnitude_range,
             ),
         )
-        finder_chart = FinderChart.from_survey(
-            general_.survey, midpoint, _FINDER_CHART_SIZE
-        )
+        finder_chart = FinderChart.from_survey(survey, midpoint, _FINDER_CHART_SIZE)
         annotation = _non_sidereal_annotation(
             general=general_, ephemerides=ephemerides_, wcs=finder_chart.wcs
         )
