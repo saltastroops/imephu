@@ -81,7 +81,7 @@ def check_cli(fits_file, tmp_path_factory, file_regression):
 
     Parameters
     ----------
-    tmp_path_factory: fixture for creating as temporary directory
+    tmp_path_factory: fixture for creating a temporary directory
         Temporary directory.
     file_regression: fixture for regression checking
         Fixture for file regression checking.
