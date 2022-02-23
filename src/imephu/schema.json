@@ -77,8 +77,29 @@
         },
         {
           "$ref": "#/$defs/rss-mos"
+        },
+        {
+          "$ref": "#/$defs/rss-fabry-perot"
         }
       ]
+    },
+    "rss-fabry-perot": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/rss-name"
+        },
+        "mode": {
+          "type": "string",
+          "description": "The mode, which must be \"imaging\"",
+          "pattern": "^Fabry-Perot$"
+        }
+      },
+      "required": [
+        "name",
+        "mode"
+      ],
+      "additionalProperties": false
     },
     "rss-imaging": {
       "type": "object",

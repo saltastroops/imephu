@@ -175,6 +175,8 @@ def _create_rss_finder_chart(
             mos_mask=mos_mask,
             reference_star_box_width=reference_star_box_width,
         )
+    elif instrument_mode == "fabry-perot":
+        return sfc.rss_fabry_perot_finder_chart(fits=fits, general=general)
     else:
         raise ValueError(f"Unsupported RSS mode: {instrument_mode}")
 

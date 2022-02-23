@@ -108,3 +108,13 @@ instrument:
   {box_width_yaml}
 """
     check_cli(instrument_yaml)
+
+
+def test_create_rss_fabry_perot_finder_chart(check_cli, mock_salt_load_fits):
+    """Test creating an RSS Fabry-Perot finder chart with the CLI."""
+    instrument_yaml = """\
+instrument:
+  name: RSS
+  mode: Fabry-Perot
+"""
+    check_cli(instrument_yaml)
