@@ -118,3 +118,12 @@ instrument:
   mode: Fabry-Perot
 """
     check_cli(instrument_yaml)
+
+
+def test_create_hrs_finder_chart(check_cli, mock_salt_load_fits):
+    """Test creating an HRS finder chart with the CLI."""
+    instrument_yaml = """\
+instrument:
+  name: HRS
+"""
+    check_cli(instrument_yaml)

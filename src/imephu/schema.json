@@ -40,6 +40,20 @@
         }
       ]
     },
+    "hrs": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The instrument name, which must be \"HRS\"",
+          "pattern": "^HRS$"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    },
     "non-sidereal-target": {
       "type": "object",
       "description": "Non-sidereal target",

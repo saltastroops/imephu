@@ -134,6 +134,8 @@ def _create_sidereal_salt_finder_chart(configuration: Dict[str, Any]) -> FinderC
         return _create_salticam_finder_chart(fits, general, instrument)
     elif instrument_name == "rss":
         return _create_rss_finder_chart(fits, general, instrument)
+    elif instrument_name == "hrs":
+        return _create_hrs_finder_chart(fits, general)
     else:
         raise ValueError(f"Unsupported instrument: {instrument_name}")
 
@@ -179,6 +181,12 @@ def _create_rss_finder_chart(
         return sfc.rss_fabry_perot_finder_chart(fits=fits, general=general)
     else:
         raise ValueError(f"Unsupported RSS mode: {instrument_mode}")
+
+
+def _create_hrs_finder_chart(
+    fits: Union[BinaryIO, Path], general: GeneralProperties
+) -> FinderChart:
+    return sfc.hrs_finder_chart(fits, general)
 
 
 if __name__ == "__main__":
