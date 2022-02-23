@@ -128,23 +128,35 @@ def _create_sidereal_salt_finder_chart(configuration: Dict[str, Any]) -> FinderC
 
     # Create the finder chart
     instrument = configuration["instrument"]
-    instrument_name = instrument["name"]
-    if instrument_name == "Salticam":
-        is_slot_mode = instrument.get("slot-mode", False)
-        return sfc.salticam_finder_chart(
-            fits=fits, general=general, is_slot_mode=is_slot_mode
-        )
-    elif instrument_name == "RSS":
-        instrument_mode = instrument["mode"]
-        if instrument_mode == "imaging":
-            is_slot_mode = instrument.get("slot-mode", False)
-            return sfc.rss_imaging_finder_chart(
-                fits=fits, general=general, is_slot_mode=is_slot_mode
-            )
-        else:
-            raise ValueError(f"Unsupported RSS mode: {instrument_mode}")
+    instrument_name = instrument["name"].lower()
+    if instrument_name == "salticam":
+        return _create_salticam_finder_chart(fits, general, instrument)
+    elif instrument_name == "rss":
+        return _create_rss_finder_chart(fits, general, instrument)
     else:
         raise ValueError(f"Unsupported instrument: {instrument_name}")
+
+
+def _create_salticam_finder_chart(fits: Union[BinaryIO, Path], general: GeneralProperties, instrument: Dict[str, Any]) -> FinderChart:
+    is_slot_mode = instrument.get("slot-mode", False)
+    return sfc.salticam_finder_chart(
+        fits=fits, general=general, is_slot_mode=is_slot_mode
+    )
+
+
+def _create_rss_finder_chart(fits: Union[BinaryIO, Path], general: GeneralProperties, instrument: Dict[str, Any]) -> FinderChart:
+    instrument_mode = instrument["mode"].lower()
+    if instrument_mode == "imaging":
+        is_slot_mode = instrument.get("slot-mode", False)
+        return sfc.rss_imaging_finder_chart(
+            fits=fits, general=general, is_slot_mode=is_slot_mode
+        )
+    elif instrument_mode == "spectroscopy":
+        slit_width = Angle(instrument["slit-width"])
+        slit_height = Angle(instrument["slit-height"])
+        return sfc.rss_longslit_finder_chart(fits=fits, general=general, slit_width=slit_width, slit_height=slit_height)
+    else:
+        raise ValueError(f"Unsupported RSS mode: {instrument_mode}")
 
 
 if __name__ == "__main__":

@@ -69,7 +69,8 @@
     },
     "rss": {
       "oneOf": [
-        { "$ref":  "#/$defs/rss-imaging" }
+        { "$ref":  "#/$defs/rss-imaging" },
+        { "$ref":  "#/$defs/rss-longslit" }
       ]
     },
     "rss-imaging": {
@@ -90,6 +91,29 @@
       },
       "required": ["mode"],
       "additionalProperties": false
+    },
+    "rss-longslit": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/rss-name"
+        },
+        "mode": {
+          "type": "string",
+          "description": "The mode, which must be \"spectroscopy\"",
+          "pattern": "^spectroscopy$"
+        },
+        "slit-height": {
+          "type": "string",
+          "description": "The slit height, in a format understood by AstroPy",
+          "examples": ["8arcmin", "4 arcmin"]
+        },
+        "slit-width": {
+          "type": "string",
+          "description": "The slit width, in a format understood by AstroPy",
+          "examples": ["2.4arcsec", "4 arcsec"]
+        }
+      }
     },
     "rss-name": {
       "type": "string",

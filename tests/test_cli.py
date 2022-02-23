@@ -69,3 +69,15 @@ instrument:
   {slot_mode_yaml}
 """
     check_cli(instrument_yaml)
+
+
+def test_create_rss_spectroscopy_finder_chart(check_cli, mock_salt_load_fits):
+    """Test creating an RSS spectroscopy finder chart with the CLI."""
+    instrument_yaml = """\
+instrument:
+  name: RSS
+  mode: spectroscopy
+  slit-width: 4 arcsec
+  slit-height: 8 arcmin
+    """
+    check_cli(instrument_yaml)
