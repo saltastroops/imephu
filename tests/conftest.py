@@ -95,15 +95,15 @@ def check_cli(fits_file, tmp_path_factory, file_regression):
     def _check_cli(instrument_yaml):
         configuration = f"""\
 fits-source:
-  image-survey: "POSS2/UKSTU Red"
-telescope: "SALT"
-pi-family-name: "Doe"
-proposal-code: "2022-1-SCI-042"
+  image-survey: POSS2/UKSTU Red
+telescope: SALT
+pi-family-name: Doe
+proposal-code: 2022-1-SCI-042
 position-angle: 30d
 target:
-  name: "Magrathea"
-  ra: "0h40m00s"
-  dec: "-60d"
+  name: Magrathea
+  ra: 0h 40m 00s
+  dec: -60d
   magnitude-range:
     bandpass: V
     minimum: 17
