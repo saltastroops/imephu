@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from typer.testing import CliRunner
 
@@ -80,4 +82,29 @@ instrument:
   slit-width: 4 arcsec
   slit-height: 8 arcmin
     """
+    check_cli(instrument_yaml)
+
+
+@pytest.mark.parametrize(
+    "file,reference_star_box_width",
+    [
+        (Path(__file__).parent / "data" / "mos_mask2.xml", "10 arcsec"),
+        (Path(__file__).parent / "data" / "mos_mask2.rsmt", None),
+    ],
+)
+def test_create_rss_mos_finder_chart(
+    file, reference_star_box_width, check_cli, mock_salt_load_fits
+):
+    """Test creating an RSS MOS finder chart with the CLI."""
+    if reference_star_box_width is not None:
+        box_width_yaml = f"reference-star-box-width: {reference_star_box_width}"
+    else:
+        box_width_yaml = ""
+    instrument_yaml = f"""\
+instrument:
+  name: RSS
+  mode: MOS
+  file: {str(file)}
+  {box_width_yaml}
+"""
     check_cli(instrument_yaml)

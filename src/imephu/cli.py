@@ -14,6 +14,7 @@ import imephu
 import imephu.salt.finder_chart as sfc
 from imephu.finder_chart import FinderChart
 from imephu.salt.finder_chart import GeneralProperties, Target
+from imephu.salt.utils import MosMask
 from imephu.service.survey import load_fits
 from imephu.utils import MagnitudeRange
 
@@ -45,8 +46,8 @@ def main(
     ),
 ) -> None:
     """A tool for creating finder charts."""  # noqa: D401
-    configuration = _read_configuration(config)
     try:
+        configuration = _read_configuration(config)
         _validate_configuration(configuration)
         _create_finder_charts(configuration, output)
     except Exception as e:
@@ -137,14 +138,18 @@ def _create_sidereal_salt_finder_chart(configuration: Dict[str, Any]) -> FinderC
         raise ValueError(f"Unsupported instrument: {instrument_name}")
 
 
-def _create_salticam_finder_chart(fits: Union[BinaryIO, Path], general: GeneralProperties, instrument: Dict[str, Any]) -> FinderChart:
+def _create_salticam_finder_chart(
+    fits: Union[BinaryIO, Path], general: GeneralProperties, instrument: Dict[str, Any]
+) -> FinderChart:
     is_slot_mode = instrument.get("slot-mode", False)
     return sfc.salticam_finder_chart(
         fits=fits, general=general, is_slot_mode=is_slot_mode
     )
 
 
-def _create_rss_finder_chart(fits: Union[BinaryIO, Path], general: GeneralProperties, instrument: Dict[str, Any]) -> FinderChart:
+def _create_rss_finder_chart(
+    fits: Union[BinaryIO, Path], general: GeneralProperties, instrument: Dict[str, Any]
+) -> FinderChart:
     instrument_mode = instrument["mode"].lower()
     if instrument_mode == "imaging":
         is_slot_mode = instrument.get("slot-mode", False)
@@ -154,7 +159,22 @@ def _create_rss_finder_chart(fits: Union[BinaryIO, Path], general: GeneralProper
     elif instrument_mode == "spectroscopy":
         slit_width = Angle(instrument["slit-width"])
         slit_height = Angle(instrument["slit-height"])
-        return sfc.rss_longslit_finder_chart(fits=fits, general=general, slit_width=slit_width, slit_height=slit_height)
+        return sfc.rss_longslit_finder_chart(
+            fits=fits, general=general, slit_width=slit_width, slit_height=slit_height
+        )
+    elif instrument_mode == "mos":
+        mos_mask = MosMask.from_file(instrument["file"])
+        reference_star_box_width = (
+            Angle(instrument["reference-star-box-width"])
+            if "reference-star-box-width" in instrument
+            else Angle(5 * u.arcsec)
+        )
+        return sfc.rss_mos_finder_chart(
+            fits=fits,
+            general=general,
+            mos_mask=mos_mask,
+            reference_star_box_width=reference_star_box_width,
+        )
     else:
         raise ValueError(f"Unsupported RSS mode: {instrument_mode}")
 

@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<slitmask>
+    <header>
+        <parameter name="VERSION" value="1.1" />
+        <parameter name="PROPOSALCODE" value="INDEF" />
+        <parameter name="MASKNUM" value="0" />
+        <parameter name="PI" value="INDEF" />
+        <parameter name="CREATOR" value="Someone" />
+        <parameter name="ROTANGLE" value="20.0" />
+        <parameter name="CENTERRA" value="10.0" />
+        <parameter name="CENTERDEC" value="-60.0" />
+        <parameter name="EQUINOX" value="2000.0" />
+        <parameter name="NSMODE" value="0" />
+        <parameter name="COOSYS" value="RADEC" />
+        <parameter name="VALIDATED" value="FALSE" />
+        <parameter name="SPECLENGTH" value="12400" />
+        <parameter name="SPECOFFSET" value="0" />
+        <parameter name="SPECPOLSPLIT" value="0" />
+        <parameter name="SPECHEIGHT" value="0" />
+    </header>
+
+    <refstar
+            id="1"
+            xce="9.874999999999998"
+            yce="-60.03333333333333"
+            radius="0.5" mag="0.0"
+    />
+    <refstar
+            id="2"
+            xce="10.124999999999998"
+            yce="-60.03333333333333"
+            radius="0.5" mag="0.0"
+    />
+    <slit
+            id="3"
+            xce="9.958333333333332"
+            yce="-60.05"
+            width="2.0"
+            length="10.0"
+            tilt="0.0"
+            priority="1.0"
+            mag="0.0"
+    />
+    <slit
+            id="4"
+            xce="10.041666666666664"
+            yce="-60.05"
+            width="4.0"
+            length="20.0"
+            tilt="-45.0"
+            priority="1.0"
+            mag="0.0"
+    />
+</slitmask>

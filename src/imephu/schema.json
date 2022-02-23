@@ -69,8 +69,15 @@
     },
     "rss": {
       "oneOf": [
-        { "$ref":  "#/$defs/rss-imaging" },
-        { "$ref":  "#/$defs/rss-longslit" }
+        {
+          "$ref": "#/$defs/rss-imaging"
+        },
+        {
+          "$ref": "#/$defs/rss-spectroscopy"
+        },
+        {
+          "$ref": "#/$defs/rss-mos"
+        }
       ]
     },
     "rss-imaging": {
@@ -89,10 +96,45 @@
           "description": "Whether slot mode is used"
         }
       },
-      "required": ["mode"],
+      "required": [
+        "name",
+        "mode"
+      ],
       "additionalProperties": false
     },
-    "rss-longslit": {
+    "rss-mos": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/rss-name"
+        },
+        "mode": {
+          "type": "string",
+          "description": "The mode, which must be \"MOS\"",
+          "pattern": "^MOS$"
+        },
+        "reference-star-box-width": {
+          "type": "string",
+          "description": "The width of a box around a reference star, as angle in a format understood by AstroPy"
+        },
+        "file": {
+          "type": "string",
+          "description": "The path of the file defining the MOS mask details"
+        }
+      },
+      "required": [
+        "name",
+        "mode",
+        "file"
+      ],
+      "additionalProperties": false
+    },
+    "rss-name": {
+      "type": "string",
+      "description": "The instrument name, which must be \"RSS\"",
+      "pattern": "^RSS$"
+    },
+    "rss-spectroscopy": {
       "type": "object",
       "properties": {
         "name": {
@@ -106,19 +148,27 @@
         "slit-height": {
           "type": "string",
           "description": "The slit height, in a format understood by AstroPy",
-          "examples": ["8arcmin", "4 arcmin"]
+          "examples": [
+            "8arcmin",
+            "4 arcmin"
+          ]
         },
         "slit-width": {
           "type": "string",
           "description": "The slit width, in a format understood by AstroPy",
-          "examples": ["2.4arcsec", "4 arcsec"]
+          "examples": [
+            "2.4arcsec",
+            "4 arcsec"
+          ]
         }
-      }
-    },
-    "rss-name": {
-      "type": "string",
-      "description": "The instrument name, which must be \"RSS\"",
-      "pattern": "^RSS$"
+      },
+      "required": [
+        "name",
+        "mode",
+        "slit-height",
+        "slit-width"
+      ],
+      "additionalProperties": false
     },
     "salt": {
       "type": "object",
@@ -129,7 +179,9 @@
         "instrument": {
           "type": "object",
           "oneOf": [
-            { "$ref": "#/$defs/rss"},
+            {
+              "$ref": "#/$defs/rss"
+            },
             {
               "$ref": "#/$defs/salticam"
             }
