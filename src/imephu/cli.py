@@ -134,6 +134,15 @@ def _create_sidereal_salt_finder_chart(configuration: Dict[str, Any]) -> FinderC
         return sfc.salticam_finder_chart(
             fits=fits, general=general, is_slot_mode=is_slot_mode
         )
+    elif instrument_name == "RSS":
+        instrument_mode = instrument["mode"]
+        if instrument_mode == "imaging":
+            is_slot_mode = instrument.get("slot-mode", False)
+            return sfc.rss_imaging_finder_chart(
+                fits=fits, general=general, is_slot_mode=is_slot_mode
+            )
+        else:
+            raise ValueError(f"Unsupported RSS mode: {instrument_mode}")
     else:
         raise ValueError(f"Unsupported instrument: {instrument_name}")
 

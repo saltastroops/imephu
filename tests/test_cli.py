@@ -47,7 +47,25 @@ def test_create_salticam_finder_chart(slot_mode, check_cli, mock_salt_load_fits)
         slot_mode_yaml = "slot-mode: false"
     instrument_yaml = f"""\
 instrument:
-    name: Salticam
-    {slot_mode_yaml}
+  name: Salticam
+  {slot_mode_yaml}
+"""
+    check_cli(instrument_yaml)
+
+
+@pytest.mark.parametrize("slot_mode", [None, True, False])
+def test_create_rss_imaging_finder_chart(slot_mode, check_cli, mock_salt_load_fits):
+    """Test creating a Salticam finder chart with the CLI."""
+    if slot_mode is None:
+        slot_mode_yaml = ""
+    elif slot_mode is True:
+        slot_mode_yaml = "slot-mode: true"
+    else:
+        slot_mode_yaml = "slot-mode: false"
+    instrument_yaml = f"""\
+instrument:
+  name: RSS
+  mode: imaging
+  {slot_mode_yaml}
 """
     check_cli(instrument_yaml)
