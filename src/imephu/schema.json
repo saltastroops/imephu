@@ -43,29 +43,20 @@
     "hrs": {
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string",
-          "description": "The instrument name, which must be \"HRS\"",
-          "pattern": "^HRS$"
-        }
       },
-      "required": [
-        "name"
-      ],
+      "required": [],
       "additionalProperties": false
     },
     "nir": {
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string",
-          "description": "The instrument name, which must be \"NIR\"",
-          "pattern": "^NIR$"
-        },
         "bundle-separation": {
           "type": "string",
           "description": "The separation between the science and sky bundle as an angle, in a format understood by AstroPy",
-          "examples": ["52arcsec", "74.4arcsec"]
+          "examples": [
+            "52arcsec",
+            "74.4arcsec"
+          ]
         },
         "science-bundle": {
           "type": "object",
@@ -73,20 +64,30 @@
             "dec": {
               "type": "string",
               "description": "Declination of the sky bundle, in a format understood by AstroPy",
-              "examples": ["-24d 5m 16s", "-15.967d"]
+              "examples": [
+                "-24d 5m 16s",
+                "-15.967d"
+              ]
             },
             "ra": {
               "type": "string",
               "description": "Right ascension of the sky bundle, in a format understood by AstroPy",
-              "examples": ["23h 17m 22s", "134.9823d"]
+              "examples": [
+                "23h 17m 22s",
+                "134.9823d"
+              ]
             }
           },
-          "required": ["dec", "ra"],
+          "required": [
+            "dec",
+            "ra"
+          ],
           "additionalProperties": false
         }
       },
       "required": [
-        "name", "bundle-separation", "science-bundle"
+        "bundle-separation",
+        "science-bundle"
       ],
       "additionalProperties": false
     },
@@ -136,9 +137,6 @@
     "rss-fabry-perot": {
       "type": "object",
       "properties": {
-        "name": {
-          "$ref": "#/$defs/rss-name"
-        },
         "mode": {
           "type": "string",
           "description": "The mode, which must be \"imaging\"",
@@ -146,7 +144,6 @@
         }
       },
       "required": [
-        "name",
         "mode"
       ],
       "additionalProperties": false
@@ -154,9 +151,6 @@
     "rss-imaging": {
       "type": "object",
       "properties": {
-        "name": {
-          "$ref": "#/$defs/rss-name"
-        },
         "mode": {
           "type": "string",
           "description": "The mode, which must be \"imaging\"",
@@ -168,7 +162,6 @@
         }
       },
       "required": [
-        "name",
         "mode"
       ],
       "additionalProperties": false
@@ -176,9 +169,6 @@
     "rss-mos": {
       "type": "object",
       "properties": {
-        "name": {
-          "$ref": "#/$defs/rss-name"
-        },
         "mode": {
           "type": "string",
           "description": "The mode, which must be \"MOS\"",
@@ -194,23 +184,14 @@
         }
       },
       "required": [
-        "name",
         "mode",
         "file"
       ],
       "additionalProperties": false
     },
-    "rss-name": {
-      "type": "string",
-      "description": "The instrument name, which must be \"RSS\"",
-      "pattern": "^RSS$"
-    },
     "rss-spectroscopy": {
       "type": "object",
       "properties": {
-        "name": {
-          "$ref": "#/$defs/rss-name"
-        },
         "mode": {
           "type": "string",
           "description": "The mode, which must be \"spectroscopy\"",
@@ -234,7 +215,6 @@
         }
       },
       "required": [
-        "name",
         "mode",
         "slit-height",
         "slit-width"
@@ -251,16 +231,52 @@
           "type": "object",
           "oneOf": [
             {
-              "$ref": "#/$defs/hrs"
+              "type": "object",
+              "properties": {
+                "hrs": {
+                  "$ref": "#/$defs/hrs"
+                }
+              },
+              "required": [
+                "hrs"
+              ],
+              "additionalProperties": false
             },
             {
-              "$ref": "#/$defs/nir"
+              "type": "object",
+              "properties": {
+                "nir": {
+                  "$ref": "#/$defs/nir"
+                }
+              },
+              "required": [
+                "nir"
+              ],
+              "additionalProperties": false
             },
             {
-              "$ref": "#/$defs/rss"
+              "type": "object",
+              "properties": {
+                "rss": {
+                  "$ref": "#/$defs/rss"
+                }
+              },
+              "required": [
+                "rss"
+              ],
+              "additionalProperties": false
             },
             {
-              "$ref": "#/$defs/salticam"
+              "type": "object",
+              "properties": {
+                "salticam": {
+                  "$ref": "#/$defs/salticam"
+                }
+              },
+              "required": [
+                "salticam"
+              ],
+              "additionalProperties": false
             }
           ]
         },
@@ -307,18 +323,12 @@
     "salticam": {
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string",
-          "description": "The instrument name, which must be \"Salticam\""
-        },
         "slot-mode": {
           "type": "boolean",
           "description": "Whether slot mode is used"
         }
       },
-      "required": [
-        "name"
-      ],
+      "required": [],
       "additionalProperties": false
     },
     "sidereal-target": {

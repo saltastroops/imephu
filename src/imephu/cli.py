@@ -129,48 +129,47 @@ def _create_sidereal_salt_finder_chart(configuration: Dict[str, Any]) -> FinderC
 
     # Create the finder chart
     instrument = configuration["instrument"]
-    instrument_name = instrument["name"].lower()
-    if instrument_name == "salticam":
-        return _create_salticam_finder_chart(fits, general, instrument)
-    elif instrument_name == "rss":
-        return _create_rss_finder_chart(fits, general, instrument)
-    elif instrument_name == "hrs":
+    if "salticam" in instrument:
+        return _create_salticam_finder_chart(fits, general, instrument["salticam"])
+    elif "rss" in instrument:
+        return _create_rss_finder_chart(fits, general, instrument["rss"])
+    elif "hrs" in instrument:
         return _create_hrs_finder_chart(fits, general)
-    elif instrument_name == "nir":
-        return _create_nir_finder_chart(fits, general, instrument)
+    elif "nir" in instrument:
+        return _create_nir_finder_chart(fits, general, instrument["nir"])
     else:
-        raise ValueError(f"Unsupported instrument: {instrument_name}")
+        raise ValueError("No supported instrument found")
 
 
 def _create_salticam_finder_chart(
-    fits: Union[BinaryIO, Path], general: GeneralProperties, instrument: Dict[str, Any]
+    fits: Union[BinaryIO, Path], general: GeneralProperties, salticam: Dict[str, Any]
 ) -> FinderChart:
-    is_slot_mode = instrument.get("slot-mode", False)
+    is_slot_mode = salticam.get("slot-mode", False)
     return sfc.salticam_finder_chart(
         fits=fits, general=general, is_slot_mode=is_slot_mode
     )
 
 
 def _create_rss_finder_chart(
-    fits: Union[BinaryIO, Path], general: GeneralProperties, instrument: Dict[str, Any]
+    fits: Union[BinaryIO, Path], general: GeneralProperties, rss: Dict[str, Any]
 ) -> FinderChart:
-    instrument_mode = instrument["mode"].lower()
+    instrument_mode = rss["mode"].lower()
     if instrument_mode == "imaging":
-        is_slot_mode = instrument.get("slot-mode", False)
+        is_slot_mode = rss.get("slot-mode", False)
         return sfc.rss_imaging_finder_chart(
             fits=fits, general=general, is_slot_mode=is_slot_mode
         )
     elif instrument_mode == "spectroscopy":
-        slit_width = Angle(instrument["slit-width"])
-        slit_height = Angle(instrument["slit-height"])
+        slit_width = Angle(rss["slit-width"])
+        slit_height = Angle(rss["slit-height"])
         return sfc.rss_longslit_finder_chart(
             fits=fits, general=general, slit_width=slit_width, slit_height=slit_height
         )
     elif instrument_mode == "mos":
-        mos_mask = MosMask.from_file(instrument["file"])
+        mos_mask = MosMask.from_file(rss["file"])
         reference_star_box_width = (
-            Angle(instrument["reference-star-box-width"])
-            if "reference-star-box-width" in instrument
+            Angle(rss["reference-star-box-width"])
+            if "reference-star-box-width" in rss
             else Angle(5 * u.arcsec)
         )
         return sfc.rss_mos_finder_chart(
@@ -192,12 +191,12 @@ def _create_hrs_finder_chart(
 
 
 def _create_nir_finder_chart(
-    fits: Union[BinaryIO, Path], general: GeneralProperties, instrument: Dict[str, Any]
+    fits: Union[BinaryIO, Path], general: GeneralProperties, nir: Dict[str, Any]
 ) -> FinderChart:
     science_bundle_center = SkyCoord(
-        ra=instrument["science-bundle"]["ra"], dec=instrument["science-bbundle"]["dec"]
+        ra=nir["science-bundle"]["ra"], dec=nir["science-bundle"]["dec"]
     )
-    bundle_separation = Angle(instrument["bundle_separation"])
+    bundle_separation = Angle(nir["bundle-separation"])
     return sfc.nir_finder_chart(
         fits=fits,
         general=general,

@@ -42,15 +42,21 @@ def test_configuration_must_be_valid():
 def test_create_salticam_finder_chart(slot_mode, check_cli, mock_salt_load_fits):
     """Test creating a Salticam finder chart with the CLI."""
     if slot_mode is None:
-        slot_mode_yaml = ""
-    elif slot_mode is True:
-        slot_mode_yaml = "slot-mode: true"
-    else:
-        slot_mode_yaml = "slot-mode: false"
-    instrument_yaml = f"""\
+        instrument_yaml = """\
 instrument:
-  name: Salticam
-  {slot_mode_yaml}
+  salticam: {}
+"""
+    elif slot_mode is True:
+        instrument_yaml = """\
+instrument:
+  salticam:
+    slot-mode: true
+"""
+    else:
+        instrument_yaml = """\
+instrument:
+  salticam:
+    slot-mode: false
 """
     check_cli(instrument_yaml)
 
@@ -66,9 +72,9 @@ def test_create_rss_imaging_finder_chart(slot_mode, check_cli, mock_salt_load_fi
         slot_mode_yaml = "slot-mode: false"
     instrument_yaml = f"""\
 instrument:
-  name: RSS
-  mode: imaging
-  {slot_mode_yaml}
+  rss:
+    mode: imaging
+    {slot_mode_yaml}
 """
     check_cli(instrument_yaml)
 
@@ -77,11 +83,11 @@ def test_create_rss_spectroscopy_finder_chart(check_cli, mock_salt_load_fits):
     """Test creating an RSS spectroscopy finder chart with the CLI."""
     instrument_yaml = """\
 instrument:
-  name: RSS
-  mode: spectroscopy
-  slit-width: 4 arcsec
-  slit-height: 8 arcmin
-    """
+  rss:
+    mode: spectroscopy
+    slit-width: 4 arcsec
+    slit-height: 8 arcmin
+"""
     check_cli(instrument_yaml)
 
 
@@ -102,10 +108,10 @@ def test_create_rss_mos_finder_chart(
         box_width_yaml = ""
     instrument_yaml = f"""\
 instrument:
-  name: RSS
-  mode: MOS
-  file: {str(file)}
-  {box_width_yaml}
+  rss:
+    mode: MOS
+    file: {str(file)}
+    {box_width_yaml}
 """
     check_cli(instrument_yaml)
 
@@ -114,8 +120,8 @@ def test_create_rss_fabry_perot_finder_chart(check_cli, mock_salt_load_fits):
     """Test creating an RSS Fabry-Perot finder chart with the CLI."""
     instrument_yaml = """\
 instrument:
-  name: RSS
-  mode: Fabry-Perot
+  rss:
+    mode: Fabry-Perot
 """
     check_cli(instrument_yaml)
 
@@ -124,7 +130,7 @@ def test_create_hrs_finder_chart(check_cli, mock_salt_load_fits):
     """Test creating an HRS finder chart with the CLI."""
     instrument_yaml = """\
 instrument:
-  name: HRS
+  hrs: {}
 """
     check_cli(instrument_yaml)
 
@@ -133,10 +139,10 @@ def test_create_nir_finder_chart(check_cli, mock_salt_load_fits):
     """Test creating an NIR finder chart with the CLI."""
     instrument_yaml = """
 instrument:
-  name: NIR
-  bundle-separation: 50 arcsec
-  science-bundle:
-    ra: 0h 40m 0s
-    dec: -60d
+  nir:
+    bundle-separation: 50 arcsec
+    science-bundle:
+      ra: 0h 40m 0s
+      dec: -60d
 """
     check_cli(instrument_yaml)

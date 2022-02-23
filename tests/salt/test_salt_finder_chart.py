@@ -133,7 +133,6 @@ def test_nir_finder_chart(
         general=general,
         science_bundle_center=fits_center,
         bundle_separation=1 * u.arcmin,
-        position_angle=general.position_angle,
     )
     check_finder(finder_chart)
 
