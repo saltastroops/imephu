@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
@@ -103,3 +105,17 @@ def test_init_mos_mask(center, position_angle, reference_stars, slits, mos_mask_
             height.to_value(u.arcsec)
         )
         assert slit.tilt.to_value(u.deg) == pytest.approx(tilt.to_value(u.deg))
+
+
+@pytest.mark.parametrize(
+    "file",
+    [
+        Path(__file__).parent.parent / "data" / "mos_mask.xml",
+        Path(__file__).parent.parent / "data" / "mos_mask.rsmt",
+    ],
+)
+def test_mos_mask_from_file(file):
+    """Test reading in MOS mask details from a file."""
+    mos_mask = MosMask.from_file(file)
+    assert len(mos_mask.reference_stars) == 2
+    assert len(mos_mask.slits) == 3
