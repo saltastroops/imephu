@@ -136,6 +136,8 @@ def _create_sidereal_salt_finder_chart(configuration: Dict[str, Any]) -> FinderC
         return _create_rss_finder_chart(fits, general, instrument)
     elif instrument_name == "hrs":
         return _create_hrs_finder_chart(fits, general)
+    elif instrument_name == "nir":
+        return _create_nir_finder_chart(fits, general, instrument)
     else:
         raise ValueError(f"Unsupported instrument: {instrument_name}")
 
@@ -186,7 +188,22 @@ def _create_rss_finder_chart(
 def _create_hrs_finder_chart(
     fits: Union[BinaryIO, Path], general: GeneralProperties
 ) -> FinderChart:
-    return sfc.hrs_finder_chart(fits, general)
+    return sfc.hrs_finder_chart(fits=fits, general=general)
+
+
+def _create_nir_finder_chart(
+    fits: Union[BinaryIO, Path], general: GeneralProperties, instrument: Dict[str, Any]
+) -> FinderChart:
+    science_bundle_center = SkyCoord(
+        ra=instrument["science-bundle"]["ra"], dec=instrument["science-bbundle"]["dec"]
+    )
+    bundle_separation = Angle(instrument["bundle_separation"])
+    return sfc.nir_finder_chart(
+        fits=fits,
+        general=general,
+        science_bundle_center=science_bundle_center,
+        bundle_separation=bundle_separation,
+    )
 
 
 if __name__ == "__main__":

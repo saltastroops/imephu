@@ -234,7 +234,6 @@ def nir_finder_chart(
     general: GeneralProperties,
     science_bundle_center: SkyCoord,
     bundle_separation: Angle,
-    position_angle: Angle,
 ) -> FinderChart:
     """Return the finder chart for an NIR observation.
 
@@ -249,8 +248,6 @@ def nir_finder_chart(
         The separation between the science fiber bundle and the sky fiber bundles, as an
         angle on the sky. The separation is measured between the center of the science
         bundle and the midpoint of the line between the centers of the sky bundles.
-    position_angle: `~astropy.coordinates.Angle`
-        The position angle, as an angle on the sky measured from north to east.
 
     Returns
     -------
@@ -262,7 +259,6 @@ def nir_finder_chart(
         general=general,
         science_bundle_center=science_bundle_center,
         bundle_separation=bundle_separation,
-        position_angle=position_angle,
         wcs=finder_chart.wcs,
     )
     finder_chart.add_annotation(annotation)
@@ -402,14 +398,13 @@ def _nir_observation_annotation(
     general: GeneralProperties,
     science_bundle_center: SkyCoord,
     bundle_separation: Angle,
-    position_angle: Angle,
     wcs: WCS,
 ) -> GroupAnnotation:
     observation_annotation = _base_annotations(general, wcs)
     bundles_annotation = nir.bundles_annotation(
         science_bundle_center=science_bundle_center,
         bundle_separation=bundle_separation,
-        position_angle=position_angle,
+        position_angle=general.position_angle,
         wcs=wcs,
     )
     observation_annotation.add_item(bundles_annotation)

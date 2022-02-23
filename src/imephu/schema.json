@@ -54,6 +54,42 @@
       ],
       "additionalProperties": false
     },
+    "nir": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The instrument name, which must be \"NIR\"",
+          "pattern": "^NIR$"
+        },
+        "bundle-separation": {
+          "type": "string",
+          "description": "The separation between the science and sky bundle as an angle, in a format understood by AstroPy",
+          "examples": ["52arcsec", "74.4arcsec"]
+        },
+        "science-bundle": {
+          "type": "object",
+          "properties": {
+            "dec": {
+              "type": "string",
+              "description": "Declination of the sky bundle, in a format understood by AstroPy",
+              "examples": ["-24d 5m 16s", "-15.967d"]
+            },
+            "ra": {
+              "type": "string",
+              "description": "Right ascension of the sky bundle, in a format understood by AstroPy",
+              "examples": ["23h 17m 22s", "134.9823d"]
+            }
+          },
+          "required": ["dec", "ra"],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "name", "bundle-separation", "science-bundle"
+      ],
+      "additionalProperties": false
+    },
     "non-sidereal-target": {
       "type": "object",
       "description": "Non-sidereal target",
@@ -214,6 +250,12 @@
         "instrument": {
           "type": "object",
           "oneOf": [
+            {
+              "$ref": "#/$defs/hrs"
+            },
+            {
+              "$ref": "#/$defs/nir"
+            },
             {
               "$ref": "#/$defs/rss"
             },

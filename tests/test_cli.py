@@ -127,3 +127,16 @@ instrument:
   name: HRS
 """
     check_cli(instrument_yaml)
+
+
+def test_create_nir_finder_chart(check_cli, mock_salt_load_fits):
+    """Test creating an NIR finder chart with the CLI."""
+    instrument_yaml = """
+instrument:
+  name: NIR
+  bundle-separation: 50 arcsec
+  science-bundle:
+    ra: 0h 40m 0s
+    dec: -60d
+"""
+    check_cli(instrument_yaml)
