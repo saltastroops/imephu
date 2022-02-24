@@ -233,20 +233,45 @@ def mos_mask_xml():
 
 
 @pytest.fixture()
-def mock_salt_load_fits(fits_file, fits_file2):
-    """Return a fixture for mocking the load_fits function for SALT finder charts.
+def mock_load_fits(fits_file, fits_file2):
+    """Return a fixture for mocking getting a FITS image from an image survey.
 
-    This fixture mocks the ``from_survey`` method of the
-    `~imephu.finder_chart.FinderChart` class. The mock method always returns the FITS
-    image of the `fits_file` fixture when called the first time and that of the
-    `fits_file2` fixture when called the second time.
+    This fixture mocks the ``load_fits`` function of the `~imephu.service.survey`
+    module. The mock method always returns the FITS image of the `fits_file` fixture
+    when called the first time and the FITS image of the `fits_file2` fixture when
+    called the second time.
 
     .. warning::
 
-       The mock function ignores any arguments - you always get the same FITS file. In
+       The mock function ignores any arguments - you always get the same FITS image. In
        particular this implies that you always should use the `fits_center` fixture for
        the center of the FITS image when calling the function for the first time, and
        the fits_center2 fixture when calling it for the second time.
+    """
+    with mock.patch.object(FinderChart, "from_survey", autospec=True) as mock_load_fits:
+        mock_load_fits.side_effect = [
+            io.BytesIO(fits_file.read_bytes()),
+            io.BytesIO(fits_file2.read_bytes()),
+        ]
+        yield mock_load_fits
+
+
+@pytest.fixture()
+def mock_from_survey(fits_file, fits_file2):
+    """Return a fixture for mocking getting a finder chart from an image survey.
+
+    This fixture mocks the ``from_survey`` method of the
+    `~imephu.finder_chart.FinderChart` class. The mock method always returns a finder
+    chart with the FITS image of the `fits_file` fixture when called the first time and
+    a finder chart with the FITS image of the `fits_file2` fixture when called the
+    second time.
+
+    .. warning::
+
+       The mock function ignores any arguments - you always get the same finder chart.
+       In particular this implies that you always should use the `fits_center` fixture
+       for the center of the FITS image when calling the function for the first time,
+       and the fits_center2 fixture when calling it for the second time.
     """
     with mock.patch.object(FinderChart, "from_survey", autospec=True) as mock_load_fits:
         mock_load_fits.side_effect = [

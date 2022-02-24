@@ -38,7 +38,7 @@ def _general_properties(target_position):
 
 @pytest.mark.parametrize("is_slot_mode", [False, True])
 def test_salticam_finder_chart(
-    is_slot_mode, fits_file, fits_center, check_finder, mock_salt_load_fits
+    is_slot_mode, fits_file, fits_center, check_finder, mock_from_survey
 ):
     """Test the finder chart for Salticam observations."""
     finder_chart = salticam_finder_chart(
@@ -51,7 +51,7 @@ def test_salticam_finder_chart(
 
 @pytest.mark.parametrize("is_slot_mode", [False, True])
 def test_rss_imaging_observation_annotation(
-    is_slot_mode, fits_file, fits_center, check_finder, mock_salt_load_fits
+    is_slot_mode, fits_file, fits_center, check_finder, mock_from_survey
 ):
     """Test the finder chart for RSS imaging observations."""
     finder_chart = rss_imaging_finder_chart(
@@ -63,7 +63,7 @@ def test_rss_imaging_observation_annotation(
 
 
 def test_rss_longslit_finder_chart(
-    fits_file, fits_center, check_finder, mock_salt_load_fits
+    fits_file, fits_center, check_finder, mock_from_survey
 ):
     """Test the finder chart for RSS longslit observations."""
     finder_chart = rss_longslit_finder_chart(
@@ -76,7 +76,7 @@ def test_rss_longslit_finder_chart(
 
 
 def test_rss_mos_finder_chart(
-    fits_file, fits_center, mos_mask_xml, check_finder, mock_salt_load_fits
+    fits_file, fits_center, mos_mask_xml, check_finder, mock_from_survey
 ):
     """Test the finder chart for RSS MOS observations."""
     reference_stars = [
@@ -111,7 +111,7 @@ def test_rss_mos_finder_chart(
 
 
 def test_rss_fabry_perot_finder_chart(
-    fits_file, fits_center, check_finder, mock_salt_load_fits
+    fits_file, fits_center, check_finder, mock_from_survey
 ):
     """Test the finder chart for RSS Fabry-Pérot observations."""
     finder_chart = rss_fabry_perot_finder_chart(
@@ -123,7 +123,7 @@ def test_rss_fabry_perot_finder_chart(
 
 @pytest.mark.parametrize("position_angle", [0 * u.deg, 30 * u.deg, -90 * u.deg])
 def test_nir_finder_chart(
-    position_angle, fits_file, fits_center, check_finder, mock_salt_load_fits
+    position_angle, fits_file, fits_center, check_finder, mock_from_survey
 ):
     """Test the finder chart for an NIR observation."""
     general = _general_properties(fits_center)
@@ -137,7 +137,7 @@ def test_nir_finder_chart(
     check_finder(finder_chart)
 
 
-def test_hrs_finder_chart(fits_file, fits_center, check_finder, mock_salt_load_fits):
+def test_hrs_finder_chart(fits_file, fits_center, check_finder, mock_from_survey):
     """Test the finder chart for an HRS observation."""
     finder_chart = hrs_finder_chart(
         fits=fits_file, general=_general_properties(fits_center)
@@ -147,7 +147,7 @@ def test_hrs_finder_chart(fits_file, fits_center, check_finder, mock_salt_load_f
 
 @pytest.mark.parametrize("which_finder_chart", [0, 1])
 def test_moving_target_finder_charts(
-    which_finder_chart, fits_center, mock_salt_load_fits, check_finder
+    which_finder_chart, fits_center, mock_from_survey, check_finder
 ):
     """Test that the generated finder charts for a moving target are correct."""
     t = datetime(2022, 2, 18, 0, 0, 0, tzinfo=timezone.utc)
