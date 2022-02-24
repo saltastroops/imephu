@@ -314,4 +314,4 @@ def test_for_time_interval_creates_correct_finder_charts(positions, expected_ind
     g = FinderChart.for_time_interval(
         start, end, ephemerides, 1 * u.deg, cast(Any, fake_create_finder_chart)
     )
-    assert [f for f in g] == expected_ephemerides
+    assert [f[0] for f in g] == expected_ephemerides
