@@ -1,10 +1,19 @@
+import io
+import time
+import zipfile
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from unittest import mock
 
+import numpy as np
 import pytest
+from astropy import units as u
+from astropy.coordinates import SkyCoord
 from typer.testing import CliRunner
 
 import imephu
 from imephu.cli import app
+from imephu.utils import Ephemeris
 
 runner = CliRunner()
 
@@ -38,8 +47,54 @@ def test_configuration_must_be_valid():
     assert "Failed validating" in result.stdout
 
 
+def test_start_time_must_have_a_timezone_offset(tmp_path):
+    """Test that a start time string must include a timezone offset."""
+    configuration = """
+telescope: SALT
+pi-family-name: Doe
+proposal-code: 2022-1-SCI-042
+position-angle: 30d
+fits-source:
+  image-survey: POSS2/UKSTU Red
+target:
+  name: Magrathea
+  horizons-id: margathea
+  start-time: "2022-02-05T17:00:00"
+  end-time: "2022-02-04T17:00:00+02:00"
+instrument:
+  salticam: {}
+    """
+    config = tmp_path / "config.yaml"
+    config.write_text(configuration)
+    result = runner.invoke(app, ["--config", config])
+    assert "start time" in result.stdout and "timezone" in result.stdout
+
+
+def test_end_time_must_have_a_timezone_offset(tmp_path):
+    """Test that an end time string must include a timezone offset."""
+    configuration = """
+telescope: SALT
+pi-family-name: Doe
+proposal-code: 2022-1-SCI-042
+position-angle: 30d
+fits-source:
+  image-survey: POSS2/UKSTU Red
+target:
+  name: Magrathea
+  horizons-id: margathea
+  start-time: "2022-02-05T17:00:00Z"
+  end-time: "2022-02-04T17:00:00"
+instrument:
+  salticam: {}
+    """
+    config = tmp_path / "config.yaml"
+    config.write_text(configuration)
+    result = runner.invoke(app, ["--config", config])
+    assert "end time" in result.stdout and "timezone" in result.stdout
+
+
 @pytest.mark.parametrize("slot_mode", [None, True, False])
-def test_create_salticam_finder_chart(slot_mode, check_cli, mock_salt_load_fits):
+def test_create_salticam_finder_chart(slot_mode, check_cli, mock_from_survey):
     """Test creating a Salticam finder chart with the CLI."""
     if slot_mode is None:
         instrument_yaml = """\
@@ -62,7 +117,7 @@ instrument:
 
 
 @pytest.mark.parametrize("slot_mode", [None, True, False])
-def test_create_rss_imaging_finder_chart(slot_mode, check_cli, mock_salt_load_fits):
+def test_create_rss_imaging_finder_chart(slot_mode, check_cli, mock_from_survey):
     """Test creating a Salticam finder chart with the CLI."""
     if slot_mode is None:
         slot_mode_yaml = ""
@@ -79,7 +134,7 @@ instrument:
     check_cli(instrument_yaml)
 
 
-def test_create_rss_spectroscopy_finder_chart(check_cli, mock_salt_load_fits):
+def test_create_rss_spectroscopy_finder_chart(check_cli, mock_from_survey):
     """Test creating an RSS spectroscopy finder chart with the CLI."""
     instrument_yaml = """\
 instrument:
@@ -99,7 +154,7 @@ instrument:
     ],
 )
 def test_create_rss_mos_finder_chart(
-    file, reference_star_box_width, check_cli, mock_salt_load_fits
+    file, reference_star_box_width, check_cli, mock_from_survey
 ):
     """Test creating an RSS MOS finder chart with the CLI."""
     if reference_star_box_width is not None:
@@ -116,7 +171,7 @@ instrument:
     check_cli(instrument_yaml)
 
 
-def test_create_rss_fabry_perot_finder_chart(check_cli, mock_salt_load_fits):
+def test_create_rss_fabry_perot_finder_chart(check_cli, mock_from_survey):
     """Test creating an RSS Fabry-Perot finder chart with the CLI."""
     instrument_yaml = """\
 instrument:
@@ -126,7 +181,7 @@ instrument:
     check_cli(instrument_yaml)
 
 
-def test_create_hrs_finder_chart(check_cli, mock_salt_load_fits):
+def test_create_hrs_finder_chart(check_cli, mock_from_survey):
     """Test creating an HRS finder chart with the CLI."""
     instrument_yaml = """\
 instrument:
@@ -135,7 +190,7 @@ instrument:
     check_cli(instrument_yaml)
 
 
-def test_create_nir_finder_chart(check_cli, mock_salt_load_fits):
+def test_create_nir_finder_chart(check_cli, mock_from_survey):
     """Test creating an NIR finder chart with the CLI."""
     instrument_yaml = """
 instrument:
@@ -146,3 +201,92 @@ instrument:
       dec: -60d
 """
     check_cli(instrument_yaml)
+
+
+@pytest.mark.parametrize(
+    "finder_chart_file",
+    [
+        "finder-chart_2022-02-17T00:00:00_2022-02-17T02:00:00.png",
+        "finder-chart_2022-02-17T02:00:00_2022-02-17T04:00:00.png",
+    ],
+)
+def test_create_non_sidereal_salt_finder_charts(
+    finder_chart_file, fits_file, fits_file2, tmp_path_factory, file_regression
+):
+    """Test creating non-sidereal SALT finder charts."""
+    t = datetime(2022, 2, 17, 0, 0, 0, 0, tzinfo=timezone.utc)
+    hour = timedelta(hours=1)
+    start = t + 0.5 * hour
+    end = t + 3.5 * hour
+    start_time = start.astimezone(timezone.utc).isoformat()
+    end_time = end.astimezone(timezone.utc).isoformat()
+    configuration = f"""\
+telescope: SALT
+pi-family-name: Doe
+proposal-code: 2022-1-SCI-042
+position-angle: 30d
+fits-source:
+  image-survey: POSS2/UKSTU Red
+target:
+  name: Magrathea
+  horizons-id: margathea
+  start-time: "{start_time}"
+  end-time: "{end_time}"
+instrument:
+  salticam:
+    slot-mode: false
+"""
+
+    ephemerides = [
+        Ephemeris(
+            epoch=t,
+            position=SkyCoord(ra="0h40m30s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + hour,
+            position=SkyCoord(ra="0h40m00s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + 2 * hour,
+            position=SkyCoord(ra="0h39m30s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + 3 * hour,
+            position=SkyCoord(ra="0h39m00s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + 4 * hour,
+            position=SkyCoord(ra="0h38m30s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+    ]
+    with mock.patch.object(
+        imephu.cli, "HorizonsService", autospec=True
+    ) as mock_horizons:
+
+        mock_horizons.return_value.ephemerides.return_value = ephemerides
+        np.random.seed(0)
+
+        with mock.patch.object(
+            imephu.cli, "load_fits", autospec=True
+        ) as mock_load_fits:
+            mock_load_fits.side_effect = [
+                io.BytesIO(fits_file.read_bytes()),
+                io.BytesIO(fits_file2.read_bytes()),
+            ]
+            try:
+                tmp = tmp_path_factory.mktemp(f"finder-chart-{time.time_ns()}")
+                config = tmp / "config.yaml"
+                config.write_text(configuration)
+                result = runner.invoke(app, ["--config", config])
+                zip_content = io.BytesIO(result.stdout_bytes)
+                with zipfile.ZipFile(zip_content) as archive:
+                    assert len(archive.filelist) == 2
+                    finder_chart = archive.read(finder_chart_file)
+                    file_regression.check(finder_chart, binary=True, extension=".png")
+            finally:
+                np.random.seed()

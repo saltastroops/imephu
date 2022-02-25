@@ -1,22 +1,32 @@
 import io
 import json
 import sys
+import zipfile
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, BinaryIO, Dict, Optional, Union
+from typing import Any, BinaryIO, Dict, Generator, List, Optional, Tuple, Union, cast
 
 import typer
 import yaml
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
+from dateutil.parser import isoparse
 from jsonschema import validate
 
 import imephu
 import imephu.salt.finder_chart as sfc
+from imephu.annotation.motion import motion_annotation
 from imephu.finder_chart import FinderChart
 from imephu.salt.finder_chart import GeneralProperties, Target
 from imephu.salt.utils import MosMask
+from imephu.service.horizons import HorizonsService
 from imephu.service.survey import load_fits
-from imephu.utils import MagnitudeRange
+from imephu.utils import (
+    Ephemeris,
+    MagnitudeRange,
+    ephemerides_magnitude_range,
+    mid_position,
+)
 
 app = typer.Typer()
 
@@ -81,14 +91,10 @@ def _create_finder_charts(
         is_sidereal = "ra" in configuration["target"]
         if is_sidereal:
             finder_chart = _create_sidereal_salt_finder_chart(configuration)
-            if output:
-                finder_chart.save(output)
-            else:
-                out = io.BytesIO()
-                finder_chart.save(out, "pdf")
-                sys.stdout.buffer.write(out.getvalue())
+            _save_sidereal_finder_chart(finder_chart, output)
         else:
-            raise NotImplementedError("Non-sidereal targets are not supported yet")
+            g = _create_non_sidereal_salt_finder_charts(configuration)
+            _save_non_sidereal_finder_charts(g, output)
     else:
         raise ValueError(f"Unsupported telescope: {configuration['telescope']}")
 
@@ -108,8 +114,113 @@ def _create_sidereal_salt_finder_chart(configuration: Dict[str, Any]) -> FinderC
     )
 
     # Collect the instrument-independent properties
+    general = _general_properties(configuration, target)
+
+    # Get the FITS file
+    fits = _fits(configuration, target)
+
+    # Create the finder chart
+    instrument = configuration["instrument"]
+    return _obtain_sidereal_salt_finder_chart(fits, general, instrument)
+
+
+def _save_sidereal_finder_chart(
+    finder_chart: FinderChart, output: Optional[Path]
+) -> None:
+    if output:
+        finder_chart.save(output)
+    else:
+        out = io.BytesIO()
+        finder_chart.save(out, "png")
+        sys.stdout.buffer.write(out.getvalue())
+
+
+def _create_non_sidereal_salt_finder_charts(
+    configuration: Dict[str, Any]
+) -> Generator[Tuple[FinderChart, Tuple[datetime, datetime]], None, None]:
+    # Extract the target details
+    target_ = configuration["target"]
+    name = target_["name"]
+    horizons_id = target_["horizons-id"]
+    ephemeris_stepsize = (
+        u.Quantity(target_["ephemeris-stepsize"])
+        if "ephemeris-stepsize" in target_
+        else None
+    )
+    start_time = isoparse(target_["start-time"])
+    end_time = isoparse(target_["end-time"])
+    if start_time.tzinfo is None or start_time.tzinfo.utcoffset(None) is None:
+        raise ValueError(
+            "The start time must have a timezone offset. Examples of "
+            "valid time strings are 2022-02-25T09:14:58Z and "
+            "2022-11-15T16:25:34-08:00."
+        )
+    if end_time.tzinfo is None or end_time.tzinfo.utcoffset(None) is None:
+        raise ValueError(
+            "The end time must have a timezone offset. Examples of valid "
+            "time strings are 2022-02-25T09:14:58Z and "
+            "2022-11-15T16:25:34-08:00."
+        )
+
+    horizons_service = HorizonsService(
+        object_id=horizons_id,
+        location="B31",
+        start=start_time,
+        end=end_time,
+        stepsize=ephemeris_stepsize,
+    )
+    ephemerides = horizons_service.ephemerides(start=start_time, end=end_time)
+
+    def _create_finder_chart(ephemerides_: List[Ephemeris]) -> FinderChart:
+        center = mid_position(ephemerides_[0].position, ephemerides_[-1].position)
+        magnitude_range = ephemerides_magnitude_range(ephemerides_)
+        target = Target(name=name, position=center, magnitude_range=magnitude_range)
+        general = _general_properties(configuration, target)
+        fits = _fits(configuration, target)
+        finder_chart = _obtain_sidereal_salt_finder_chart(
+            fits=fits, general=general, instrument=configuration["instrument"]
+        )
+        track_annotation = motion_annotation(
+            ephemerides=ephemerides_, wcs=finder_chart.wcs
+        )
+        finder_chart.add_annotation(track_annotation)
+        return finder_chart
+
+    return FinderChart.for_time_interval(
+        start=start_time,
+        end=end_time,
+        ephemerides=ephemerides,
+        max_track_length=8 * u.arcmin,
+        create_finder_chart=_create_finder_chart,
+    )
+
+
+def _save_non_sidereal_finder_charts(
+    finder_chart_generator: Generator[
+        Tuple[FinderChart, Tuple[datetime, datetime]], None, None
+    ],
+    output: Optional[Path],
+) -> None:
+    if output:
+        out: Union[Path, BinaryIO] = output
+    else:
+        out = io.BytesIO()
+    with zipfile.ZipFile(out, "w") as archive:
+        for finder_chart, (start, end) in finder_chart_generator:
+            start_time = start.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+            end_time = end.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+            fc = io.BytesIO()
+            finder_chart.save(fc, "png")
+            archive.writestr(f"finder-chart_{start_time}_{end_time}.png", fc.getvalue())
+    if not output:
+        sys.stdout.buffer.write(cast(io.BytesIO, out).getvalue())
+
+
+def _general_properties(
+    configuration: Dict[str, Any], target: Target
+) -> GeneralProperties:
     fits_source = configuration["fits-source"]
-    general = GeneralProperties(
+    return GeneralProperties(
         target=target,
         position_angle=Angle(configuration["position-angle"]),
         automated_position_angle=False,
@@ -118,17 +229,21 @@ def _create_sidereal_salt_finder_chart(configuration: Dict[str, Any]) -> FinderC
         survey=fits_source["image-survey"] if "image-survey" in fits_source else None,
     )
 
-    # Get the FITS file
+
+def _fits(configuration: Dict[str, Any], target: Target) -> Union[BinaryIO, Path]:
+    fits_source = configuration["fits-source"]
     if "image-survey" in fits_source:
         survey = fits_source["image-survey"]
-        fits_center = position
+        fits_center = target.position
         size = 10 * u.arcmin
-        fits: Union[BinaryIO, Path] = load_fits(survey, fits_center, size)
+        return load_fits(survey, fits_center, size)
     else:
-        fits = Path(fits_source["file"])
+        return Path(fits_source["file"])
 
-    # Create the finder chart
-    instrument = configuration["instrument"]
+
+def _obtain_sidereal_salt_finder_chart(
+    fits: Union[BinaryIO, Path], general: GeneralProperties, instrument: Dict[str, Any]
+) -> FinderChart:
     if "salticam" in instrument:
         return _create_salticam_finder_chart(fits, general, instrument["salticam"])
     elif "rss" in instrument:

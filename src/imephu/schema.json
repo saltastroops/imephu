@@ -97,15 +97,27 @@
       "properties": {
         "end-time": {
           "type": "string",
-          "description": "End of the time interval to consider for the target"
+          "description": "End of the time interval to consider for the target, as an ISO-8601 string with a timezone offset",
+          "examples": [
+            "2022-02-17T14:09:45+02:00"
+          ]
+        },
+        "ephemeris-stepsize": {
+          "type": "string",
+          "description": "The time between two ephemeris values, in a format understood by AstroPy",
+          "examples": ["5 min", "1day"]
         },
         "horizons-id": {
           "type": "string",
           "description": "Target identifier in the JPL Horizons database"
         },
+        "name": {
+          "type": "string",
+          "description": "Target name"
+        },
         "start-time": {
           "type": "string",
-          "description": "Beginning of the time interval to consider for the target, in a format understood by the dateutil package for Python",
+          "description": "Beginning of the time interval to consider for the target, as an ISO-8601 string with a timezone offset",
           "examples": [
             "2022-02-21T14:09:45Z"
           ]
@@ -114,6 +126,7 @@
       "required": [
         "end-time",
         "horizons-id",
+        "name",
         "start-time"
       ],
       "additionalProperties": false

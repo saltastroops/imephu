@@ -4,7 +4,7 @@ import dataclasses
 import os
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, BinaryIO, Generator, List, Optional, Union
+from typing import Any, BinaryIO, Generator, List, Optional, Tuple, Union
 
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
@@ -294,7 +294,7 @@ def moving_target_finder_charts(
     end: datetime,
     ephemerides: List[Ephemeris],
     survey: str,
-) -> Generator[FinderChart, None, None]:
+) -> Generator[Tuple[FinderChart, Tuple[datetime, datetime]], None, None]:
     """Return a generator for the finder charts for a moving target in a time interval.
 
     Parameters

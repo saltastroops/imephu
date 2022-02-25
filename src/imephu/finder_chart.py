@@ -4,7 +4,7 @@ import bisect
 import os
 from datetime import datetime
 from io import BytesIO
-from typing import Any, BinaryIO, Callable, Generator, List, Optional, Union, Tuple
+from typing import Any, BinaryIO, Callable, Generator, List, Optional, Tuple, Union
 
 import matplotlib.pyplot as plt
 import pikepdf

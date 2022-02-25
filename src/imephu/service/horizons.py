@@ -44,7 +44,7 @@ class HorizonsService:
         The Horizons identifier for this object, such as ``Ceres``. The exact string
         will be used when querying the ephemerides from JPL Horizons.
     location: `str`
-        The location as an `MPC pbservatory
+        The location as an `MPC observatory
         code<https://minorplanetcenter.net//iau/lists/ObsCodesF.html>`_ For example, the
         location for the Southern African Large Telescope is B31.
     start: `~datetime.datetime`
