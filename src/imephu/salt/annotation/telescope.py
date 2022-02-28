@@ -1,9 +1,12 @@
+from typing import Optional
+
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
 from imephu.annotation.general import (
     CrosshairsAnnotation,
+    EmptyAnnotation,
     GroupAnnotation,
     RectangleAnnotation,
     TextAnnotation,
@@ -237,7 +240,7 @@ def base_annotations(
     pi_family_name: str,
     position_angle: Angle,
     automated_position_angle: bool,
-    survey: str,
+    survey: Optional[str],
     fits_center: SkyCoord,
     wcs: WCS,
 ) -> GroupAnnotation:
@@ -258,8 +261,8 @@ def base_annotations(
         The position angle, as an angle on the sky from north to east.
     automated_position_angle: bool
         Whether the position angle has been calculated automatically.
-    survey: str
-        The survey name.
+    survey: str, optional
+        The image survey name.
     fits_center: `~astropy.coordinates.SkyCoord`
         The central position of the finder chart, in right ascension and declination
     wcs: `~astropy.wcs.WCS`
@@ -278,7 +281,7 @@ def base_annotations(
                 pi_family_name=pi_family_name,
                 wcs=wcs,
             ),
-            survey_annotation(survey=survey, wcs=wcs),
+            survey_annotation(survey=survey, wcs=wcs) if survey else EmptyAnnotation(),
             position_angle_annotation(
                 position_angle=position_angle,
                 automated_position_angle=automated_position_angle,

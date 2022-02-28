@@ -4,7 +4,7 @@ import bisect
 import os
 from datetime import datetime
 from io import BytesIO
-from typing import Any, BinaryIO, Callable, Generator, List, Optional, Union
+from typing import Any, BinaryIO, Callable, Generator, List, Optional, Tuple, Union
 
 import matplotlib.pyplot as plt
 import pikepdf
@@ -76,7 +76,7 @@ class FinderChart:
         ephemerides: List[Ephemeris],
         max_track_length: Angle,
         create_finder_chart: Callable[[List[Ephemeris]], "FinderChart"],
-    ) -> Generator[FinderChart, None, None]:
+    ) -> Generator[Tuple["FinderChart", Tuple[datetime, datetime]], None, None]:
         """Create finder charts for a time interval.
 
         This method is intended for non-sidereal targets, which may require multiple
@@ -99,6 +99,8 @@ class FinderChart:
         * The list of ephemerides to include on the finder chart (for example when
           using an annotation to indicate the target motion).
 
+        The finder charts are returned along with the time interval they cover.
+
         Parameters
         ----------
         start: `~datetime.datetime`
@@ -118,8 +120,8 @@ class FinderChart:
 
         Yields
         ------
-        `~immephu.finder_chart.FinderChart`
-            The generated finder charts.
+        tuple of a `~imephu.finder_chart.FinderChart` and a datetime interval
+            The generated finder charts along with the time intervals they cover.
         """
         # The start and end time must be timezone-aware
         if start.tzinfo is None or start.tzinfo.utcoffset(None) is None:
@@ -173,7 +175,7 @@ class FinderChart:
 
         # Create the finder charts
         for group in groups:
-            yield create_finder_chart(group)
+            yield create_finder_chart(group), (group[0].epoch, group[-1].epoch)
 
     @property
     def wcs(self) -> WCS:
