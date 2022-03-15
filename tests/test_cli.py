@@ -40,6 +40,86 @@ def test_read_configuration_from_stdin():
     assert "Failed validating" in result.stdout and "xyz123" in result.stdout
 
 
+def test_read_configuration_with_absolute_fits_file_path(tmp_path, check_cli):
+    """Test that the configuration may reference an absolute FITS file path."""
+    fits_file = Path(__file__).parent / "data" / "ra10_dec-60.fits"
+    fits_source_yaml = f"""\
+fits-source:
+  file: {fits_file}
+    """
+    instrument_yaml = """\
+instrument:
+  salticam:
+    slot-mode: false
+"""
+    check_cli(instrument_yaml, fits_source_yaml)
+
+
+def test_read_configuration_with_relative_fits_file_path(
+    tmp_path, check_cli, file_regression
+):
+    """Test that the configuration may reference a relative FITS file path."""
+    fits_file = Path(__file__).parent / "data" / "ra10_dec-60.fits"
+    fits_data = fits_file.read_bytes()
+    referenced_fits_file = tmp_path / "magrathea.fits"
+    referenced_fits_file.write_bytes(fits_data)
+
+    configuration = """
+telescope: SALT
+pi-family-name: Doe
+proposal-code: 2022-1-SCI-042
+position-angle: 30d
+fits-source:
+  file: magrathea.fits
+target:
+  name: Magrathea
+  ra: 0h 40m 00s
+  dec: -60d
+  magnitude-range:
+    bandpass: V
+    minimum: 17
+    maximum: 17.3
+instrument:
+  salticam: {}
+    """
+    config = tmp_path / "config.yaml"
+    config.write_text(configuration)
+    output = tmp_path / "finder_chart.png"
+
+    np.random.seed(0)
+    try:
+        runner.invoke(app, ["--config", config, "--out", output])
+        finder_chart = output.read_bytes()
+        file_regression.check(finder_chart, binary=True, extension=".png")
+    finally:
+        np.random.seed()
+
+
+def test_read_configuration_from_stdin_requires_absolute_fits_path(tmp_path):
+    """Test that the FITS file path must be absolute when reading config from stdin."""
+    configuration = """
+telescope: SALT
+pi-family-name: Doe
+proposal-code: 2022-1-SCI-042
+position-angle: 30d
+fits-source:
+  file: relative-path.fits
+target:
+  name: Magrathea
+  ra: 0h 40m 00s
+  dec: -60d
+  magnitude-range:
+    bandpass: V
+    minimum: 17
+    maximum: 17.3
+instrument:
+  salticam: {}
+    """
+    result = runner.invoke(app, input=configuration)
+    assert result.exit_code != 0
+    assert "read from stdin" in result.stdout
+
+
 def test_configuration_must_be_valid():
     """Test that invalid finder chart configurations are rejected."""
     result = runner.invoke(app, [], input="invalid: true")
