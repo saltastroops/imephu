@@ -10,6 +10,94 @@ You can install imephu with pip:
 pip install imephu
 ```
 
+## Creating off-the-shelf finder charts
+
+imephu ships with a command line interface with command ``imephu``. Let us run it to find out about its options:
+
+```shell
+imephu --help
+```
+
+We'll get some helpful information:
+
+```text
+Usage: imephu [OPTIONS]
+
+  A tool for creating finder charts.
+
+Options:
+  -c, --config PATH     Configuration details for the finder chart(s).
+                        [required]
+  -o, --out PATH        Output file.
+  --version             Show the version and exit.
+  --install-completion  Install completion for the current shell.
+  --show-completion     Show completion for the current shell, to copy it or
+                        customize the installation.
+  --help                Show this message and exit.
+```
+
+We can see that we need at least a configuration file. This must be a YAML file containing all the details necessary for creating the finder chart, such as the telescope and the instrument configuration. Let's start with a SALT setup using the Salticam imaging camera.
+
+```{literalinclude} configuration-examples/salticam.yaml
+---
+language: yaml
+---
+```
+
+Save the file as `salticam.yaml` and then use it to create a finder chart:
+
+```shell
+imephu --config salticam.yaml --out salticam.pdf
+```
+
+We get the following finder chart.
+
+```{image} img/finder-charts/lmc-salticam.png
+---
+alt: Finder chart for a Salticam setuo
+align: center
+---
+```
+
+Let's also try to create an RSS finder chart for the following configuration.
+
+```{literalinclude} configuration-examples/rss-longslit.yaml
+---
+language: yaml
+---
+```
+
+Save the configuration as ``rss-longslit.yaml`` and run the command for creating a finder chart from it:
+
+```shell
+imephu --config rss-longslit.yaml --out rss-longslit.png
+```
+
+While previously we created a pdf, we now get a png, which looks like this:
+
+```{image} img/finder-charts/ngc6000-rss-longslit.png
+---
+alt: Finder chart for an RSS longslit setup
+align: center
+---
+```
+
+There may be cases where the standard FITS image obtained from one of the available image servers is not the best one to use. For example, you might want to use a zoomed in version. Let's try this with our RSS finder chart! Here is a setup using a FITS image from file.
+
+```{literalinclude} configuration-examples/rss-longslit-own-fits.yaml
+---
+language: yaml
+---
+```
+
+The only difference to the previous configuration is that the `fits-source` now specifies a file rather than an image survey. The file path must be absolute or relative to the configuration file (not the present working directory).
+
+Save the configuration file as ```rss-longslit-own-fits.yaml``` and make sure that you have a FITS file ``ngc6000-zoomed-in.fits`` in the same directory.
+
+```{note}
+You can download the FITS file {download}`here <_static/ngc6000-zoomed-in.fits>`.
+```
+
 ## Creating ready-made finder charts
 
 We start by creating a barebones finder chart.

@@ -3,6 +3,7 @@ from astropy.coordinates import SkyCoord
 from astropy.wcs import WCS
 
 from imephu.annotation.general import CircleAnnotation, GroupAnnotation, TextAnnotation
+from imephu.geometry import translate
 
 
 def field_of_view_annotation(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation:
@@ -24,8 +25,9 @@ def field_of_view_annotation(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation
     fov_annotation = CircleAnnotation(
         fits_center, 5 * u.arcmin, wcs=wcs, edgecolor="green"
     )
+    label_position = translate(fits_center, (-3.6, 3.6) * u.arcmin)
     name_annotation = TextAnnotation(
-        (0.86, 0.86),
+        label_position,
         "SCAM",
         wcs=wcs,
         style="italic",

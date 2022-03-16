@@ -42,6 +42,8 @@ class TextAnnotation(Annotation):
         The horizontal alignment of the text.
     verticalalignment: {"baseline", "bottom", "center", "center_baseline", "top"}, default: "center"
         The vertical alignment of the text.
+    clip_on: bool, default: True
+        Whether to clip the text at the plot boundaries.
     **kwargs: dict, optional
         Additional keyword arguments, which will be passed to Matplotlib's
         `~matplotlib.axes.Axes.text` method for adding text to plot Axes.
@@ -57,6 +59,7 @@ class TextAnnotation(Annotation):
         verticalalignment: Literal[
             "baseline", "bottom", "center", "center_baseline", "top"
         ] = "center",
+            clip_on: bool = True,
         **kwargs: Any,
     ):
         self._position = position
@@ -66,6 +69,7 @@ class TextAnnotation(Annotation):
         self._kwargs["color"] = color
         self._kwargs["horizontalalignment"] = horizontalalignment
         self._kwargs["verticalalignment"] = verticalalignment
+        self._kwargs["clip_on"] = clip_on
 
     def add_to(self, ax: WCSAxes) -> None:
         """Add the text to a finder chart.
