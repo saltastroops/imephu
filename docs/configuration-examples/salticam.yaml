@@ -1,0 +1,17 @@
+telescope: SALT
+proposal-code: 2022-1-SCI-042
+pi-family-name: Doe
+position-angle: 0d
+target:
+  name: LMC
+  ra:  05h 23m 34.5s
+  dec: −69d 45m 22s
+  magnitude-range:
+    bandpass: V
+    minimum: 0.9
+    maximum: 0.9
+fits-source:
+  image-survey: POSS2/UKSTU Red
+instrument:
+  salticam:
+    slot-mode: false
