@@ -48,7 +48,7 @@ def title_annotation(
         style="italic",
         weight="bold",
         size="large",
-        clip_on=False
+        clip_on=False,
     )
 
 

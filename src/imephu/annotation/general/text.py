@@ -59,7 +59,7 @@ class TextAnnotation(Annotation):
         verticalalignment: Literal[
             "baseline", "bottom", "center", "center_baseline", "top"
         ] = "center",
-            clip_on: bool = True,
+        clip_on: bool = True,
         **kwargs: Any,
     ):
         self._position = position
