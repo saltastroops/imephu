@@ -54,7 +54,7 @@ We get the following finder chart.
 
 ```{image} img/finder-charts/lmc-salticam.png
 ---
-alt: Finder chart for a Salticam setuo
+alt: Finder chart for a Salticam setup
 align: center
 ---
 ```
