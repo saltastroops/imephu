@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import bisect
 import os
+import warnings
 from datetime import datetime
 from io import BytesIO
 from typing import Any, BinaryIO, Callable, Generator, List, Optional, Tuple, Union
@@ -14,7 +15,7 @@ from astropy.io import fits
 from astropy.visualization.interval import AsymmetricPercentileInterval
 from astropy.visualization.mpl_normalize import simple_norm
 from astropy.visualization.wcsaxes.core import WCSAxesSubplot
-from astropy.wcs import WCS
+from astropy.wcs import FITSFixedWarning, WCS
 from matplotlib.figure import Figure
 
 import imephu
@@ -50,7 +51,9 @@ class FinderChart:
         # The FITS data is read in only when it is needed. To avoid trying to read from
         # a closed stream later on, we thus force the data to be read in immediately.
         self._data = self._hdu.data
-        self._wcs = WCS(self._hdu)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=FITSFixedWarning)
+            self._wcs = WCS(self._hdu)
         self._annotations: List[Annotation] = []
 
     @staticmethod
