@@ -92,10 +92,12 @@ def check_cli(fits_file, tmp_path_factory, file_regression):
         Function for checking the command line interface.
     """
 
-    def _check_cli(instrument_yaml):
+    def _check_cli(
+        instrument_yaml,
+        fits_source_yaml="fits-source:\n  image-survey: POSS2/UKSTU Red",
+    ):
         configuration = f"""\
-fits-source:
-  image-survey: POSS2/UKSTU Red
+{fits_source_yaml}
 telescope: SALT
 pi-family-name: Doe
 proposal-code: 2022-1-SCI-042

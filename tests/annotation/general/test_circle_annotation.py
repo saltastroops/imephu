@@ -72,7 +72,8 @@ def test_circle_annotation_translated(
         facecolor="gray",
     )
     translated_circle_annotation = circle_annotation.translate(displacement)
-    translated_circle_annotation._kwargs["color"] = "blue"
+    translated_circle_annotation._kwargs["edgecolor"] = "blue"
+    translated_circle_annotation._kwargs["facecolor"] = "blue"
     finder_chart.add_annotation(circle_annotation)
     finder_chart.add_annotation(translated_circle_annotation)
     finder_chart.add_annotation(

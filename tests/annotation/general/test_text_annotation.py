@@ -34,6 +34,7 @@ def test_text_annotation_with_axes_coordinates(fits_file, check_finder):
         color="orange",
         fontsize=18,
         horizontalalignment="center",
+        clip_on=False,
     )
     finder_chart.add_annotation(text_annotation)
     check_finder(finder_chart)

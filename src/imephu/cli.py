@@ -59,6 +59,7 @@ def main(
     try:
         configuration = _read_configuration(config)
         _validate_configuration(configuration)
+        configuration["__config-path"] = config
         _create_finder_charts(configuration, output)
     except Exception as e:
         typer.echo(str(e), err=True)
@@ -238,7 +239,16 @@ def _fits(configuration: Dict[str, Any], target: Target) -> Union[BinaryIO, Path
         size = 10 * u.arcmin
         return load_fits(survey, fits_center, size)
     else:
-        return Path(fits_source["file"])
+        path = Path(fits_source["file"])
+        if path.is_absolute():
+            return path
+        elif configuration["__config-path"] is not None:
+            return cast(Path, configuration["__config-path"]).parent / path
+        else:
+            raise ValueError(
+                "The value of the fits_source.file property in the configuration must "
+                "be an absolute path if the configuration is read from stdin."
+            )
 
 
 def _obtain_sidereal_salt_finder_chart(

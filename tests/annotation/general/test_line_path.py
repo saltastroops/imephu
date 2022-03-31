@@ -56,7 +56,8 @@ def test_line_path_annotation_rotated(pivot, angle, fits_file, check_finder, leg
         alpha=0.2,
     )
     rotated_circle_annotation = line_path_annotation.rotate(pivot, angle)
-    rotated_circle_annotation._kwargs["color"] = "blue"
+    rotated_circle_annotation._kwargs["edgecolor"] = "blue"
+    rotated_circle_annotation._kwargs["facecolor"] = "blue"
     pivot_marker = CircleAnnotation(
         pivot,
         12 * u.arcsec,
