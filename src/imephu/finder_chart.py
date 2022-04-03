@@ -15,7 +15,7 @@ from astropy.io import fits
 from astropy.visualization.interval import AsymmetricPercentileInterval
 from astropy.visualization.mpl_normalize import simple_norm
 from astropy.visualization.wcsaxes.core import WCSAxesSubplot
-from astropy.wcs import FITSFixedWarning, WCS
+from astropy.wcs import WCS, FITSFixedWarning
 from matplotlib.figure import Figure
 
 import imephu
