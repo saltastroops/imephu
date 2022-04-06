@@ -21,7 +21,7 @@ myst_enable_extensions = [
 ]
 html_theme = "sphinx_book_theme"
 html_sidebars = {
-    "**": ["sbt-sidebar-nav.html", "sbt-sidebar-footer.html"]
+    "**": ["sbt-sidebar-nav.html"]
 }
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
@@ -31,4 +31,3 @@ intersphinx_mapping = {
     'astropy': ('https://docs.astropy.org/en/stable/', None)
 }
 myst_url_schemes = ["http", "https"]
-jupyter_execute_notebooks = "cache"
