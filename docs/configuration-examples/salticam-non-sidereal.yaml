@@ -1,0 +1,15 @@
+telescope: SALT
+proposal-code: 2022-1-SCI-042
+pi-family-name: Doe
+position-angle: 0d
+target:
+  name: Ubuntu
+  horizons-id: 2005 EW302
+  start-time: "2022-04-03T12:00:00+00"
+  end-time: "2022-04-06T12:00:00+00"
+  ephemeris-stepsize: 1 hour
+fits-source:
+  image-survey: POSS2/UKSTU Red
+instrument:
+  salticam:
+    slot-mode: false

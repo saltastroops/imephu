@@ -141,6 +141,7 @@ target:
   horizons-id: margathea
   start-time: "2022-02-05T17:00:00"
   end-time: "2022-02-04T17:00:00+02:00"
+  ephemeris-stepsize: 1h
 instrument:
   salticam: {}
     """
@@ -164,6 +165,7 @@ target:
   horizons-id: margathea
   start-time: "2022-02-05T17:00:00Z"
   end-time: "2022-02-04T17:00:00"
+  ephemeris-stepsize: 1h
 instrument:
   salticam: {}
     """
@@ -286,8 +288,8 @@ instrument:
 @pytest.mark.parametrize(
     "finder_chart_file",
     [
-        "finder-chart_2022-02-17T00:00:00_2022-02-17T02:00:00.png",
-        "finder-chart_2022-02-17T02:00:00_2022-02-17T04:00:00.png",
+        "finder-chart_2022-02-17_00h00m00s_2022-02-17_02h00m00s.png",
+        "finder-chart_2022-02-17_02h00m00s_2022-02-17_04h00m00s.png",
     ],
 )
 def test_create_non_sidereal_salt_finder_charts(
@@ -309,9 +311,10 @@ fits-source:
   image-survey: POSS2/UKSTU Red
 target:
   name: Magrathea
-  horizons-id: margathea
+  horizons-id: magrathea
   start-time: "{start_time}"
   end-time: "{end_time}"
+  ephemeris-stepsize: 1h
 instrument:
   salticam:
     slot-mode: false
@@ -370,3 +373,103 @@ instrument:
                     file_regression.check(finder_chart, binary=True, extension=".png")
             finally:
                 np.random.seed()
+
+
+def test_use_format_option_for_sidereal_finder_chart(fits_file, tmp_path_factory):
+    """Test using the --format option when creating a non-sidereal finder chart."""
+    configuration = """\
+telescope: SALT
+proposal-code: 2022-1-SCI-042
+pi-family-name: Doe
+position-angle: 0d
+target:
+  name: LMC
+  ra:  05h 23m 34.5s
+  dec: −69d 45m 22s
+  magnitude-range:
+    bandpass: V
+    minimum: 0.9
+    maximum: 0.9
+fits-source:
+  image-survey: POSS2/UKSTU Red
+instrument:
+  salticam:
+    slot-mode: false    
+"""
+    np.random.seed(0)
+    try:
+        tmp = tmp_path_factory.mktemp(f"finder-chart-{time.time_ns()}")
+        config = tmp / "config.yaml"
+        config.write_text(configuration)
+        output = tmp / "finder_chart.png"
+        with mock.patch.object(
+                imephu.cli, "load_fits", autospec=True
+        ) as mock_load_fits:
+            fits = fits_file.read_bytes()
+            mock_load_fits.return_value = io.BytesIO(fits)
+            runner.invoke(app, ["--config", config, "--out", output, "--format", "pdf"])
+            finder_chart = output.read_bytes()
+            assert finder_chart.startswith(b"%PDF")
+    finally:
+        np.random.seed()
+
+
+
+def test_use_format_option_for_non_sidereal_finder_chart(fits_file, tmp_path_factory):
+    """Test using the --format option when creating a non-sidereal finder chart."""
+    t = datetime(2022, 2, 17, 0, 0, 0, 0, tzinfo=timezone.utc)
+    hour = timedelta(hours=1)
+    start = t + 0.5 * hour
+    end = t + 0.6 * hour
+    start_time = start.astimezone(timezone.utc).isoformat()
+    end_time = end.astimezone(timezone.utc).isoformat()
+    configuration = f"""\
+    telescope: SALT
+    pi-family-name: Doe
+    proposal-code: 2022-1-SCI-042
+    position-angle: 30d
+    fits-source:
+      image-survey: POSS2/UKSTU Red
+    target:
+      name: Magrathea
+      horizons-id: magrathea
+      start-time: "{start_time}"
+      end-time: "{end_time}"
+      ephemeris-stepsize: 1h
+    instrument:
+      salticam:
+        slot-mode: false
+    """
+
+    ephemerides = [
+        Ephemeris(
+            epoch=t,
+            position=SkyCoord(ra="0h40m30s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + hour,
+            position=SkyCoord(ra="0h40m00s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+    ]
+    with mock.patch.object(
+            imephu.cli, "HorizonsService", autospec=True
+    ) as mock_horizons:
+
+        mock_horizons.return_value.ephemerides.return_value = ephemerides
+        np.random.seed(0)
+
+        with mock.patch.object(
+                imephu.cli, "load_fits", autospec=True
+        ) as mock_load_fits:
+
+            mock_load_fits.return_value = fits_file
+            tmp = tmp_path_factory.mktemp(f"finder-chart-{time.time_ns()}")
+            config = tmp / "config.yaml"
+            config.write_text(configuration)
+            result = runner.invoke(app, ["--config", config, "--format", "pdf"])
+            zip_content = io.BytesIO(result.stdout_bytes)
+            with zipfile.ZipFile(zip_content) as archive:
+                finder_chart = archive.read("finder-chart_2022-02-17_00h00m00s_2022-02-17_01h00m00s.pdf")
+                assert finder_chart[:10].startswith(b"%PDF")

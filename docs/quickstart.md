@@ -98,6 +98,54 @@ Save the configuration file as ```rss-longslit-own-fits.yaml``` and make sure th
 You can download the FITS file {download}`here <_static/ngc6000-zoomed-in.fits>`.
 ```
 
+### Finder charts for non-sidereal targets
+
+When creating finder charts for non-sidereal targets, you have to specify the asteroid's identifier for the [Horizons database](https://ssd.jpl.nasa.gov/horizons/app.html#/), a start time, an end time and a stepsize between ephemerides instead of the right ascension, declination and magnitude range. The start and end time must be given as an ISO-8601 string with timezone offset.
+
+Here is an example configuration for observing the asteroid Ubuntu with Salticam.
+
+```{literalinclude} configuration-examples/salticam-non-sidereal.yaml
+---
+language: yaml
+---
+```
+
+```{warning}
+As shown in the example, the values for the start and end date *must* be enclosed in double quotes. Otherwise you will get an error that the value is not of type 'string'.
+```
+
+Save the configuration as `salticam-non-sidereal.yaml` and run imephu with this file.
+
+```shell
+imephu --config salticam-non-sidereal.yaml --out ubuntu.zip
+```
+
+If the path of the target does not fit onto a single finder chart, multiple finder charts are generated, and a zip file of all the charts is created. The name of the finder chart file within this zip file include the start and end of the time interval for which the chart is valid.
+
+Whereas for sidereal finder charts the image type can be inferred from the extension of the chosen output file, this is not the case for non-sidereal targets. However, you can request a specific type (such as ``pdf`` or ``png``) by using the ``--format`` option. For example:
+
+```shell
+imephu --config salticam-non-sidereal.yaml --out ubuntu.zip --format png
+```
+
+Matplotlib's default format is used if no format is specified. This is usually PNG but can be changed by [setting rcParams("savefig.format")](https://matplotlib.org/3.5.0/tutorials/introductory/customizing.html?highlight=savefig.format#a-sample-matplotlibrc-file).
+
+## Writing the finder chart to stdout
+
+So far we have always used the `--out` option to save the generated file in a file. However, if you want to use imephu as part of a Unix pipeline, you can omit the option so that the file content is written to stdout instead. For example:
+
+```shell
+imephu --config salticam.yaml | less
+```
+
+Matplotlib's default format is used. This is usually PNG but can be changed by [setting rcParams("savefig.format")](https://matplotlib.org/3.5.0/tutorials/introductory/customizing.html?highlight=savefig.format#a-sample-matplotlibrc-file). You can change this with the `--format` option.
+
+```shell
+imephu --config salticam.yaml --format pdf | less
+```
+
+You might wonder what happens if you use both the `--out` and the `--format` option. In this case, `--format` sets the image format, and the created file is named as defined by `--out` is used, irrespective of whether the file extension is consistent with the chosen image format. For example, you hence might end up with a pdf file called `finder-chart.png`.
+
 ## Creating ready-made finder charts
 
 We start by creating a barebones finder chart.
