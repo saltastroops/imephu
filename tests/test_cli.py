@@ -385,7 +385,7 @@ position-angle: 0d
 target:
   name: LMC
   ra:  05h 23m 34.5s
-  dec: −69d 45m 22s
+  dec: -69d 45m 22s
   magnitude-range:
     bandpass: V
     minimum: 0.9
