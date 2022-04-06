@@ -51,7 +51,12 @@ def main(
     output: Optional[Path] = typer.Option(
         None, "--out", "-o", file_okay=True, resolve_path=True, help="Output file."
     ),
-        format: str = typer.Option("png", "--format", "-f", help="Image format (such as png or pdf) for the finder chart(s)."),
+    format: str = typer.Option(
+        "png",
+        "--format",
+        "-f",
+        help="Image format (such as png or pdf) for the finder chart(s).",
+    ),
     version: Optional[bool] = typer.Option(
         None, "--version", callback=_version_callback, help="Show the version and exit."
     ),
@@ -202,7 +207,7 @@ def _save_non_sidereal_finder_charts(
         Tuple[FinderChart, Tuple[datetime, datetime]], None, None
     ],
     output: Optional[Path],
-        format: Optional[str]
+    format: Optional[str],
 ) -> None:
     if output:
         out: Union[Path, BinaryIO] = output
@@ -214,7 +219,9 @@ def _save_non_sidereal_finder_charts(
             end_time = end.astimezone(timezone.utc).strftime("%Y-%m-%d_%Hh%Mm%Ss")
             fc = io.BytesIO()
             finder_chart.save(fc, format=format)
-            archive.writestr(f"finder-chart_{start_time}_{end_time}.{format}", fc.getvalue())
+            archive.writestr(
+                f"finder-chart_{start_time}_{end_time}.{format}", fc.getvalue()
+            )
     if not output:
         sys.stdout.buffer.write(cast(io.BytesIO, out).getvalue())
 
