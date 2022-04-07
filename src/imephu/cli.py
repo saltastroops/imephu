@@ -51,6 +51,12 @@ def main(
     output: Optional[Path] = typer.Option(
         None, "--out", "-o", file_okay=True, resolve_path=True, help="Output file."
     ),
+    format: str = typer.Option(
+        "png",
+        "--format",
+        "-f",
+        help="Image format (such as png or pdf) for the finder chart(s).",
+    ),
     version: Optional[bool] = typer.Option(
         None, "--version", callback=_version_callback, help="Show the version and exit."
     ),
@@ -60,7 +66,7 @@ def main(
         configuration = _read_configuration(config)
         _validate_configuration(configuration)
         configuration["__config-path"] = config
-        _create_finder_charts(configuration, output)
+        _create_finder_charts(configuration, output, format)
     except Exception as e:
         typer.echo(str(e), err=True)
         raise typer.Exit(code=1)
@@ -86,16 +92,16 @@ def _validate_configuration(configuration: Any) -> None:
 
 
 def _create_finder_charts(
-    configuration: Dict[str, Any], output: Optional[Path]
+    configuration: Dict[str, Any], output: Optional[Path], format: Optional[str]
 ) -> None:
     if configuration["telescope"] == "SALT":
         is_sidereal = "ra" in configuration["target"]
         if is_sidereal:
             finder_chart = _create_sidereal_salt_finder_chart(configuration)
-            _save_sidereal_finder_chart(finder_chart, output)
+            _save_sidereal_finder_chart(finder_chart, output, format)
         else:
             g = _create_non_sidereal_salt_finder_charts(configuration)
-            _save_non_sidereal_finder_charts(g, output)
+            _save_non_sidereal_finder_charts(g, output, format)
     else:
         raise ValueError(f"Unsupported telescope: {configuration['telescope']}")
 
@@ -126,13 +132,13 @@ def _create_sidereal_salt_finder_chart(configuration: Dict[str, Any]) -> FinderC
 
 
 def _save_sidereal_finder_chart(
-    finder_chart: FinderChart, output: Optional[Path]
+    finder_chart: FinderChart, output: Optional[Path], format: Optional[str]
 ) -> None:
     if output:
-        finder_chart.save(output)
+        finder_chart.save(output, format=format)
     else:
         out = io.BytesIO()
-        finder_chart.save(out, "png")
+        finder_chart.save(out, format=format)
         sys.stdout.buffer.write(out.getvalue())
 
 
@@ -201,6 +207,7 @@ def _save_non_sidereal_finder_charts(
         Tuple[FinderChart, Tuple[datetime, datetime]], None, None
     ],
     output: Optional[Path],
+    format: Optional[str],
 ) -> None:
     if output:
         out: Union[Path, BinaryIO] = output
@@ -208,11 +215,13 @@ def _save_non_sidereal_finder_charts(
         out = io.BytesIO()
     with zipfile.ZipFile(out, "w") as archive:
         for finder_chart, (start, end) in finder_chart_generator:
-            start_time = start.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
-            end_time = end.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+            start_time = start.astimezone(timezone.utc).strftime("%Y-%m-%d_%Hh%Mm%Ss")
+            end_time = end.astimezone(timezone.utc).strftime("%Y-%m-%d_%Hh%Mm%Ss")
             fc = io.BytesIO()
-            finder_chart.save(fc, "png")
-            archive.writestr(f"finder-chart_{start_time}_{end_time}.png", fc.getvalue())
+            finder_chart.save(fc, format=format)
+            archive.writestr(
+                f"finder-chart_{start_time}_{end_time}.{format}", fc.getvalue()
+            )
     if not output:
         sys.stdout.buffer.write(cast(io.BytesIO, out).getvalue())
 

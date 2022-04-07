@@ -10,6 +10,7 @@ caption: Content
 ---
 
 quickstart
+notebooks/salt
 api
 development
 ```

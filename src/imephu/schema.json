@@ -125,6 +125,7 @@
       },
       "required": [
         "end-time",
+        "ephemeris-stepsize",
         "horizons-id",
         "name",
         "start-time"

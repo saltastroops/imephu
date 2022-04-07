@@ -7,9 +7,10 @@ flake8-docstrings
 flake8-print
 isort
 jsonschema
+jupyter
 matplotlib
 mypy
-myst-parser
+myst-nb
 numpydoc
 pikepdf
 pytest
