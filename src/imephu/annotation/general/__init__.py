@@ -1,4 +1,5 @@
 from imephu.annotation.general.circle import CircleAnnotation
+from imephu.annotation.general.empty import EmptyAnnotation
 from imephu.annotation.general.group import GroupAnnotation
 from imephu.annotation.general.line_path import LinePathAnnotation
 from imephu.annotation.general.rectangle import RectangleAnnotation
@@ -11,6 +12,7 @@ __all__ = [
     "ArrowAnnotation",
     "CircleAnnotation",
     "CrosshairsAnnotation",
+    "EmptyAnnotation",
     "GroupAnnotation",
     "LinePathAnnotation",
     "RectangleAnnotation",

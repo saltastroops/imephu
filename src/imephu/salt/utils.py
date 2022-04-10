@@ -1,4 +1,6 @@
+import zipfile
 from dataclasses import dataclass
+from pathlib import Path
 from typing import List
 
 from astropy import units as u
@@ -62,6 +64,27 @@ class MosMask:
 
     def __init__(self, mask_xml: str) -> None:
         self._init_from_xml(mask_xml)
+
+    @staticmethod
+    def from_file(name: Path) -> "MosMask":
+        """Return the `~imephu.salt.utils.MosMask defined in a file.
+
+        The file can be an RSMT file, as produced by SALT's RSS Slit Mask Tool, or an
+        XML file.
+
+        Parameters
+        ----------
+        path: `~pathlib.Path`
+            Path of the file defining the MOS mask.
+        """
+        if zipfile.is_zipfile(name):
+            with zipfile.ZipFile(name, "r") as archive:
+                mask_xml = archive.read("Slitmask.xml").decode("utf-8")
+        else:
+            with open(name, "r") as f:
+                mask_xml = f.read()
+
+        return MosMask(mask_xml)
 
     @property
     def center(self) -> SkyCoord:

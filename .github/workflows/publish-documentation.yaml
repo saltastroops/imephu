@@ -5,7 +5,7 @@
 
 name: publish-documentation
 
-# Run this action when chsanges are pushed to the main branch
+# Run this action when changes are pushed to the main branch
 on:
   push:
     branches:

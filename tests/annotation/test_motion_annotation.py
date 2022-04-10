@@ -7,8 +7,7 @@ from astropy.coordinates import SkyCoord
 from imephu.annotation.motion import motion_annotation
 from imephu.finder_chart import FinderChart
 from imephu.geometry import rotate
-from imephu.salt.finder_chart import MagnitudeRange
-from imephu.utils import Ephemeris
+from imephu.utils import Ephemeris, MagnitudeRange
 
 
 @pytest.mark.parametrize(

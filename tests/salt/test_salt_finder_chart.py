@@ -1,12 +1,14 @@
+from datetime import datetime, timedelta, timezone
+
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 
 from imephu.salt.finder_chart import (
     GeneralProperties,
-    MagnitudeRange,
     Target,
     hrs_finder_chart,
+    moving_target_finder_charts,
     nir_finder_chart,
     rss_fabry_perot_finder_chart,
     rss_imaging_finder_chart,
@@ -15,6 +17,7 @@ from imephu.salt.finder_chart import (
     salticam_finder_chart,
 )
 from imephu.salt.utils import MosMask, MosMaskSlit
+from imephu.utils import Ephemeris, MagnitudeRange
 
 POSITION_ANGLE = Angle(20 * u.deg)
 
@@ -35,10 +38,11 @@ def _general_properties(target_position):
 
 @pytest.mark.parametrize("is_slot_mode", [False, True])
 def test_salticam_finder_chart(
-    is_slot_mode, fits_file, fits_center, check_finder, mock_salt_load_fits
+    is_slot_mode, fits_file, fits_center, check_finder, mock_from_survey
 ):
     """Test the finder chart for Salticam observations."""
     finder_chart = salticam_finder_chart(
+        fits=fits_file,
         general=_general_properties(fits_center),
         is_slot_mode=is_slot_mode,
     )
@@ -47,10 +51,11 @@ def test_salticam_finder_chart(
 
 @pytest.mark.parametrize("is_slot_mode", [False, True])
 def test_rss_imaging_observation_annotation(
-    is_slot_mode, fits_file, fits_center, check_finder, mock_salt_load_fits
+    is_slot_mode, fits_file, fits_center, check_finder, mock_from_survey
 ):
     """Test the finder chart for RSS imaging observations."""
     finder_chart = rss_imaging_finder_chart(
+        fits=fits_file,
         general=_general_properties(fits_center),
         is_slot_mode=is_slot_mode,
     )
@@ -58,10 +63,11 @@ def test_rss_imaging_observation_annotation(
 
 
 def test_rss_longslit_finder_chart(
-    fits_file, fits_center, check_finder, mock_salt_load_fits
+    fits_file, fits_center, check_finder, mock_from_survey
 ):
     """Test the finder chart for RSS longslit observations."""
     finder_chart = rss_longslit_finder_chart(
+        fits=fits_file,
         general=_general_properties(fits_center),
         slit_width=4 * u.arcsec,
         slit_height=8 * u.arcmin,
@@ -70,7 +76,7 @@ def test_rss_longslit_finder_chart(
 
 
 def test_rss_mos_finder_chart(
-    fits_file, fits_center, mos_mask_xml, check_finder, mock_salt_load_fits
+    fits_file, fits_center, mos_mask_xml, check_finder, mock_from_survey
 ):
     """Test the finder chart for RSS MOS observations."""
     reference_stars = [
@@ -99,16 +105,17 @@ def test_rss_mos_finder_chart(
     )
     mos_mask = MosMask(xml)
     finder_chart = rss_mos_finder_chart(
-        general=_general_properties(fits_center), mos_mask=mos_mask
+        fits=fits_file, general=_general_properties(fits_center), mos_mask=mos_mask
     )
     check_finder(finder_chart)
 
 
 def test_rss_fabry_perot_finder_chart(
-    fits_file, fits_center, check_finder, mock_salt_load_fits
+    fits_file, fits_center, check_finder, mock_from_survey
 ):
     """Test the finder chart for RSS Fabry-Pérot observations."""
     finder_chart = rss_fabry_perot_finder_chart(
+        fits=fits_file,
         general=_general_properties(fits_center),
     )
     check_finder(finder_chart)
@@ -116,21 +123,78 @@ def test_rss_fabry_perot_finder_chart(
 
 @pytest.mark.parametrize("position_angle", [0 * u.deg, 30 * u.deg, -90 * u.deg])
 def test_nir_finder_chart(
-    position_angle, fits_file, fits_center, check_finder, mock_salt_load_fits
+    position_angle, fits_file, fits_center, check_finder, mock_from_survey
 ):
     """Test the finder chart for an NIR observation."""
     general = _general_properties(fits_center)
     general.position_angle = position_angle
     finder_chart = nir_finder_chart(
+        fits=fits_file,
         general=general,
         science_bundle_center=fits_center,
         bundle_separation=1 * u.arcmin,
-        position_angle=general.position_angle,
     )
     check_finder(finder_chart)
 
 
-def test_hrs_finder_chart(fits_file, fits_center, check_finder, mock_salt_load_fits):
+def test_hrs_finder_chart(fits_file, fits_center, check_finder, mock_from_survey):
     """Test the finder chart for an HRS observation."""
-    finder_chart = hrs_finder_chart(_general_properties(fits_center))
+    finder_chart = hrs_finder_chart(
+        fits=fits_file, general=_general_properties(fits_center)
+    )
     check_finder(finder_chart)
+
+
+@pytest.mark.parametrize("which_finder_chart", [0, 1])
+def test_moving_target_finder_charts(
+    which_finder_chart, fits_center, mock_from_survey, check_finder
+):
+    """Test that the generated finder charts for a moving target are correct."""
+    t = datetime(2022, 2, 18, 0, 0, 0, tzinfo=timezone.utc)
+    hour = timedelta(hours=1)
+    ephemerides = [
+        Ephemeris(
+            epoch=t,
+            position=SkyCoord(ra="0h40m30s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + hour,
+            position=SkyCoord(ra="0h40m00s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + 2 * hour,
+            position=SkyCoord(ra="0h39m30s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + 3 * hour,
+            position=SkyCoord(ra="0h39m00s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+        Ephemeris(
+            epoch=t + 4 * hour,
+            position=SkyCoord(ra="0h38m30s", dec=-60 * u.deg),
+            magnitude_range=None,
+        ),
+    ]
+    start = t + 0.5 * hour
+    end = t + 3.5 * hour
+    g = moving_target_finder_charts(
+        general=_general_properties(fits_center),
+        start=start,
+        end=end,
+        ephemerides=ephemerides,
+        survey="POSS2/UKSTU Red",
+    )
+    counter = 0
+    for finder_chart, _ in g:
+        # The regression fixture only creates a single file per test run, it seems. So
+        # to get all finder charts and ensure a deterministic result, we have to make
+        # sure it is used only once.
+        if counter == which_finder_chart:
+            check_finder(finder_chart)
+        counter += 1
+
+    assert counter == 2

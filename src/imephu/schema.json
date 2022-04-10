@@ -1,0 +1,408 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/salt"
+    }
+  ],
+  "$defs": {
+    "fits-source": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "image-survey": {
+              "type": "string",
+              "description": "Image survey to use for for the finder chart image",
+              "examples": [
+                "POSS2/UKSTU Red"
+              ]
+            }
+          },
+          "required": [
+            "image-survey"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "file": {
+              "type": "string",
+              "description": "Path of the FITS file for for the finder chart image"
+            }
+          },
+          "required": [
+            "file"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "hrs": {
+      "type": "object",
+      "properties": {
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "nir": {
+      "type": "object",
+      "properties": {
+        "bundle-separation": {
+          "type": "string",
+          "description": "The separation between the science and sky bundle as an angle, in a format understood by AstroPy",
+          "examples": [
+            "52arcsec",
+            "74.4arcsec"
+          ]
+        },
+        "science-bundle": {
+          "type": "object",
+          "properties": {
+            "dec": {
+              "type": "string",
+              "description": "Declination of the sky bundle, in a format understood by AstroPy",
+              "examples": [
+                "-24d 5m 16s",
+                "-15.967d"
+              ]
+            },
+            "ra": {
+              "type": "string",
+              "description": "Right ascension of the sky bundle, in a format understood by AstroPy",
+              "examples": [
+                "23h 17m 22s",
+                "134.9823d"
+              ]
+            }
+          },
+          "required": [
+            "dec",
+            "ra"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "bundle-separation",
+        "science-bundle"
+      ],
+      "additionalProperties": false
+    },
+    "non-sidereal-target": {
+      "type": "object",
+      "description": "Non-sidereal target",
+      "properties": {
+        "end-time": {
+          "type": "string",
+          "description": "End of the time interval to consider for the target, as an ISO-8601 string with a timezone offset",
+          "examples": [
+            "2022-02-17T14:09:45+02:00"
+          ]
+        },
+        "ephemeris-stepsize": {
+          "type": "string",
+          "description": "The time between two ephemeris values, in a format understood by AstroPy",
+          "examples": ["5 min", "1day"]
+        },
+        "horizons-id": {
+          "type": "string",
+          "description": "Target identifier in the JPL Horizons database"
+        },
+        "name": {
+          "type": "string",
+          "description": "Target name"
+        },
+        "start-time": {
+          "type": "string",
+          "description": "Beginning of the time interval to consider for the target, as an ISO-8601 string with a timezone offset",
+          "examples": [
+            "2022-02-21T14:09:45Z"
+          ]
+        }
+      },
+      "required": [
+        "end-time",
+        "ephemeris-stepsize",
+        "horizons-id",
+        "name",
+        "start-time"
+      ],
+      "additionalProperties": false
+    },
+    "rss": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/rss-imaging"
+        },
+        {
+          "$ref": "#/$defs/rss-spectroscopy"
+        },
+        {
+          "$ref": "#/$defs/rss-mos"
+        },
+        {
+          "$ref": "#/$defs/rss-fabry-perot"
+        }
+      ]
+    },
+    "rss-fabry-perot": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "The mode, which must be \"imaging\"",
+          "pattern": "^Fabry-Perot$"
+        }
+      },
+      "required": [
+        "mode"
+      ],
+      "additionalProperties": false
+    },
+    "rss-imaging": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "The mode, which must be \"imaging\"",
+          "pattern": "^imaging$"
+        },
+        "slot-mode": {
+          "type": "boolean",
+          "description": "Whether slot mode is used"
+        }
+      },
+      "required": [
+        "mode"
+      ],
+      "additionalProperties": false
+    },
+    "rss-mos": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "The mode, which must be \"MOS\"",
+          "pattern": "^MOS$"
+        },
+        "reference-star-box-width": {
+          "type": "string",
+          "description": "The width of a box around a reference star, as angle in a format understood by AstroPy"
+        },
+        "file": {
+          "type": "string",
+          "description": "The path of the file defining the MOS mask details"
+        }
+      },
+      "required": [
+        "mode",
+        "file"
+      ],
+      "additionalProperties": false
+    },
+    "rss-spectroscopy": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "The mode, which must be \"spectroscopy\"",
+          "pattern": "^spectroscopy$"
+        },
+        "slit-height": {
+          "type": "string",
+          "description": "The slit height, in a format understood by AstroPy",
+          "examples": [
+            "8arcmin",
+            "4 arcmin"
+          ]
+        },
+        "slit-width": {
+          "type": "string",
+          "description": "The slit width, in a format understood by AstroPy",
+          "examples": [
+            "2.4arcsec",
+            "4 arcsec"
+          ]
+        }
+      },
+      "required": [
+        "mode",
+        "slit-height",
+        "slit-width"
+      ],
+      "additionalProperties": false
+    },
+    "salt": {
+      "type": "object",
+      "properties": {
+        "fits-source": {
+          "$ref": "#/$defs/fits-source"
+        },
+        "instrument": {
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "hrs": {
+                  "$ref": "#/$defs/hrs"
+                }
+              },
+              "required": [
+                "hrs"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "nir": {
+                  "$ref": "#/$defs/nir"
+                }
+              },
+              "required": [
+                "nir"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "rss": {
+                  "$ref": "#/$defs/rss"
+                }
+              },
+              "required": [
+                "rss"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "salticam": {
+                  "$ref": "#/$defs/salticam"
+                }
+              },
+              "required": [
+                "salticam"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "pi-family-name": {
+          "type": "string",
+          "description": "Family name of the Principal Investigator"
+        },
+        "position-angle": {
+          "type": "string",
+          "description": "Position angle in a format understood by Astropy, measured from north towards east"
+        },
+        "proposal-code": {
+          "type": "string",
+          "description": "Proposal code"
+        },
+        "target": {
+          "type": "object",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sidereal-target"
+            },
+            {
+              "$ref": "#/$defs/non-sidereal-target"
+            }
+          ]
+        },
+        "telescope": {
+          "type": "string",
+          "description": "The telescope name, which must be \"SALT\"",
+          "pattern": "^SALT$"
+        }
+      },
+      "required": [
+        "fits-source",
+        "instrument",
+        "pi-family-name",
+        "position-angle",
+        "proposal-code",
+        "target",
+        "telescope"
+      ],
+      "additionalProperties": false
+    },
+    "salticam": {
+      "type": "object",
+      "properties": {
+        "slot-mode": {
+          "type": "boolean",
+          "description": "Whether slot mode is used"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "sidereal-target": {
+      "type": "object",
+      "description": "Sidereal target",
+      "properties": {
+        "dec": {
+          "type": "string",
+          "description": "Declination, in a format AstroPy understands",
+          "examples": [
+            "-59d13m08s"
+          ]
+        },
+        "magnitude-range": {
+          "type": "object",
+          "description": "Magnitude range",
+          "properties": {
+            "bandpass": {
+              "type": "string",
+              "description": "Bandpass for which the magnitudes are given",
+              "examples": [
+                "V",
+                "R"
+              ]
+            },
+            "maximum": {
+              "type": "number",
+              "description": "Maximum (faintest) magnitude"
+            },
+            "minimum": {
+              "type": "number",
+              "description": "Minimum (brightest) magnitude"
+            }
+          },
+          "required": [
+            "bandpass",
+            "maximum",
+            "minimum"
+          ],
+          "additionalProperties": false
+        },
+        "name": {
+          "type": "string",
+          "description": "Target name"
+        },
+        "ra": {
+          "type": "string",
+          "description": "Right ascension, in a format AstroPy understands",
+          "examples": [
+            "11h07m14s"
+          ]
+        }
+      },
+      "required": [
+        "dec",
+        "magnitude-range",
+        "name",
+        "ra"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

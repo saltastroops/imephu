@@ -132,3 +132,5 @@ dmypy.json
 .idea
 *.iml
 .vscode
+/docs/jupyter_execute
+/docs/.jupyter_cache

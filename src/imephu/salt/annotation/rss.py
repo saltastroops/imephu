@@ -8,6 +8,7 @@ from imephu.annotation.general import (
     RectangleAnnotation,
     TextAnnotation,
 )
+from imephu.geometry import translate
 from imephu.salt.utils import MosMask
 
 
@@ -30,8 +31,9 @@ def field_of_view_annotation(fits_center: SkyCoord, wcs: WCS) -> GroupAnnotation
     fov_annotation = CircleAnnotation(
         fits_center, 4 * u.arcmin, wcs=wcs, edgecolor="green"
     )
+    label_position = translate(fits_center, (-2.9, 2.9) * u.arcmin)
     name_annotation = TextAnnotation(
-        (0.79, 0.79),
+        label_position,
         "RSS",
         wcs=wcs,
         style="italic",

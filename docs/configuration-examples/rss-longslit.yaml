@@ -1,0 +1,19 @@
+telescope: SALT
+proposal-code: 2022-1-SCI-043
+pi-family-name: Doe
+position-angle: 30.6d
+target:
+  name: NGC 6000
+  ra: 15h 49m 49.5s
+  dec: −29° 23′ 13″
+  magnitude-range:
+    minimum: 11.18
+    maximum: 11.36
+    bandpass: V
+fits-source:
+  image-survey: POSS2/UKSTU Red
+instrument:
+  rss:
+    mode: "spectroscopy"
+    slit-height: 8 arcmin
+    slit-width: 2 arcsec
