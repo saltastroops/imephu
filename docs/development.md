@@ -110,3 +110,77 @@ Fixture | Description
 --- | ---
 check_finder | Function comparing a finder chart against a previously saved version, asserting nothing has changed. (Technically, the saved png file is compared.)
 fits_file | {py:obj}`~pathlib.Path` of a FITS file that can be used for generating a finder chart. 
+
+## Publishing the package
+
+### Publishing manually
+
+In order to publish imephu from your machine, first install twine, if you haven't done so already:
+
+```shell
+pipx install twine
+```
+
+Then remove the `dist` folder if need be:
+
+```shell
+rm -r dist
+```
+
+Build the package:
+
+```shell
+pyproject-build --sdist
+```
+
+If you have your own PyPI server, say `https://pypi.example.com`, create a file `.pypirc` in your home directory with the following content:
+
+```
+[distutils]
+index-servers =
+    pypi
+    testpypi
+    saao
+
+[pypi]
+repository = https://upload.pypi.org/legacy/
+
+[testpypi]
+repository = https://test.pypi.org/legacy/
+
+[example]
+repository = https://pypi.example.com/
+```
+
+You can then use twine to upload the package:
+
+```shell
+twine upload -r https://pypi.example.com dist/*
+```
+
+Afterwards you can install imephu from your PyPI server with
+
+```shell
+python -m pip install --index-url https://pypi.example.com/
+```
+
+Upload the package to [Test PyPI](https://packaging.python.org/guides/using-testpypi/):
+
+```shell
+twine upload -r testpypi dist/*
+```
+
+You can then install imephu from Test PyPI with
+
+```shell
+python -m pip install --index-url https://test.pypi.org/simple/ imephu
+```
+
+If all looks good, you can publish your package:
+
+```shell
+twine upload dist/*
+```
+
+
+
