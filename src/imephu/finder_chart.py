@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import bisect
+import copy
 import os
 import warnings
 from datetime import datetime
 from io import BytesIO
-from typing import Any, BinaryIO, Callable, Generator, List, Optional, Tuple, Union
+from typing import Any, BinaryIO, Callable, Dict, Generator, List, Optional, Tuple, Union
 
 import matplotlib.pyplot as plt
 import pikepdf
@@ -51,6 +52,7 @@ class FinderChart:
         # The FITS data is read in only when it is needed. To avoid trying to read from
         # a closed stream later on, we thus force the data to be read in immediately.
         self._data = self._hdu.data
+        self._metadata: Dict[str, Any] = dict()
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=FITSFixedWarning)
             self._wcs = WCS(self._hdu)
@@ -102,7 +104,9 @@ class FinderChart:
         * The list of ephemerides to include on the finder chart (for example when
           using an annotation to indicate the target motion).
 
-        The finder charts are returned along with the time interval they cover.
+        The finder charts are returned along with the time interval they cover. The time
+        interval is also added as a tuple of `~datetime.datetime` values with the key
+        ``valid_for`` to the finder chart's metadata.
 
         Parameters
         ----------
@@ -178,7 +182,10 @@ class FinderChart:
 
         # Create the finder charts
         for group in groups:
-            yield create_finder_chart(group), (group[0].epoch, group[-1].epoch)
+            valid_for = (group[0].epoch, group[-1].epoch)
+            finder_chart = create_finder_chart(group)
+            finder_chart.add_metadata("valid_for", valid_for)
+            yield finder_chart, valid_for
 
     @property
     def wcs(self) -> WCS:
@@ -199,6 +206,37 @@ class FinderChart:
         the other annotations.
         """
         self._annotations.append(annotation)
+
+    @property
+    def metadata(self) -> Dict[str, Any]:
+        """
+        Return the metadata for the finder chart.
+
+        Metadata can  be added with the `add_metadata` method. A shallow copy of the
+        metadata is returned.
+
+        Returns
+        -------
+        dict
+            The metadata of the finder chart.
+        """
+        return self._metadata.copy()
+
+    def add_metadata(self, key: str, value: Any) -> None:
+        """
+        Add a key-value to the finder chart's metadata.
+
+        If the key existrs in the metadata already, the existing value for the key is
+        replaced.
+
+        Parameters
+        ----------
+        key: `str`
+            Key.
+        value: `~typing.Any`
+            Value.
+        """
+        self._metadata[key] = value
 
     def show(self) -> None:
         """Display the finder chart on the screen."""
