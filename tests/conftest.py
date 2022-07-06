@@ -77,7 +77,9 @@ def check_finder(file_regression):
             with Image.open(contents) as im:
                 pil_contents = io.BytesIO()
                 im.save(pil_contents, format="png")
-            file_regression.check(pil_contents.getvalue(), binary=True, extension=".png")
+            file_regression.check(
+                pil_contents.getvalue(), binary=True, extension=".png"
+            )
         finally:
             np.random.seed()
 
@@ -97,10 +99,6 @@ def check_image(file_regression):
     Parameters
     ----------
     file_regression
-
-    Returns
-    -------
-
     """
 
     def _check_image(image_contents):
@@ -112,9 +110,12 @@ def check_image(file_regression):
         with Image.open(image_contents) as im:
             pil_contents = io.BytesIO()
             im.save(pil_contents, format="png")
-            file_regression.check(pil_contents.getvalue(), binary=True, extension=".png")
+            file_regression.check(
+                pil_contents.getvalue(), binary=True, extension=".png"
+            )
 
     return _check_image
+
 
 @pytest.fixture()
 def check_cli(fits_file, tmp_path_factory, file_regression):
@@ -176,7 +177,9 @@ target:
             with Image.open(contents) as im:
                 pil_contents = io.BytesIO()
                 im.save(pil_contents, format="png")
-                file_regression.check(pil_contents.getvalue(), binary=True, extension=".png")
+                file_regression.check(
+                    pil_contents.getvalue(), binary=True, extension=".png"
+                )
         finally:
             np.random.seed()
 

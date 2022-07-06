@@ -10,7 +10,6 @@ import pikepdf
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-from PIL import Image
 
 import imephu
 import imephu.service.survey

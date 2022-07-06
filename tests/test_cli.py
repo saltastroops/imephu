@@ -55,9 +55,7 @@ instrument:
     check_cli(instrument_yaml, fits_source_yaml)
 
 
-def test_read_configuration_with_relative_fits_file_path(
-    tmp_path, check_image
-):
+def test_read_configuration_with_relative_fits_file_path(tmp_path, check_image):
     """Test that the configuration may reference a relative FITS file path."""
     fits_file = Path(__file__).parent / "data" / "ra10_dec-60.fits"
     fits_data = fits_file.read_bytes()
