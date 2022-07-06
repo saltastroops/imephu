@@ -13,7 +13,7 @@ extensions = [
     "myst_nb",
 ]
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'jupyter_execute', 'Thumbs.db', '.DS_Store']
 html_static_path = ['_static']
 default_role = 'py:obj'
 myst_enable_extensions = [
