@@ -56,7 +56,7 @@ instrument:
 
 
 def test_read_configuration_with_relative_fits_file_path(
-    tmp_path, check_cli, file_regression
+    tmp_path, check_image
 ):
     """Test that the configuration may reference a relative FITS file path."""
     fits_file = Path(__file__).parent / "data" / "ra10_dec-60.fits"
@@ -90,7 +90,7 @@ instrument:
     try:
         runner.invoke(app, ["--config", config, "--out", output])
         finder_chart = output.read_bytes()
-        file_regression.check(finder_chart, binary=True, extension=".png")
+        check_image(io.BytesIO(finder_chart))
     finally:
         np.random.seed()
 
@@ -293,7 +293,7 @@ instrument:
     ],
 )
 def test_create_non_sidereal_salt_finder_charts(
-    finder_chart_file, fits_file, fits_file2, tmp_path_factory, file_regression
+    finder_chart_file, fits_file, fits_file2, tmp_path_factory, check_image
 ):
     """Test creating non-sidereal SALT finder charts."""
     t = datetime(2022, 2, 17, 0, 0, 0, 0, tzinfo=timezone.utc)
@@ -370,7 +370,7 @@ instrument:
                 with zipfile.ZipFile(zip_content) as archive:
                     assert len(archive.filelist) == 2
                     finder_chart = archive.read(finder_chart_file)
-                    file_regression.check(finder_chart, binary=True, extension=".png")
+                    check_image(io.BytesIO(finder_chart))
             finally:
                 np.random.seed()
 

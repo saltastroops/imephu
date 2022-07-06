@@ -8,6 +8,7 @@ import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
+from PIL import Image
 from typer.testing import CliRunner
 
 import imephu
@@ -67,12 +68,53 @@ def check_finder(file_regression):
         try:
             contents = io.BytesIO()
             finder_chart.save(contents, format="png")
-            file_regression.check(contents.getvalue(), binary=True, extension=".png")
+
+            # Matplotlib adds a string with version information to the PNG. As this
+            # leads to test failure if the previously stored finder chart was generated
+            # with another Matplotlib version, we store the image with Pillow to get
+            # rid of the string.
+            contents.seek(0)
+            with Image.open(contents) as im:
+                pil_contents = io.BytesIO()
+                im.save(pil_contents, format="png")
+            file_regression.check(pil_contents.getvalue(), binary=True, extension=".png")
         finally:
             np.random.seed()
 
     return _check_finder
 
+
+@pytest.fixture()
+def check_image(file_regression):
+    """
+    Return a function for checking an image against a previously stored version.
+
+    The image is first loaded into Pillow and then saved as a png. This removes any
+    comment added by Matplotlib. This is necessary as Matplotlib adds its version number
+    to the comment, which leads to a test failure if a different version is used for
+    testing.
+
+    Parameters
+    ----------
+    file_regression
+
+    Returns
+    -------
+
+    """
+
+    def _check_image(image_contents):
+        # Matplotlib adds a string with version information to the PNG. As this
+        # leads to test failure if the previously stored finder chart was generated
+        # with another Matplotlib version, we store the image with Pillow to get
+        # rid of the string.
+        image_contents.seek(0)
+        with Image.open(image_contents) as im:
+            pil_contents = io.BytesIO()
+            im.save(pil_contents, format="png")
+            file_regression.check(pil_contents.getvalue(), binary=True, extension=".png")
+
+    return _check_image
 
 @pytest.fixture()
 def check_cli(fits_file, tmp_path_factory, file_regression):
@@ -125,7 +167,16 @@ target:
                 mock_load_fits.return_value = io.BytesIO(fits)
                 runner.invoke(app, ["--config", config, "--out", output])
                 finder_chart = output.read_bytes()
-                file_regression.check(finder_chart, binary=True, extension=".png")
+
+            # Matplotlib adds a string with version information to the PNG. As this
+            # leads to test failure if the previously stored finder chart was generated
+            # with another Matplotlib version, we store the image with Pillow to get
+            # rid of the string.
+            contents = io.BytesIO(finder_chart)
+            with Image.open(contents) as im:
+                pil_contents = io.BytesIO()
+                im.save(pil_contents, format="png")
+                file_regression.check(pil_contents.getvalue(), binary=True, extension=".png")
         finally:
             np.random.seed()
 
