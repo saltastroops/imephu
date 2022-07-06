@@ -2,7 +2,7 @@ import io
 import pathlib
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
-from typing import Any, cast, Tuple
+from typing import Any, cast
 from unittest import mock
 
 import numpy as np
@@ -167,7 +167,11 @@ def test_for_time_interval_start_must_be_earlier_than_end(start, end, expectatio
     ]
     with expectation:
         g = FinderChart.for_time_interval(
-            start, end, ephemerides, 5 * u.arcmin, cast(Any, lambda x: _FakeFinderChart(42))
+            start,
+            end,
+            ephemerides,
+            5 * u.arcmin,
+            cast(Any, lambda x: _FakeFinderChart(42)),
         )
         next(g)
 
@@ -200,7 +204,11 @@ def test_for_time_interval_time_intervals_must_be_covered(start, end, expectatio
     ]
     with expectation:
         g = FinderChart.for_time_interval(
-            start, end, ephemerides, 5 * u.arcmin, cast(Any, lambda x: _FakeFinderChart(42))
+            start,
+            end,
+            ephemerides,
+            5 * u.arcmin,
+            cast(Any, lambda x: _FakeFinderChart(42)),
         )
         next(g)
 
@@ -225,7 +233,11 @@ def test_for_time_interval_max_track_length_must_be_positive(
     ]
     with expectation:
         g = FinderChart.for_time_interval(
-            start, end, ephemerides, max_track_length, cast(Any, lambda x: _FakeFinderChart(42))
+            start,
+            end,
+            ephemerides,
+            max_track_length,
+            cast(Any, lambda x: _FakeFinderChart(42)),
         )
         next(g)
 
@@ -317,7 +329,9 @@ def test_for_time_interval_creates_correct_finder_charts(positions, expected_ind
     expected_valid_for = []
     for index_group in expected_indices:
         expected_ephemerides.append([ephemerides[i] for i in index_group])
-        expected_valid_for.append((ephemerides[index_group[0]].epoch, ephemerides[index_group[-1]].epoch))
+        expected_valid_for.append(
+            (ephemerides[index_group[0]].epoch, ephemerides[index_group[-1]].epoch)
+        )
 
     start = t
     end = t + timedelta(hours=len(positions) - 1)

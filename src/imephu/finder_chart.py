@@ -1,12 +1,21 @@
 from __future__ import annotations
 
 import bisect
-import copy
 import os
 import warnings
 from datetime import datetime
 from io import BytesIO
-from typing import Any, BinaryIO, Callable, Dict, Generator, List, Optional, Tuple, Union
+from typing import (
+    Any,
+    BinaryIO,
+    Callable,
+    Dict,
+    Generator,
+    List,
+    Optional,
+    Tuple,
+    Union,
+)
 
 import matplotlib.pyplot as plt
 import pikepdf
