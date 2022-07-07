@@ -106,12 +106,8 @@ class FinderChart:
         you need any annotations for the non-sidereal nature, it is up to
         ``create_finder_chart`` to provide them.
 
-        The ``create_finder_chart`` function has to accept two arguments, in this order:
-
-        * The center of the finder chart as a position on the sky, in right ascension
-          and declination.
-        * The list of ephemerides to include on the finder chart (for example when
-          using an annotation to indicate the target motion).
+        The ``create_finder_chart`` function has to accept as its single argument the
+        list of ephemerides to include on the finder chart.
 
         The finder charts are returned along with the time interval they cover. The time
         interval is also added as a tuple of `~datetime.datetime` values with the key
