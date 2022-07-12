@@ -27,7 +27,6 @@ from astropy.visualization.wcsaxes.core import WCSAxesSubplot
 from astropy.wcs import WCS, FITSFixedWarning
 from matplotlib.figure import Figure
 
-import imephu
 from imephu.annotation import Annotation
 from imephu.service.survey import load_fits
 from imephu.utils import Ephemeris
@@ -272,7 +271,7 @@ class FinderChart:
             pdf = BytesIO()
             plt.savefig(pdf, format=format, bbox_inches="tight")
             if hasattr(name, "write"):
-                name.write(pdf.getvalue())
+                name.write(pdf.getvalue())  # type: ignore
             else:
                 with open(name, "wb") as f:  # type: ignore
                     f.write(pdf.getvalue())

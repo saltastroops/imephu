@@ -1,5 +1,4 @@
 from io import BytesIO
-from unittest import mock
 
 import pytest
 import responses
@@ -7,7 +6,6 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 from responses import matchers
 
-import imephu.service.survey
 from imephu.service.survey import DigitizedSkySurvey, SkyView, SurveyError, load_fits
 
 DSS_URL = "https://archive.stsci.edu/cgi-bin/dss_search"
@@ -123,20 +121,6 @@ def test_skyview_survey_handles_http_errors(status_code):
     with pytest.raises(SurveyError):
         dss = SkyView()
         dss.load_fits("2MASS-K", SkyCoord(ra=0 * u.deg, dec=0 * u.deg), 10 * u.arcmin)
-
-
-def test_load_fits_returns_fits_from_survey(fits_center):
-    """Test that the load_fits function returns a finder chart from a survey."""
-    with mock.patch.object(
-        imephu.service.survey, "DigitizedSkySurvey", autospec=True
-    ) as MockSurvey:
-        MockSurvey.return_value.load_fits.return_value = BytesIO(
-            b"I'm a mocked response."
-        )
-        fits = load_fits(
-            survey="POSS2/UKSTU Red", fits_center=fits_center, size=10 * u.arcmin
-        )
-        assert fits.read() == b"I'm a mocked response."
 
 
 def test_load_fits_handles_invalid_survey(fits_center):
