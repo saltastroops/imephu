@@ -8,7 +8,6 @@ from io import BytesIO
 from typing import Any, BinaryIO, Callable, Generator, List, Optional, Tuple, Union
 
 import matplotlib.pyplot as plt
-import pikepdf
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.io import fits
@@ -229,12 +228,11 @@ class FinderChart:
         if format and format.lower() == "pdf":
             pdf = BytesIO()
             plt.savefig(pdf, format=format, bbox_inches="tight")
-            pdf_with_metadata = FinderChart._update_pdf_metadata(pdf.getvalue())
             if hasattr(name, "write"):
-                name.write(pdf_with_metadata)  # type: ignore
+                name.write(pdf.getvalue())
             else:
                 with open(name, "wb") as f:  # type: ignore
-                    f.write(pdf_with_metadata)
+                    f.write(pdf.getvalue())
         else:
             plt.savefig(name, format=format, bbox_inches="tight")
         plt.close(figure)
@@ -309,37 +307,3 @@ class FinderChart:
 
         x.set_ticks(size=7)
         y.set_ticks(size=7)
-
-    @staticmethod
-    def _update_pdf_metadata(pdf: bytes) -> bytes:
-        """Update a pdf by setting some metadata values.
-
-        The following metadata values are set:
-
-        - ``dc:title``: The string ``imephu x.y.z`` is assigned (where ``x.y.z`` is the
-          version).
-        - ``xmp:CreatorTool``: A string of the form "imephu x.y.z" is assigned.
-
-        The resulting pdf is returned; the original pdf remains unchanged.
-
-        See the Core properties chapter of the `XMP specification
-        <https://wwwimages2.adobe.com/content/dam/acom/en/devnet/xmp/pdfs/XMP%20SDK%20Release%20cc-2016-08/XMPSpecificationPart1.pdf>`_
-        for more details about the metadata properties.
-
-        Parameters
-        ----------
-        pdf: `bytes`
-            The pdf whose ``xml:creatorTool`` metadata value should be set.
-
-        Returns
-        -------
-        `bytes`
-            The updated pdf content.
-        """
-        with pikepdf.open(BytesIO(pdf)) as document:
-            with document.open_metadata() as meta:
-                meta["dc:title"] = "Finder Chart"
-                meta["xmp:CreatorTool"] = f"imephu {imephu.__version__}"
-            updated_pdf = BytesIO()
-            document.save(updated_pdf)
-            return updated_pdf.getvalue()
