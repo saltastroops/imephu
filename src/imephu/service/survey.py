@@ -1,6 +1,6 @@
 import urllib.parse
 from io import BytesIO
-from typing import BinaryIO, Protocol
+from typing import BinaryIO, Protocol, NamedTuple, Callable, Dict
 
 import requests
 from astropy import units as u
@@ -13,22 +13,30 @@ class SurveyError(BaseException):
     pass
 
 
-_DSS_IDENTIFIERS = {
-    "POSS2/UKSTU Red": "poss2ukstu_red",
-    "POSS2/UKSTU Blue": "poss2ukstu_blue",
-    "POSS2/UKSTU IR": "poss2ukstu_ir",
-    "POSS1 Red": "poss1_red",
-    "POSS1 Blue": "poss1_blue",
-    "Quick-V": "quickv",
-    "HST Phase2 (GSC2)": "phase2_gsc2",
-    "HST Phase2 (GSC1)": "phase2_gsc1",
+class _SurveyDetails(NamedTuple):
+    identifier: str
+    is_covering_position: Callable[[SkyCoord], bool]
+
+
+_always_true = lambda x: True
+
+
+_DSS_DETAILS: Dict[str, _SurveyDetails] = {
+    "POSS2/UKSTU Red": _SurveyDetails("poss2ukstu_red", _always_true),
+    "POSS2/UKSTU Blue":  _SurveyDetails("poss2ukstu_blue", _always_true),
+    "POSS2/UKSTU IR": _SurveyDetails("poss2ukstu_ir", _always_true),
+    "POSS1 Red": _SurveyDetails("poss1_red", lambda p: p.dec.to_value(u.deg) > -30),
+    "POSS1 Blue": _SurveyDetails("poss1_blue", lambda p: p.dec.to_value(u.deg) > -30),
+    "Quick-V": _SurveyDetails("quickv", lambda p: p.dec.to_value(u.deg) > 6),
+    "HST Phase2 (GSC2)": _SurveyDetails("phase2_gsc2", _always_true),
+    "HST Phase2 (GSC1)": _SurveyDetails("phase2_gsc1", lambda p: p.dec.to_value(u.deg) < -20 or p.dec.to_value(u.deg) > 6)
 }
 
 
-_SKYVIEW_IDENTIFIERS = {
-    "2MASS-H": "2mass-h",
-    "2MASS-J": "2mass-j",
-    "2MASS-K": "2mass-k",
+_SKYVIEW_DETAILS = {
+    "2MASS-H": _SurveyDetails("2mass-h", _always_true),
+    "2MASS-J": _SurveyDetails("2mass-j", _always_true),
+    "2MASS-K": _SurveyDetails("2mass-k", _always_true)
 }
 
 
@@ -70,6 +78,28 @@ class SkySurvey(Protocol):
             The center position of the loaded FITS file.
         size: `~astropy.coordinates.Angle`
             The width and height of the FITS image, as an angle on the sky.
+
+        Returns
+        -------
+        binary stream
+            The FITS file.
+        """
+        raise NotImplementedError
+
+    def is_covering_position(self, survey: str, position: SkyCoord) -> bool:
+        """Return whether a position is covered by the sky survey.
+
+        Parameters
+        ----------
+        survey: `str`
+            The name of the survey.
+        position: `~astropy.coordinates.SkyCoord`
+            The position.
+
+        Returns
+        -------
+        bool
+            True if the position is covered  by the survey, False otherwise.
         """
         raise NotImplementedError
 
@@ -83,7 +113,7 @@ class DigitizedSkySurvey(SkySurvey):
 
     def __init__(self) -> None:
         self._survey_identifiers = {
-            key.lower(): value for key, value in _DSS_IDENTIFIERS.items()
+            key.lower(): value for key, value in _DSS_DETAILS.items()
         }
 
     def url(self, survey: str, fits_center: SkyCoord, size: Angle) -> str:
@@ -154,6 +184,24 @@ class DigitizedSkySurvey(SkySurvey):
             raise SurveyError("No FITS file could be loaded.")
         return BytesIO(response.content)
 
+    def is_covering_position(self, survey: str, position: SkyCoord) -> bool:
+        """Return whether a position is covered by the sky survey.
+
+        Parameters
+        ----------
+        survey: `str`
+            The name of the survey.
+        position: `~astropy.coordinates.SkyCoord`
+            The position.
+
+        Returns
+        -------
+        bool
+            True if the position is covered  by the survey, False otherwise.
+        """
+        return _DSS_DETAILS[survey].is_covering_position(position)
+
+
     def _survey_identifier(self, survey: str) -> str:
         if survey.lower() not in self._survey_identifiers:
             raise ValueError(f"Unknown survey: {survey}")
@@ -176,7 +224,7 @@ class SkyView(SkySurvey):
     def __init__(self, pixels: int = 300) -> None:
         self._pixels = pixels
         self._survey_identifiers = {
-            key.lower(): value for key, value in _SKYVIEW_IDENTIFIERS.items()
+            key.lower(): value for key, value in _SKYVIEW_DETAILS.items()
         }
 
     def url(self, survey: str, fits_center: SkyCoord, size: Angle) -> str:
@@ -242,6 +290,23 @@ class SkyView(SkySurvey):
             raise SurveyError("No FITS file could be loaded.")
         return BytesIO(response.content)
 
+    def is_covering_position(self, survey: str, position: SkyCoord) -> bool:
+        """Return whether a position is covered by the sky survey.
+
+        Parameters
+        ----------
+        survey: `str`
+            The name of the survey.
+        position: `~astropy.coordinates.SkyCoord`
+            The position.
+
+        Returns
+        -------
+        bool
+            True if the position is covered  by the survey, False otherwise.
+        """
+        return _SKYVIEW_DETAILS[survey].is_covering_position(position)
+
     def _survey_identifier(self, survey: str) -> str:
         if survey.lower() not in self._survey_identifiers:
             raise ValueError(f"Unknown survey: {survey}")
@@ -292,9 +357,9 @@ def url(survey: str, fits_center: SkyCoord, size: Angle) -> str:
     str
         The URL.
     """
-    if survey.lower() in [s.lower() for s in _DSS_IDENTIFIERS.keys()]:
+    if survey.lower() in [s.lower() for s in _DSS_DETAILS.keys()]:
         survey_: SkySurvey = DigitizedSkySurvey()
-    elif survey.lower() in [s.lower() for s in _SKYVIEW_IDENTIFIERS.keys()]:
+    elif survey.lower() in [s.lower() for s in _SKYVIEW_DETAILS.keys()]:
         survey_ = SkyView(pixels=700)
     else:
         raise ValueError(f"Unknown survey: {survey}")
@@ -349,3 +414,52 @@ def load_fits(survey: str, fits_center: SkyCoord, size: Angle) -> BinaryIO:
     if response.status_code != 200:
         raise SurveyError("No FITS file could be loaded.")
     return BytesIO(response.content)
+
+
+def is_covering_position(survey: str, position: SkyCoord) -> bool:
+    """Return whether a position is covered by a sky survey.
+
+    In principle, this function is equivalent to the `is_covering_position` methods of
+    the `SkySurvey` implementations. For example,
+
+    .. code:: python
+
+       from astropy import units as u
+       from astropy.coordinates import SkyCoord
+
+       is_covering_position("POSS2/UKSTU Red",
+                            SkyCoord(ra=120 * u.deg, dec=-30 * u.deg))
+
+    is the same as
+
+    .. code:: python
+
+       survey = DigitizedSkySurvey()
+       survey.is_covering_position("POSS2/UKSTU Red",
+                                   SkyCoord(ra=120 * u.deg, dec=-30 * u.deg))
+
+    The advantage of this function is that you don't have to remember which survey
+    belongs to which `SkySurvey` implementation.
+
+    See the `SkySurvey` implementations for the supported surveys.
+
+    Parameters
+    ----------
+    survey: `str`
+        The name of the survey.
+    position: `~astropy.coordinates.SkyCoord`
+        The position.
+
+    Returns
+    -------
+    binary stream
+        The FITS file.
+    """
+    if survey.lower() in [s.lower() for s in _DSS_DETAILS.keys()]:
+        survey_: SkySurvey = DigitizedSkySurvey()
+    elif survey.lower() in [s.lower() for s in _SKYVIEW_DETAILS.keys()]:
+        survey_ = SkyView(pixels=700)
+    else:
+        raise ValueError(f"Unknown survey: {survey}")
+    return survey_.is_covering_position(survey, position)
+
