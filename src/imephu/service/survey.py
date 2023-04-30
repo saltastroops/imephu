@@ -112,7 +112,7 @@ class DigitizedSkySurvey(SkySurvey):
     """
 
     def __init__(self) -> None:
-        self._survey_identifiers = {
+        self._survey_details: Dict[str, _SurveyDetails] = {
             key.lower(): value for key, value in _DSS_DETAILS.items()
         }
 
@@ -199,14 +199,14 @@ class DigitizedSkySurvey(SkySurvey):
         bool
             True if the position is covered  by the survey, False otherwise.
         """
-        return _DSS_DETAILS[survey].is_covering_position(position)
+        return self._survey_details[survey.lower()].is_covering_position(position)
 
 
     def _survey_identifier(self, survey: str) -> str:
-        if survey.lower() not in self._survey_identifiers:
+        if survey.lower() not in self._survey_details:
             raise ValueError(f"Unknown survey: {survey}")
 
-        return self._survey_identifiers[survey.lower()]
+        return self._survey_details[survey.lower()].identifier
 
 
 class SkyView(SkySurvey):
@@ -223,7 +223,7 @@ class SkyView(SkySurvey):
 
     def __init__(self, pixels: int = 300) -> None:
         self._pixels = pixels
-        self._survey_identifiers = {
+        self._survey_details: Dict[str, _SurveyDetails] = {
             key.lower(): value for key, value in _SKYVIEW_DETAILS.items()
         }
 
@@ -305,13 +305,13 @@ class SkyView(SkySurvey):
         bool
             True if the position is covered  by the survey, False otherwise.
         """
-        return _SKYVIEW_DETAILS[survey].is_covering_position(position)
+        return self._survey_details[survey.lower()].is_covering_position(position)
 
     def _survey_identifier(self, survey: str) -> str:
-        if survey.lower() not in self._survey_identifiers:
+        if survey.lower() not in self._survey_details:
             raise ValueError(f"Unknown survey: {survey}")
 
-        return self._survey_identifiers[survey.lower()]
+        return self._survey_details[survey.lower()].identifier
 
 
 def url(survey: str, fits_center: SkyCoord, size: Angle) -> str:
