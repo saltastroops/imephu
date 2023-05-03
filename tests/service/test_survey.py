@@ -1,5 +1,4 @@
 from io import BytesIO
-from unittest import mock
 
 import pytest
 import responses
@@ -7,8 +6,8 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 from responses import matchers
 
-import imephu.service.survey
-from imephu.service.survey import DigitizedSkySurvey, SkyView, SurveyError, load_fits
+from imephu.service.survey import DigitizedSkySurvey, SkyView, SurveyError, load_fits, \
+    is_covering_position
 
 DSS_URL = "https://archive.stsci.edu/cgi-bin/dss_search"
 
@@ -125,21 +124,31 @@ def test_skyview_survey_handles_http_errors(status_code):
         dss.load_fits("2MASS-K", SkyCoord(ra=0 * u.deg, dec=0 * u.deg), 10 * u.arcmin)
 
 
-def test_load_fits_returns_fits_from_survey(fits_center):
-    """Test that the load_fits function returns a finder chart from a survey."""
-    with mock.patch.object(
-        imephu.service.survey, "DigitizedSkySurvey", autospec=True
-    ) as MockSurvey:
-        MockSurvey.return_value.load_fits.return_value = BytesIO(
-            b"I'm a mocked response."
-        )
-        fits = load_fits(
-            survey="POSS2/UKSTU Red", fits_center=fits_center, size=10 * u.arcmin
-        )
-        assert fits.read() == b"I'm a mocked response."
-
-
 def test_load_fits_handles_invalid_survey(fits_center):
     """Test that the load_fits function handles invalid surveys correctly."""
     with pytest.raises(ValueError):
         load_fits(survey="Invalid Survey", fits_center=fits_center, size=10 * u.arcmin)
+
+
+@pytest.mark.parametrize("survey, ra, dec, expected",
+                         [
+                             ("POSS2/UKSTU Red", 1, -60, True),
+                             ("POSS2/UKSTU Blue", 1, 5, True),
+                             ("POSS1 Red", 1, -30.001, False),
+                             ("POSS1 Red", 1, -29.999, True),
+                             ("POSS1 Blue", 1, -30.01, False),
+                             ("POSS1 Blue", 1, -29.99, True),
+                             ("Quick-V", 1, 5.99, False),
+                             ("Quick-V", 1, 6.01, True),
+                             ("HST Phase2 (GSC2)", 1, -56, True),
+                             ("HST Phase2 (GSC1)", 1, -20.01, True),
+                             ("HST Phase2 (GSC1)", 1, -19.99, False),
+                             ("HST Phase2 (GSC1)", 1, 5.99, False),
+                             ("HST Phase2 (GSC1)", 1, 6.01, True),
+                             ("2MASS-H", 1, 5, True),
+                             ("2MASS-J", 1, 5, True),
+                             ("2MASS-K", 1, 5, True),
+                         ]
+                         )
+def test_is_covering_position_returns_correct_value(survey: str, ra: float, dec: float, expected: bool) -> None:
+    assert is_covering_position(survey, SkyCoord(ra=ra * u.deg, dec=dec * u.deg)) == expected

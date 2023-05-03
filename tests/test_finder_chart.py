@@ -6,7 +6,6 @@ from typing import Any, cast
 from unittest import mock
 
 import numpy as np
-import pikepdf
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
@@ -15,6 +14,19 @@ import imephu
 import imephu.service.survey
 from imephu.finder_chart import FinderChart
 from imephu.utils import Ephemeris, MagnitudeRange
+
+
+class _FakeFinderChart:
+    def __init__(self, expected_value: Any):
+        self.expected_value = expected_value
+        self._metadata = {}
+
+    def add_metadata(self, key: str, value: Any) -> None:
+        self._metadata[key] = value
+
+    @property
+    def metadata(self):
+        return self._metadata.copy()
 
 
 @contextmanager
@@ -57,13 +69,13 @@ def test_finder_chart_is_generated_from_stream(check_finder):
 # Formats other than jpg or png may produce different files for different runs,
 # so that they cannot be tested with pytest-regressions.
 @pytest.mark.parametrize("format", ["jpg", "png"])
-def test_finder_chart_export_formats(format, file_regression, fits_file):
+def test_finder_chart_export_formats(format, check_image, fits_file):
     """Test that finder charts can be exported to different file formats."""
     np.random.seed(0)
     finder_chart = FinderChart(fits_file)
     contents = io.BytesIO()
     finder_chart.save(contents, format=format)
-    file_regression.check(contents.getvalue(), binary=True, extension=f".{format}")
+    check_image(contents)
 
 
 def test_finder_chart_from_survey_returns_finder_chart(
@@ -78,20 +90,6 @@ def test_finder_chart_from_survey_returns_finder_chart(
             "POSS2/UKSTU Red", fits_center, 10 * u.arcmin
         )
         check_finder(finder_chart)
-
-
-def test_metadata_is_added_to_finder_chart_pdf(fits_file):
-    """Test that metadata is added to finder chart pdf files."""
-    # save the pdf...
-    finder_chart = FinderChart(fits_file)
-    pdf = io.BytesIO()
-    finder_chart.save(name=pdf, format="pdf")
-
-    # ... and check that the metadata has been added
-    document = pikepdf.open(io.BytesIO(pdf.getvalue()))
-    meta = document.open_metadata()
-    assert meta["dc:title"] == "Finder Chart"
-    assert meta["xmp:CreatorTool"] == f"imephu {imephu.__version__}"
 
 
 def test_for_time_interval_start_must_be_timezone_aware():
@@ -154,7 +152,11 @@ def test_for_time_interval_start_must_be_earlier_than_end(start, end, expectatio
     ]
     with expectation:
         g = FinderChart.for_time_interval(
-            start, end, ephemerides, 5 * u.arcmin, cast(Any, lambda x: 42)
+            start,
+            end,
+            ephemerides,
+            5 * u.arcmin,
+            cast(Any, lambda x: _FakeFinderChart(42)),
         )
         next(g)
 
@@ -187,7 +189,11 @@ def test_for_time_interval_time_intervals_must_be_covered(start, end, expectatio
     ]
     with expectation:
         g = FinderChart.for_time_interval(
-            start, end, ephemerides, 5 * u.arcmin, cast(Any, lambda x: 42)
+            start,
+            end,
+            ephemerides,
+            5 * u.arcmin,
+            cast(Any, lambda x: _FakeFinderChart(42)),
         )
         next(g)
 
@@ -212,7 +218,11 @@ def test_for_time_interval_max_track_length_must_be_positive(
     ]
     with expectation:
         g = FinderChart.for_time_interval(
-            start, end, ephemerides, max_track_length, cast(Any, lambda x: 42)
+            start,
+            end,
+            ephemerides,
+            max_track_length,
+            cast(Any, lambda x: _FakeFinderChart(42)),
         )
         next(g)
 
@@ -301,17 +311,23 @@ def test_for_time_interval_creates_correct_finder_charts(positions, expected_ind
         for i, _ in enumerate(positions)
     ]
     expected_ephemerides = []
+    expected_valid_for = []
     for index_group in expected_indices:
         expected_ephemerides.append([ephemerides[i] for i in index_group])
+        expected_valid_for.append(
+            (ephemerides[index_group[0]].epoch, ephemerides[index_group[-1]].epoch)
+        )
 
     start = t
     end = t + timedelta(hours=len(positions) - 1)
 
-    # Fake function for creating a finder chart. It just returns the argument passed.
+    # Fake function for creating a finder chart.
     def fake_create_finder_chart(e):
-        return e
+        return _FakeFinderChart(e)
 
     g = FinderChart.for_time_interval(
         start, end, ephemerides, 1 * u.deg, cast(Any, fake_create_finder_chart)
     )
-    assert [f[0] for f in g] == expected_ephemerides
+    g = list(g)
+    assert [cast(Any, f[0]).expected_value for f in g] == expected_ephemerides
+    assert [f[0].metadata["valid_for"] for f in g] == expected_valid_for

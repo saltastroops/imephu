@@ -5,10 +5,19 @@ import os
 import warnings
 from datetime import datetime
 from io import BytesIO
-from typing import Any, BinaryIO, Callable, Generator, List, Optional, Tuple, Union
+from typing import (
+    Any,
+    BinaryIO,
+    Callable,
+    Dict,
+    Generator,
+    List,
+    Optional,
+    Tuple,
+    Union,
+)
 
 import matplotlib.pyplot as plt
-import pikepdf
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.io import fits
@@ -18,7 +27,6 @@ from astropy.visualization.wcsaxes.core import WCSAxesSubplot
 from astropy.wcs import WCS, FITSFixedWarning
 from matplotlib.figure import Figure
 
-import imephu
 from imephu.annotation import Annotation
 from imephu.service.survey import load_fits
 from imephu.utils import Ephemeris
@@ -51,6 +59,7 @@ class FinderChart:
         # The FITS data is read in only when it is needed. To avoid trying to read from
         # a closed stream later on, we thus force the data to be read in immediately.
         self._data = self._hdu.data
+        self._metadata: Dict[str, Any] = dict()
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=FITSFixedWarning)
             self._wcs = WCS(self._hdu)
@@ -95,14 +104,12 @@ class FinderChart:
         you need any annotations for the non-sidereal nature, it is up to
         ``create_finder_chart`` to provide them.
 
-        The ``create_finder_chart`` function has to accept two arguments, in this order:
+        The ``create_finder_chart`` function has to accept as its single argument the
+        list of ephemerides to include on the finder chart.
 
-        * The center of the finder chart as a position on the sky, in right ascension
-          and declination.
-        * The list of ephemerides to include on the finder chart (for example when
-          using an annotation to indicate the target motion).
-
-        The finder charts are returned along with the time interval they cover.
+        The finder charts are returned along with the time interval they cover. The time
+        interval is also added as a tuple of `~datetime.datetime` values with the key
+        ``valid_for`` to the finder chart's metadata.
 
         Parameters
         ----------
@@ -178,7 +185,10 @@ class FinderChart:
 
         # Create the finder charts
         for group in groups:
-            yield create_finder_chart(group), (group[0].epoch, group[-1].epoch)
+            valid_for = (group[0].epoch, group[-1].epoch)
+            finder_chart = create_finder_chart(group)
+            finder_chart.add_metadata("valid_for", valid_for)
+            yield finder_chart, valid_for
 
     @property
     def wcs(self) -> WCS:
@@ -199,6 +209,37 @@ class FinderChart:
         the other annotations.
         """
         self._annotations.append(annotation)
+
+    @property
+    def metadata(self) -> Dict[str, Any]:
+        """
+        Return the metadata for the finder chart.
+
+        Metadata can  be added with the `add_metadata` method. A shallow copy of the
+        metadata is returned.
+
+        Returns
+        -------
+        dict
+            The metadata of the finder chart.
+        """
+        return self._metadata.copy()
+
+    def add_metadata(self, key: str, value: Any) -> None:
+        """
+        Add a key-value to the finder chart's metadata.
+
+        If the key existrs in the metadata already, the existing value for the key is
+        replaced.
+
+        Parameters
+        ----------
+        key: `str`
+            Key.
+        value: `~typing.Any`
+            Value.
+        """
+        self._metadata[key] = value
 
     def show(self) -> None:
         """Display the finder chart on the screen."""
@@ -229,12 +270,11 @@ class FinderChart:
         if format and format.lower() == "pdf":
             pdf = BytesIO()
             plt.savefig(pdf, format=format, bbox_inches="tight")
-            pdf_with_metadata = FinderChart._update_pdf_metadata(pdf.getvalue())
             if hasattr(name, "write"):
-                name.write(pdf_with_metadata)  # type: ignore
+                name.write(pdf.getvalue())  # type: ignore
             else:
                 with open(name, "wb") as f:  # type: ignore
-                    f.write(pdf_with_metadata)
+                    f.write(pdf.getvalue())
         else:
             plt.savefig(name, format=format, bbox_inches="tight")
         plt.close(figure)
@@ -309,37 +349,3 @@ class FinderChart:
 
         x.set_ticks(size=7)
         y.set_ticks(size=7)
-
-    @staticmethod
-    def _update_pdf_metadata(pdf: bytes) -> bytes:
-        """Update a pdf by setting some metadata values.
-
-        The following metadata values are set:
-
-        - ``dc:title``: The string ``imephu x.y.z`` is assigned (where ``x.y.z`` is the
-          version).
-        - ``xmp:CreatorTool``: A string of the form "imephu x.y.z" is assigned.
-
-        The resulting pdf is returned; the original pdf remains unchanged.
-
-        See the Core properties chapter of the `XMP specification
-        <https://wwwimages2.adobe.com/content/dam/acom/en/devnet/xmp/pdfs/XMP%20SDK%20Release%20cc-2016-08/XMPSpecificationPart1.pdf>`_
-        for more details about the metadata properties.
-
-        Parameters
-        ----------
-        pdf: `bytes`
-            The pdf whose ``xml:creatorTool`` metadata value should be set.
-
-        Returns
-        -------
-        `bytes`
-            The updated pdf content.
-        """
-        with pikepdf.open(BytesIO(pdf)) as document:
-            with document.open_metadata() as meta:
-                meta["dc:title"] = "Finder Chart"
-                meta["xmp:CreatorTool"] = f"imephu {imephu.__version__}"
-            updated_pdf = BytesIO()
-            document.save(updated_pdf)
-            return updated_pdf.getvalue()
