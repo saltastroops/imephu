@@ -66,7 +66,7 @@ def bundles_annotation(
         center=science_bundle_center,
         wcs=wcs,
         include_fibers=include_fibers,
-    ).translate((0, bundle_separaration_arcsec) * u.arcsec)
+    ).rotate(science_bundle_center, 90 * u.deg).translate((0, bundle_separaration_arcsec) * u.arcsec)
     annotation = GroupAnnotation([sky_bundle, science_bundle])
     return annotation.rotate(science_bundle_center, position_angle)
 

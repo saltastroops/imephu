@@ -5,4 +5,4 @@ The finder charts are primarily intended for the Southern African Large Telescop
 (SALT).
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
