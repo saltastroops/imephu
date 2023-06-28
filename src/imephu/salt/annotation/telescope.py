@@ -125,6 +125,7 @@ def position_angle_annotation(
         style="italic",
         weight="bold",
         size="large",
+        clip_on=False,
     )
 
 
@@ -153,6 +154,7 @@ def survey_annotation(survey: str, wcs: WCS) -> TextAnnotation:
         style="italic",
         weight="bold",
         size="large",
+        clip_on=False,
     )
 
 
@@ -160,7 +162,6 @@ def magnitude_range_annotation(
     bandpass: str,
     min_magnitude: float,
     max_magnitude: float,
-    fits_center: SkyCoord,
     wcs: WCS,
 ) -> TextAnnotation:
     """Return a text annotation with the magnitude range.
@@ -193,7 +194,7 @@ def magnitude_range_annotation(
     else:
         text = f"{bandpass} = {max_magnitude:.1f}"
     return TextAnnotation(
-        fits_center,
+        (0.5, 0.02),
         text,
         wcs,
         color=(0, 0.5, 1),
@@ -202,7 +203,7 @@ def magnitude_range_annotation(
         size="large",
         horizontalalignment="center",
         verticalalignment="baseline",
-    ).translate(Angle((0, -4.8) * u.arcmin))
+    )
 
 
 def slot_annotation(

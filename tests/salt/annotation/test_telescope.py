@@ -78,7 +78,6 @@ def test_magnitude_range_annotation(
         bandpass=bandpass,
         min_magnitude=min_magnitude,
         max_magnitude=max_magnitude,
-        fits_center=fits_center,
         wcs=finder_chart.wcs,
     )
     legend = TextAnnotation(

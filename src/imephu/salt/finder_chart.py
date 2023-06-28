@@ -437,7 +437,6 @@ def _imaging_annotation(
             bandpass=magnitude_range.bandpass,
             min_magnitude=magnitude_range.min_magnitude,
             max_magnitude=magnitude_range.max_magnitude,
-            fits_center=general.target.position,
             wcs=wcs,
         )
         observation_annotation.add_item(magnitude_annotation)
