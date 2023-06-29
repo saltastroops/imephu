@@ -1,7 +1,7 @@
 @Library('saao-shared-library') _
 
 pipeline {
-  agent none
+  agent any
 
   stages {
     stage('Run tests') {
