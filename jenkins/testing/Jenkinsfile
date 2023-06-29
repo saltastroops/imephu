@@ -6,9 +6,10 @@ pipeline {
   stages {
     agent {
       dockerfile {
-      filename 'Dockerfile'
-      dir 'jenkins/deployment'
-      args '-v imephu-venv:/venv -u 0:0'
+        filename 'Dockerfile'
+        dir 'jenkins/deployment'
+        args '-v imephu-venv:/venv -u 0:0'
+      }
     }
 
     stage('Run tests') {
