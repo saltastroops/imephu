@@ -8,7 +8,7 @@ pipeline {
       agent {
         dockerfile {
           filename 'Dockerfile'
-          dir 'jenkins/deployment'
+          dir 'jenkins/testing'
           args '-v imephu-venv:/venv -u 0:0'
         }
       }
