@@ -17,11 +17,11 @@ pipeline {
         sh 'poetry export --without-hashes -f requirements.txt --with dev --output requirements.txt'
         sh 'pip install -r requirements.txt'
         script {
-          saao.runTests(
+          saao.runPythonTests(
             'black': ['src', 'tests'],
             'mypy': ['src', 'tests'],
             'pytest': ['tests'],
-            'ruff':['src', 'tests']
+            'ruff': ['src', 'tests']
           )
         }
       }
