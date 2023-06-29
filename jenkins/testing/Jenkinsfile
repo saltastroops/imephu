@@ -4,15 +4,15 @@ pipeline {
   agent none
 
   stages {
-    agent {
-      dockerfile {
-        filename 'Dockerfile'
-        dir 'jenkins/deployment'
-        args '-v imephu-venv:/venv -u 0:0'
-      }
-    }
-
     stage('Run tests') {
+      agent {
+        dockerfile {
+          filename 'Dockerfile'
+          dir 'jenkins/deployment'
+          args '-v imephu-venv:/venv -u 0:0'
+        }
+      }
+
       steps {
         sh 'poetry export -f requirements.txt --with dev --output requirements.txt'
         sh 'pip install -r requirements.txt'
