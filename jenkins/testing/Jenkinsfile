@@ -9,7 +9,7 @@ pipeline {
         dockerfile {
           filename 'Dockerfile'
           dir 'jenkins'
-          args '-v imephu-venv:/venv -u 0:0'
+          args '-v imephu-venv:/.cache/pip -u 0:0'
         }
       }
 
