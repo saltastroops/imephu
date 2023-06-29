@@ -15,7 +15,7 @@ pipeline {
 
       steps {
         sh 'poetry export --without-hashes -f requirements.txt --with dev --output requirements.txt'
-        sh 'pip install -r requirements.txt'
+        sh 'pip install -r requirements.txt --cache-dir /.cache/pip'
         script {
           saao.runPythonTests(
             'black': ['src', 'tests'],
