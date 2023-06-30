@@ -15,6 +15,7 @@ pipeline {
 
       steps {
         script {
+          sh 'poetry install'
           saao.runPythonTests(
             'black': ['src', 'tests'],
             'mypy': ['src', 'tests'],
