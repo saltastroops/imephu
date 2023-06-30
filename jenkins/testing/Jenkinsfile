@@ -9,19 +9,18 @@ pipeline {
         dockerfile {
           filename 'Dockerfile'
           dir 'jenkins'
-          args '-v imephu-venv:/.cache/pip -u 0:0'
+          args '-v imephu-venv:/.cache/pypoetry -u 0:0'
         }
       }
 
       steps {
-        sh 'poetry export --without-hashes -f requirements.txt --with dev --output requirements.txt'
-        sh 'pip install -r requirements.txt --cache-dir /.cache/pip'
         script {
           saao.runPythonTests(
             'black': ['src', 'tests'],
             'mypy': ['src', 'tests'],
             'pytest': ['tests'],
-            'ruff': ['src', 'tests']
+            'ruff': ['src', 'tests'],
+            'usePoetry': true
           )
         }
       }
