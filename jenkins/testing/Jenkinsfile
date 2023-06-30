@@ -15,7 +15,7 @@ pipeline {
 
       steps {
         script {
-          sh 'poetry add --group-dev allure-pytest bandit black mypy pytest ruff'
+          sh 'poetry add --group=dev allure-pytest bandit black mypy pytest ruff'
           sh 'poetry install'
           saao.runPythonTests(
             'black': ['src', 'tests'],
