@@ -183,10 +183,13 @@ class DigitizedSkySurvey(SkySurvey):
         binary stream
             The FITS file.
         """
-        response = requests.get(self.url(survey, fits_center, size))
-        if response.status_code != 200:
-            raise SurveyError("No FITS file could be loaded.")
-        return BytesIO(response.content)
+        try:
+            response = requests.get(self.url(survey, fits_center, size))
+            if response.status_code != 200:
+                raise SurveyError("No FITS file could be loaded.")
+            return BytesIO(response.content)
+        except BaseException as e:
+            raise SurveyError("No FITS file could be loaded.") from e
 
     def is_covering_position(self, survey: str, position: SkyCoord) -> bool:
         """Return whether a position is covered by the sky survey.
@@ -288,10 +291,13 @@ class SkyView(SkySurvey):
         binary stream
             The FITS file.
         """
-        response = requests.get(self.url(survey, fits_center, size))
-        if response.status_code != 200:
-            raise SurveyError("No FITS file could be loaded.")
-        return BytesIO(response.content)
+        try:
+            response = requests.get(self.url(survey, fits_center, size))
+            if response.status_code != 200:
+                raise SurveyError("No FITS file could be loaded.")
+            return BytesIO(response.content)
+        except BaseException as e:
+            raise SurveyError("No FITS file could be loaded.") from e
 
     def is_covering_position(self, survey: str, position: SkyCoord) -> bool:
         """Return whether a position is covered by the sky survey.
