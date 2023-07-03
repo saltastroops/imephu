@@ -17,13 +17,16 @@ pipeline {
         script {
           sh 'poetry add --group=dev allure-pytest black mypy pytest ruff'
           sh 'poetry install'
-          saao.runPythonTests(
+          def success = saao.runPythonTests(
             'black': ['src', 'tests'],
             'mypy': ['src', 'tests'],
             'pytest': ['tests'],
             'ruff': ['src', 'tests'],
             'usePoetry': true
           )
+          if (!success) {
+            error("Tests failed.")
+          }
         }
       }
     }
