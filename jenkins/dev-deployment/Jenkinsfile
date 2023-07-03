@@ -11,7 +11,7 @@ pipeline {
   stages {
     stage('Server') {
       steps {
-        echo "Here is the server: ${params.PYPI_SERVER}"
+        echo "Here is the server! -- ${params.PYPI_SERVER}"
       }
     }
   }
