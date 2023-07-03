@@ -15,7 +15,7 @@ pipeline {
     stage('Deploy') {
       steps {
         sh '''
-        poetry config repositories/dev http://pypi.cape.saao.ac.za:8080/
+        poetry config repositories.dev http://pypi.cape.saao.ac.za:8080/
         poetry build
         poetry publish -r dev --username $PYPI_CREDENTIALS_USR --password $PYPI_CREDENTIALS_PSW
         '''
