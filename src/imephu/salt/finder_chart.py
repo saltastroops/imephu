@@ -166,11 +166,14 @@ def rss_longslit_finder_chart(
     return finder_chart
 
 
+DEFAULT_REF_STAR_BOX_SIZE = Angle(5 * u.arcsec)
+
+
 def rss_mos_finder_chart(
     fits: Union[str, BinaryIO, os.PathLike[Any]],
     general: GeneralProperties,
     mos_mask: MosMask,
-    reference_star_box_width: Angle = Angle(5 * u.arcsec),
+    reference_star_box_width: Angle = DEFAULT_REF_STAR_BOX_SIZE,
 ) -> FinderChart:
     """Return the finder chart for an RSS MOS observation.
 

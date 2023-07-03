@@ -271,9 +271,9 @@ class FinderChart:
             pdf = BytesIO()
             plt.savefig(pdf, format=format, bbox_inches="tight")
             if hasattr(name, "write"):
-                name.write(pdf.getvalue())  # type: ignore
+                name.write(pdf.getvalue())
             else:
-                with open(name, "wb") as f:  # type: ignore
+                with open(name, "wb") as f:
                     f.write(pdf.getvalue())
         else:
             plt.savefig(name, format=format, bbox_inches="tight")

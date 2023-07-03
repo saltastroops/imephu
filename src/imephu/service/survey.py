@@ -18,7 +18,7 @@ class _SurveyDetails(NamedTuple):
     is_covering_position: Callable[[SkyCoord], bool]
 
 
-def _always_true(x: SkyCoord):
+def _always_true(x: SkyCoord) -> bool:
     return True
 
 
