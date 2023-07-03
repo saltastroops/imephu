@@ -39,7 +39,7 @@ def _version_callback(value: bool) -> None:
 
 @app.command()
 def main(
-    config: Optional[Path] = typer.Option(
+    config: Optional[Path] = typer.Option(  # noqa: B008
         None,
         "--config",
         "-c",
@@ -48,16 +48,16 @@ def main(
         resolve_path=True,
         help="Configuration details for the finder chart(s).",
     ),
-    output: Optional[Path] = typer.Option(
+    output: Optional[Path] = typer.Option(  # noqa: B008
         None, "--out", "-o", file_okay=True, resolve_path=True, help="Output file."
     ),
-    format: str = typer.Option(
+    format: str = typer.Option(  # noqa: B008
         "png",
         "--format",
         "-f",
         help="Image format (such as png or pdf) for the finder chart(s).",
     ),
-    version: Optional[bool] = typer.Option(
+    version: Optional[bool] = typer.Option(  # noqa: B008
         None, "--version", callback=_version_callback, help="Show the version and exit."
     ),
 ) -> None:
@@ -69,7 +69,7 @@ def main(
         _create_finder_charts(configuration, output, format)
     except Exception as e:
         typer.echo(str(e), err=True)
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
 
 
 def _read_configuration(config: Optional[Path]) -> Any:
