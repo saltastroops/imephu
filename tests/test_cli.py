@@ -5,15 +5,14 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest import mock
 
+import imephu
 import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-from typer.testing import CliRunner
-
-import imephu
 from imephu.cli import app
 from imephu.utils import Ephemeris
+from typer.testing import CliRunner
 
 runner = CliRunner()
 

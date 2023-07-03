@@ -3,7 +3,6 @@ from pathlib import Path
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-
 from imephu.salt.utils import MosMask, MosMaskSlit
 
 

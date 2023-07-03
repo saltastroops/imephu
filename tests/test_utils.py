@@ -5,7 +5,6 @@ from typing import Optional
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-
 from imephu.utils import (
     Ephemeris,
     MagnitudeRange,

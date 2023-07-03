@@ -3,7 +3,6 @@ from datetime import datetime, timedelta, timezone
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-
 from imephu.annotation.motion import motion_annotation
 from imephu.finder_chart import FinderChart
 from imephu.geometry import rotate

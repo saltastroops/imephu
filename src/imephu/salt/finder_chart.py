@@ -9,7 +9,6 @@ from typing import Any, BinaryIO, Generator, List, Optional, Tuple, Union
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
-
 from imephu.annotation.general import GroupAnnotation
 from imephu.annotation.motion import motion_annotation
 from imephu.finder_chart import FinderChart

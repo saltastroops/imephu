@@ -5,13 +5,12 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, cast
 from unittest import mock
 
+import imephu
+import imephu.service.survey
 import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-
-import imephu
-import imephu.service.survey
 from imephu.finder_chart import FinderChart
 from imephu.utils import Ephemeris, MagnitudeRange
 

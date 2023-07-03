@@ -1,5 +1,4 @@
 from astropy.coordinates import Angle, SkyCoord
-
 from imephu.annotation.general.arrow import ArrowAnnotation
 from imephu.finder_chart import FinderChart
 

@@ -4,17 +4,16 @@ import pathlib
 import time
 from unittest import mock
 
+import imephu
 import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-from PIL import Image
-from typer.testing import CliRunner
-
-import imephu
 from imephu.annotation.general import TextAnnotation
 from imephu.cli import app
 from imephu.salt.finder_chart import FinderChart
+from PIL import Image
+from typer.testing import CliRunner
 
 runner = CliRunner()
 

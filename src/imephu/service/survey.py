@@ -1,6 +1,6 @@
 import urllib.parse
 from io import BytesIO
-from typing import BinaryIO, Protocol, NamedTuple, Callable, Dict
+from typing import BinaryIO, Callable, Dict, NamedTuple, Protocol
 
 import requests
 from astropy import units as u

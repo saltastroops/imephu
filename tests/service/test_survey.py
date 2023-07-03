@@ -4,15 +4,14 @@ import pytest
 import responses
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-from responses import matchers
-
 from imephu.service.survey import (
     DigitizedSkySurvey,
     SkyView,
     SurveyError,
-    load_fits,
     is_covering_position,
+    load_fits,
 )
+from responses import matchers
 
 DSS_URL = "https://archive.stsci.edu/cgi-bin/dss_search"
 
