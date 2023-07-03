@@ -1,9 +1,10 @@
 pipeline {
   agent {
     dockerfile {
-    filename 'Dockerfile'
-    dir 'jenkins'
-    args '-v imephu-venv:/.cache/pypoetry -u 0:0'
+      filename 'Dockerfile'
+      dir 'jenkins'
+      args '-v imephu-venv:/.cache/pypoetry -u 0:0'
+    }
   }
 
   environment {
