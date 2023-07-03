@@ -1,18 +1,17 @@
 pipeline {
   agent any
 
-  parameters {
-    string(
-      name: 'PYPI_SERVER',
-      defaultValue: 'http://pypi.example.com',
-      description: 'URL of the PyPI server.')
+  environment {
+    PYPI_CREDENTIALS = credentials('pypi-dev-credentials')
   }
 
   stages {
-    stage('Server') {
-      steps {
-        echo "Here is the server! -- ${params.PYPI_SERVER}"
-      }
+    stage('Deploy') {
+      sh '''
+      poetry config repositories/dev http://pypi.cape.saao.ac.za:8080/
+      poetry build
+      poetry publish -r dev --username $PYPI_CREDENTIALS_USR --password $PYPI_CREDENTIALS_PSW
+      '''
     }
   }
 }
