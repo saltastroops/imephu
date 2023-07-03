@@ -9,5 +9,5 @@ There are two differences to the production deployment:
 
 ## Requirements
 
-Before using the Jenkinsfile, you must create credentials in Jenkins for the PyPI server user. These must be of the type "Username and password", and their id must be "pypi-dev-credentials".
+Before using the Jenkinsfile, you must create credentials in Jenkins for the PyPI server user. These must be of the type "Username with password", and their id must be "pypi-dev-credentials".
 
