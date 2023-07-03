@@ -18,7 +18,8 @@ class _SurveyDetails(NamedTuple):
     is_covering_position: Callable[[SkyCoord], bool]
 
 
-_always_true = lambda x: True
+def _always_true(x: SkyCoord):
+    return True
 
 
 _DSS_DETAILS: Dict[str, _SurveyDetails] = {
