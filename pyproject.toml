@@ -30,3 +30,14 @@ mypy = "^1.4.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "B", "I"]
+unfixable = ["B"]
+ignore = ["E203", "E501"]
+dummy-variable-rgx = "^ignore_me$"
+target-version = "py310"
+
+[tool.ruff.pydocstyle]
+convention = "numpy"
