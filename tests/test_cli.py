@@ -348,7 +348,6 @@ instrument:
     with mock.patch.object(
         imephu.cli, "HorizonsService", autospec=True
     ) as mock_horizons:
-
         mock_horizons.return_value.ephemerides.return_value = ephemerides
         np.random.seed(0)
 
@@ -453,14 +452,12 @@ def test_use_format_option_for_non_sidereal_finder_chart(fits_file, tmp_path_fac
     with mock.patch.object(
         imephu.cli, "HorizonsService", autospec=True
     ) as mock_horizons:
-
         mock_horizons.return_value.ephemerides.return_value = ephemerides
         np.random.seed(0)
 
         with mock.patch.object(
             imephu.cli, "load_fits", autospec=True
         ) as mock_load_fits:
-
             mock_load_fits.return_value = fits_file
             tmp = tmp_path_factory.mktemp(f"finder-chart-{time.time_ns()}")
             config = tmp / "config.yaml"
