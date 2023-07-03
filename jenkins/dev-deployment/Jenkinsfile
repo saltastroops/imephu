@@ -1,0 +1,18 @@
+pipeline {
+  agent any
+
+  parameters {
+    string(
+      name: 'PYPI_SERVER',
+      defaultValue: 'http://pypi.example.com',
+      description: 'URL of the PyPI server.')
+  }
+
+  stages {
+    stage('Server') {
+      steps {
+        echo "Here is the server: $PYPI_SERVER"
+      }
+    }
+  }
+}
