@@ -20,13 +20,10 @@ Before setting up the Jenkins job you need to create a GitHub App, install it in
 openssl pkcs8 -topk8 -inform PEM -outform PEM -in downloaded-github-app-key.pem -out converted-github-app-key.pem -nocrypt
 ```
 
-<<<<<<< HEAD
 You need to create credentials of type "GitHub App" for this GitHub App. The App ID is an integer, which you can find on the General tab of the app's settings. The Key is the converted private key you generated above.
 
 ![GitHub App credentials](img/github_app_credentials.png)
 
-=======
->>>>>>> development
 ### Environment variables
 
 The following environment variable needs to be defined.
