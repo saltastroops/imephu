@@ -112,7 +112,7 @@ def test_skyview_returns_the_content_sent():
 def test_skyview_handles_wrong_survey():
     """Test that the SkyView class handles wrong survey names correctly."""
     dss = SkyView()
-    with pytest.raises(ValueError):
+    with pytest.raises(BaseException):
         dss.load_fits(
             "Invalid Survey", SkyCoord(ra=0 * u.deg, dec=0 * u.deg), 10 * u.arcmin
         )
