@@ -65,7 +65,7 @@ Still for the GitHub source, add the following behaviours by using the "Add" but
 * Clean after checkout
 * Clean before checkout
 
-For the filter enter `main development` in the Include input and leave the Exclude input empty.
+For the filter enter `main development PR-*` in the Include input and leave the Exclude input empty.
 
 ![Add the behaviours](img/github-source-behaviours.png)
 
