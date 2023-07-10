@@ -318,7 +318,7 @@ class SkyView(SkySurvey):
 
     def _survey_identifier(self, survey: str) -> str:
         if survey.lower() not in self._survey_details:
-            raise ValueError(f"Unknown survey: {survey}")
+            raise SurveyError(f"Unknown survey: {survey}")
 
         return self._survey_details[survey.lower()].identifier
 
