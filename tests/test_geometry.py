@@ -1,7 +1,6 @@
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-
 from imephu.finder_chart import FinderChart
 from imephu.geometry import rotate, translate
 

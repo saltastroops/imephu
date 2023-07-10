@@ -1,6 +1,6 @@
 import urllib.parse
 from io import BytesIO
-from typing import BinaryIO, Protocol, NamedTuple, Callable, Dict
+from typing import BinaryIO, Callable, Dict, NamedTuple, Protocol
 
 import requests
 from astropy import units as u
@@ -18,25 +18,29 @@ class _SurveyDetails(NamedTuple):
     is_covering_position: Callable[[SkyCoord], bool]
 
 
-_always_true = lambda x: True
+def _always_true(x: SkyCoord) -> bool:
+    return True
 
 
 _DSS_DETAILS: Dict[str, _SurveyDetails] = {
     "POSS2/UKSTU Red": _SurveyDetails("poss2ukstu_red", _always_true),
-    "POSS2/UKSTU Blue":  _SurveyDetails("poss2ukstu_blue", _always_true),
+    "POSS2/UKSTU Blue": _SurveyDetails("poss2ukstu_blue", _always_true),
     "POSS2/UKSTU IR": _SurveyDetails("poss2ukstu_ir", _always_true),
     "POSS1 Red": _SurveyDetails("poss1_red", lambda p: p.dec.to_value(u.deg) > -30),
     "POSS1 Blue": _SurveyDetails("poss1_blue", lambda p: p.dec.to_value(u.deg) > -30),
     "Quick-V": _SurveyDetails("quickv", lambda p: p.dec.to_value(u.deg) > 6),
     "HST Phase2 (GSC2)": _SurveyDetails("phase2_gsc2", _always_true),
-    "HST Phase2 (GSC1)": _SurveyDetails("phase2_gsc1", lambda p: p.dec.to_value(u.deg) < -20 or p.dec.to_value(u.deg) > 6)
+    "HST Phase2 (GSC1)": _SurveyDetails(
+        "phase2_gsc1",
+        lambda p: p.dec.to_value(u.deg) < -20 or p.dec.to_value(u.deg) > 6,
+    ),
 }
 
 
 _SKYVIEW_DETAILS = {
     "2MASS-H": _SurveyDetails("2mass-h", _always_true),
     "2MASS-J": _SurveyDetails("2mass-j", _always_true),
-    "2MASS-K": _SurveyDetails("2mass-k", _always_true)
+    "2MASS-K": _SurveyDetails("2mass-k", _always_true),
 }
 
 
@@ -179,10 +183,13 @@ class DigitizedSkySurvey(SkySurvey):
         binary stream
             The FITS file.
         """
-        response = requests.get(self.url(survey, fits_center, size))
-        if response.status_code != 200:
-            raise SurveyError("No FITS file could be loaded.")
-        return BytesIO(response.content)
+        try:
+            response = requests.get(self.url(survey, fits_center, size))
+            if response.status_code != 200:
+                raise SurveyError("No FITS file could be loaded.")
+            return BytesIO(response.content)
+        except BaseException as e:
+            raise SurveyError("No FITS file could be loaded.") from e
 
     def is_covering_position(self, survey: str, position: SkyCoord) -> bool:
         """Return whether a position is covered by the sky survey.
@@ -200,7 +207,6 @@ class DigitizedSkySurvey(SkySurvey):
             True if the position is covered  by the survey, False otherwise.
         """
         return self._survey_details[survey.lower()].is_covering_position(position)
-
 
     def _survey_identifier(self, survey: str) -> str:
         if survey.lower() not in self._survey_details:
@@ -285,10 +291,13 @@ class SkyView(SkySurvey):
         binary stream
             The FITS file.
         """
-        response = requests.get(self.url(survey, fits_center, size))
-        if response.status_code != 200:
-            raise SurveyError("No FITS file could be loaded.")
-        return BytesIO(response.content)
+        try:
+            response = requests.get(self.url(survey, fits_center, size))
+            if response.status_code != 200:
+                raise SurveyError("No FITS file could be loaded.")
+            return BytesIO(response.content)
+        except BaseException as e:
+            raise SurveyError("No FITS file could be loaded.") from e
 
     def is_covering_position(self, survey: str, position: SkyCoord) -> bool:
         """Return whether a position is covered by the sky survey.
@@ -309,7 +318,7 @@ class SkyView(SkySurvey):
 
     def _survey_identifier(self, survey: str) -> str:
         if survey.lower() not in self._survey_details:
-            raise ValueError(f"Unknown survey: {survey}")
+            raise SurveyError(f"Unknown survey: {survey}")
 
         return self._survey_details[survey.lower()].identifier
 
@@ -462,4 +471,3 @@ def is_covering_position(survey: str, position: SkyCoord) -> bool:
     else:
         raise ValueError(f"Unknown survey: {survey}")
     return survey_.is_covering_position(survey, position)
-

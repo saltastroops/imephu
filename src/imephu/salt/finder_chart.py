@@ -9,7 +9,6 @@ from typing import Any, BinaryIO, Generator, List, Optional, Tuple, Union
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
-
 from imephu.annotation.general import GroupAnnotation
 from imephu.annotation.motion import motion_annotation
 from imephu.finder_chart import FinderChart
@@ -167,11 +166,14 @@ def rss_longslit_finder_chart(
     return finder_chart
 
 
+DEFAULT_REF_STAR_BOX_SIZE = Angle(5 * u.arcsec)
+
+
 def rss_mos_finder_chart(
     fits: Union[str, BinaryIO, os.PathLike[Any]],
     general: GeneralProperties,
     mos_mask: MosMask,
-    reference_star_box_width: Angle = Angle(5 * u.arcsec),
+    reference_star_box_width: Angle = DEFAULT_REF_STAR_BOX_SIZE,
 ) -> FinderChart:
     """Return the finder chart for an RSS MOS observation.
 
@@ -437,7 +439,6 @@ def _imaging_annotation(
             bandpass=magnitude_range.bandpass,
             min_magnitude=magnitude_range.min_magnitude,
             max_magnitude=magnitude_range.max_magnitude,
-            fits_center=general.target.position,
             wcs=wcs,
         )
         observation_annotation.add_item(magnitude_annotation)

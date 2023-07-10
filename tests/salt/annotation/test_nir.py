@@ -3,7 +3,6 @@ from pathlib import Path
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-
 from imephu.annotation.general import TextAnnotation
 from imephu.finder_chart import FinderChart
 from imephu.salt.annotation.nir import bundles_annotation  # fiber_bundle_annotation

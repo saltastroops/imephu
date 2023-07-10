@@ -5,15 +5,14 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest import mock
 
+import imephu
 import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-from typer.testing import CliRunner
-
-import imephu
 from imephu.cli import app
 from imephu.utils import Ephemeris
+from typer.testing import CliRunner
 
 runner = CliRunner()
 
@@ -348,7 +347,6 @@ instrument:
     with mock.patch.object(
         imephu.cli, "HorizonsService", autospec=True
     ) as mock_horizons:
-
         mock_horizons.return_value.ephemerides.return_value = ephemerides
         np.random.seed(0)
 
@@ -453,14 +451,12 @@ def test_use_format_option_for_non_sidereal_finder_chart(fits_file, tmp_path_fac
     with mock.patch.object(
         imephu.cli, "HorizonsService", autospec=True
     ) as mock_horizons:
-
         mock_horizons.return_value.ephemerides.return_value = ephemerides
         np.random.seed(0)
 
         with mock.patch.object(
             imephu.cli, "load_fits", autospec=True
         ) as mock_load_fits:
-
             mock_load_fits.return_value = fits_file
             tmp = tmp_path_factory.mktemp(f"finder-chart-{time.time_ns()}")
             config = tmp / "config.yaml"

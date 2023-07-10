@@ -3,7 +3,6 @@ from datetime import datetime, timedelta, timezone
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
-
 from imephu.salt.finder_chart import (
     GeneralProperties,
     Target,
@@ -189,7 +188,7 @@ def test_moving_target_finder_charts(
         survey="POSS2/UKSTU Red",
     )
     counter = 0
-    for finder_chart, _ in g:
+    for finder_chart, _ in g:  # noqa: B007
         # The regression fixture only creates a single file per test run, it seems. So
         # to get all finder charts and ensure a deterministic result, we have to make
         # sure it is used only once.

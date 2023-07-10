@@ -2,7 +2,6 @@ import numpy as np
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
-
 from imephu.annotation.general import (
     CircleAnnotation,
     CrosshairsAnnotation,
@@ -59,14 +58,18 @@ def bundles_annotation(
         wcs=wcs,
         include_fibers=include_fibers,
     )
-    sky_bundle = _sky_bundle(
-        r=r,
-        d_horizontal=d_horizontal,
-        d_vertical=d_vertical,
-        center=science_bundle_center,
-        wcs=wcs,
-        include_fibers=include_fibers,
-    ).translate((0, bundle_separaration_arcsec) * u.arcsec)
+    sky_bundle = (
+        _sky_bundle(
+            r=r,
+            d_horizontal=d_horizontal,
+            d_vertical=d_vertical,
+            center=science_bundle_center,
+            wcs=wcs,
+            include_fibers=include_fibers,
+        )
+        .rotate(science_bundle_center, 90 * u.deg)
+        .translate((0, bundle_separaration_arcsec) * u.arcsec)
+    )
     annotation = GroupAnnotation([sky_bundle, science_bundle])
     return annotation.rotate(science_bundle_center, position_angle)
 

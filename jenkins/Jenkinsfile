@@ -1,0 +1,126 @@
+// The Python versions for which pytest is run. All versions must have been installed
+// with pyenv in the Dockerfile.
+def pythonVersions = ['3.8.0', '3.9.0', '3.10.0']
+
+// Return a stage for running pytest for a given Python version.
+def testStage(pythonVersion) {
+   return {
+     stage("Run tests for version Python $pythonVersion") {
+        sh """
+        . /venv/$pythonVersion/bin/activate
+        poetry install
+        poetry run pytest tests
+        """
+     }
+   }
+}
+
+pipeline {
+  agent {
+    dockerfile {
+      filename 'Dockerfile'
+      dir 'jenkins'
+      args '-v imephu-venv:/venv -u 0:0'
+    }
+  }
+
+  // Note: The version defined by PYTHON_VERSION must have been installed with pyenv in
+  // the Dockerfile.
+  environment {
+    DEV_PYPI_CREDENTIALS = credentials('saltastroops_dev_pypi')
+    DEV_PYPI_URL = 'http://pypi.cape.saao.ac.za'
+    PYPI_TOKEN = credentials('saltastroops_pypi_token')
+    PYTHON_VERSION = '3.10.0'
+  }
+
+  stages {
+    stage('Prepare the virtual environments') {
+      steps {
+        sh 'mkdir -p /venv'
+        script {
+          pythonVersions.each { v ->
+            stage("Create virtual environment for $v") {
+              sh """
+              pyenv local $v
+              python -m venv /venv/$v
+              . /venv/$v/bin/activate
+              poetry install
+              pyenv local system
+              """
+            }
+          }
+        }
+      }
+    }
+
+    stage('Perform linting tests') {
+      steps {
+        sh """
+        . /venv/$PYTHON_VERSION/bin/activate
+        poetry run black --check src tests
+        poetry run ruff src tests
+        """
+      }
+    }
+
+    stage('Check static typing') {
+      steps {
+        sh """
+        . /venv/$PYTHON_VERSION/bin/activate
+        poetry run mypy src
+        """
+      }
+    }
+
+    stage("Run unit and integration tests") {
+      steps {
+        script {
+          def parallelStages = [:]
+          pythonVersions.each { v ->
+            parallelStages[v] = testStage(v)
+          }
+          parallel parallelStages
+        }
+      }
+    }
+
+    stage('Deploy to development PyPI server') {
+      when  {
+        branch 'development'
+      }
+      steps {
+        sh '''
+        poetry config repositories.dev $DEV_PYPI_URL
+        poetry build
+        poetry publish -r dev --username $DEV_PYPI_CREDENTIALS_USR --password $DEV_PYPI_CREDENTIALS_PSW
+        '''
+      }
+    }
+
+    stage('Deploy to PyPI server') {
+      when {
+        branch 'main'
+      }
+      steps {
+        sh '''
+        poetry config pypi-token.pypi $PYPI_TOKEN
+        poetry build
+        poetry publish
+        '''
+      }
+    }
+  }
+
+  post {
+    changed {
+      emailext(
+        body: """The pipeline status has changed to ${currentBuild.result} for the $JOB_NAME pipeline.
+
+See full details on ${env.BUILD_URL}.
+""",
+        subject: "[Jenkins :: $JOB_NAME] pipeline status changed",
+        to: "$SALT_ASTROOPS_EMAIL"
+      )
+    }
+  }
+}

@@ -1,7 +1,6 @@
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
-
 from imephu.annotation.general import TextAnnotation
 from imephu.finder_chart import FinderChart
 from imephu.salt.annotation import telescope
@@ -78,7 +77,6 @@ def test_magnitude_range_annotation(
         bandpass=bandpass,
         min_magnitude=min_magnitude,
         max_magnitude=max_magnitude,
-        fits_center=fits_center,
         wcs=finder_chart.wcs,
     )
     legend = TextAnnotation(

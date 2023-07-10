@@ -1,12 +1,11 @@
 from datetime import datetime, timedelta, timezone
 from unittest import mock
 
+import imephu
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from astropy.table import Table
-
-import imephu
 from imephu.service.horizons import HorizonsService
 from imephu.utils import Ephemeris
 

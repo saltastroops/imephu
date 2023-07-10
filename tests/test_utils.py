@@ -5,7 +5,6 @@ from typing import Optional
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-
 from imephu.utils import (
     Ephemeris,
     MagnitudeRange,
@@ -119,7 +118,7 @@ def test_ephemerides_magnitude_range_requires_consistent_bandpass(
 def test_ephemerides_magnitude_range(min_magnitudes, max_magnitudes, expected):
     """Test that the ephemerides_magnitude_range function returns the correct range."""
     ephemerides = []
-    for i, _ in enumerate(min_magnitudes):
+    for i, _ in enumerate(min_magnitudes):  # noqa: B007
         if min_magnitudes[i] is not None:
             mr: Optional[MagnitudeRange] = MagnitudeRange(
                 min_magnitude=min_magnitudes[i],
