@@ -56,19 +56,11 @@ Go to the Jenkins dashboard and click on "New item" in the sidebar menu. Choose 
 
 On the configuration page add a GitHub source.
 
-<<<<<<< HEAD
 ![Add a GitHub source](img/add-github-source.png)
 
 Choose the GitHub App credentials defined above as the credentials and https://github.com/saltastroops/imephu as the repository HTTPS URL.
 
 ![Set the credentials and repository](img/github-credentials-and-repo.png)
-=======
-![add-github-source.png](img/add-github-source.png)
-
-Choose the GitHub App credentials defined above as the credentials and https://github.com/saltastroops/imephu as the repository HTTPS URL.
-
-![github-credentials-and-repo.png](img/github-credentials-and-repo.png)
->>>>>>> development
 
 Still for the GitHub source, add the following behaviours by using the "Add" button:
 
@@ -78,7 +70,6 @@ Still for the GitHub source, add the following behaviours by using the "Add" but
 
 For the filter enter `main development` in the Include input and leave the Exclude input empty.
 
-<<<<<<< HEAD
 ![Add the behaviours](img/github-source-behaviours.png)
 
 In the Build Configuration section enter `jenkins/Jenkinsfile` as the script path.
@@ -88,13 +79,6 @@ In the Build Configuration section enter `jenkins/Jenkinsfile` as the script pat
 Finally, if webhooks are unavailable (either because they are not enabled on GitHub or because the Jenkins server cannot be connected to from the outside), you should enable periodic scanning of the repository.
 
 ![Enable periodic scanning of the repository](img/polling.png)
-=======
-![github-source-behaviours.png](img/github-source-behaviours.png)
-
-In the Build Configuration section enter `jenkins/Jenkinsfile` as the script path.
-
-![build-configuration.png](img/build-configuration.png)
->>>>>>> development
 
 ## Updating the workflow when supported Python versions change
 
