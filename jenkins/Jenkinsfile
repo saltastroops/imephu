@@ -119,7 +119,7 @@ pipeline {
 See full details on ${env.BUILD_URL}.
 """,
         subject: "[Jenkins :: $JOB_NAME] pipeline status changed",
-        to: $SALT_ASTROOPS_EMAIL
+        to: "$SALT_ASTROOPS_EMAIL"
       )
     }
   }
