@@ -58,7 +58,7 @@ def test_dss_returns_the_content_sent():
 def test_dss_handles_wrong_survey():
     """Test that the DigitizedSkySurvey class handles wrong survey names correctly."""
     dss = DigitizedSkySurvey()
-    with pytest.raises(ValueError):
+    with pytest.raises(SurveyError):
         dss.load_fits(
             "Invalid Survey", SkyCoord(ra=0 * u.deg, dec=0 * u.deg), 10 * u.arcmin
         )
