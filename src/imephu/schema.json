@@ -58,12 +58,12 @@
             "74.4arcsec"
           ]
         },
-        "science-bundle": {
+        "reference-star": {
           "type": "object",
           "properties": {
             "dec": {
               "type": "string",
-              "description": "Declination of the sky bundle, in a format understood by AstroPy",
+              "description": "Declination of the reference star, in a format understood by AstroPy",
               "examples": [
                 "-24d 5m 16s",
                 "-15.967d"
@@ -71,7 +71,7 @@
             },
             "ra": {
               "type": "string",
-              "description": "Right ascension of the sky bundle, in a format understood by AstroPy",
+              "description": "Right ascension of the reference star, in a format understood by AstroPy",
               "examples": [
                 "23h 17m 22s",
                 "134.9823d"
@@ -86,8 +86,7 @@
         }
       },
       "required": [
-        "bundle-separation",
-        "science-bundle"
+        "bundle-separation"
       ],
       "additionalProperties": false
     },

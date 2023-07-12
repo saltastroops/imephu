@@ -327,14 +327,17 @@ def _create_hrs_finder_chart(
 def _create_nir_finder_chart(
     fits: Union[BinaryIO, Path], general: GeneralProperties, nir: Dict[str, Any]
 ) -> FinderChart:
-    science_bundle_center = SkyCoord(
-        ra=nir["science-bundle"]["ra"], dec=nir["science-bundle"]["dec"]
-    )
+    if "reference-star" in nir:
+        reference_star = SkyCoord(
+            ra=nir["reference-star"]["ra"], dec=nir["reference-star"]["dec"]
+        )
+    else:
+        reference_star = None
     bundle_separation = Angle(nir["bundle-separation"])
     return sfc.nir_finder_chart(
         fits=fits,
         general=general,
-        science_bundle_center=science_bundle_center,
+        reference_star=reference_star,
         bundle_separation=bundle_separation,
     )
 

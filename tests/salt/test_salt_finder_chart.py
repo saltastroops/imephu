@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
+from imephu.geometry import translate
 from imephu.salt.finder_chart import (
     GeneralProperties,
     Target,
@@ -120,17 +121,34 @@ def test_rss_fabry_perot_finder_chart(
     check_finder(finder_chart)
 
 
-@pytest.mark.parametrize("position_angle", [0 * u.deg, 30 * u.deg, -90 * u.deg])
+@pytest.mark.parametrize(
+    "position_angle, target_offset",
+    [
+        (0 * u.deg, None),
+        (30 * u.deg, (0.5, 1) * u.arcmin),
+        (-90 * u.deg, (-2, -1) * u.arcmin),
+    ],
+)
 def test_nir_finder_chart(
-    position_angle, fits_file, fits_center, check_finder, mock_from_survey
+    position_angle,
+    target_offset,
+    fits_file,
+    fits_center,
+    check_finder,
+    mock_from_survey,
 ):
     """Test the finder chart for an NIR observation."""
     general = _general_properties(fits_center)
+    if target_offset:
+        reference_star = fits_center
+        general.target.position = translate(fits_center, target_offset)
+    else:
+        reference_star = None
     general.position_angle = position_angle
     finder_chart = nir_finder_chart(
         fits=fits_file,
         general=general,
-        science_bundle_center=fits_center,
+        reference_star=reference_star,
         bundle_separation=1 * u.arcmin,
     )
     check_finder(finder_chart)
