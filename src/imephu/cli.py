@@ -332,7 +332,7 @@ def _create_nir_finder_chart(
             ra=nir["reference-star"]["ra"], dec=nir["reference-star"]["dec"]
         )
     else:
-        reference_star =  None
+        reference_star = None
     bundle_separation = Angle(nir["bundle-separation"])
     return sfc.nir_finder_chart(
         fits=fits,

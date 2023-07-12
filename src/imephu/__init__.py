@@ -7,4 +7,4 @@ The finder charts are primarily intended for the Southern African Large Telescop
 
 from importlib.metadata import version
 
-__version__ = version('wheel')
+__version__ = version("wheel")

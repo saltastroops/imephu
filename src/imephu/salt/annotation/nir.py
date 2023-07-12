@@ -2,8 +2,6 @@ import numpy as np
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
-
-from imephu import geometry
 from imephu.annotation.general import (
     CircleAnnotation,
     CrosshairsAnnotation,
@@ -16,7 +14,7 @@ _OUTLINE_COLOR = "red"
 
 
 def bundles_annotation(
-        finder_chart_center: SkyCoord,
+    finder_chart_center: SkyCoord,
     science_bundle_center: SkyCoord,
     bundle_separation: Angle,
     position_angle: Angle,
