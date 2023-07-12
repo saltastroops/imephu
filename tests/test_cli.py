@@ -275,7 +275,7 @@ def test_create_nir_finder_chart(check_cli, mock_from_survey):
 instrument:
   nir:
     bundle-separation: 50 arcsec
-    science-bundle:
+    reference-star:
       ra: 0h 40m 0s
       dec: -60d
 """

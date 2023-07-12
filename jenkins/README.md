@@ -28,9 +28,9 @@ You need to create credentials of type "GitHub App" for this GitHub App. The App
 
 The following environment variable needs to be defined.
 
-| Environment variable | Description                                                                                   | Example value        |
-|----------------------|-----------------------------------------------------------------------------------------------|----------------------|
-| SALT_ASTROOPS_EMAIL  | Email address for SALT Astronomy Operations. This is used for pipeline failure notifications. | astroops@example.com |
+| Environment variable | Description                                                                           | Example value        |
+|----------------------|---------------------------------------------------------------------------------------|----------------------|
+| SALT_ASTROOPS_EMAIL  | Email address for SALT Astronomy Operations. This is used for pipeline notifications. | astroops@example.com |
 
 Environment variables can be set via Manage Jenkins - Configure System (cf. [this Stack Overflow entry](https://stackoverflow.com/questions/54207815/does-jenkins-have-a-feature-like-credentials-for-non-secrets)).
 

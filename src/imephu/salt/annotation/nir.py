@@ -14,6 +14,7 @@ _OUTLINE_COLOR = "red"
 
 
 def bundles_annotation(
+    finder_chart_center: SkyCoord,
     science_bundle_center: SkyCoord,
     bundle_separation: Angle,
     position_angle: Angle,
@@ -27,6 +28,9 @@ def bundles_annotation(
 
     Parameters
     ----------
+    finder_chart_center: `~astropy.coordinates.SkyCoord`
+        The finder chart center, as a position on the sky, in right ascension and
+        declination.
     science_bundle_center: `~astropy.coordinates.SkyCoord`
         The center position of the sky fiber bundle, as a position on the sky, in
         right ascension and declination.
@@ -54,24 +58,28 @@ def bundles_annotation(
         r=r,
         d_horizontal=d_horizontal,
         d_vertical=d_vertical,
-        center=science_bundle_center,
+        center=finder_chart_center,
         wcs=wcs,
         include_fibers=include_fibers,
-    )
+    ).rotate(finder_chart_center, 90 * u.deg + position_angle)
     sky_bundle = (
         _sky_bundle(
             r=r,
             d_horizontal=d_horizontal,
             d_vertical=d_vertical,
-            center=science_bundle_center,
+            center=finder_chart_center,
             wcs=wcs,
             include_fibers=include_fibers,
         )
-        .rotate(science_bundle_center, 90 * u.deg)
-        .translate((0, bundle_separaration_arcsec) * u.arcsec)
+        .rotate(finder_chart_center, 90 * u.deg)
+        .translate((bundle_separaration_arcsec, 0) * u.arcsec)
+        .rotate(finder_chart_center, position_angle)
     )
     annotation = GroupAnnotation([sky_bundle, science_bundle])
-    return annotation.rotate(science_bundle_center, position_angle)
+
+    target_offsets = finder_chart_center.spherical_offsets_to(science_bundle_center)
+
+    return annotation.translate(target_offsets)
 
 
 def _science_bundle(

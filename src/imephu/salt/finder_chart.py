@@ -234,18 +234,21 @@ def rss_fabry_perot_finder_chart(
 def nir_finder_chart(
     fits: Union[str, BinaryIO, os.PathLike[Any]],
     general: GeneralProperties,
-    science_bundle_center: SkyCoord,
+    reference_star: Optional[SkyCoord],
     bundle_separation: Angle,
 ) -> FinderChart:
     """Return the finder chart for an NIR observation.
+
+    If coordinates for a reference star are passed, they define the center of the finder
+    chart, and the sky bundle is centered on the target coordinates.
 
     Parameters
     ----------
     fits: `str`, `path-like` or `binary file-like`
         FITS file to display.
-    science_bundle_center: `~astropy.coordinates.SkyCoord`
-        The center position of the sky fiber bundle, as a position on the sky, in
-        right ascension and declination.
+    reference_star: `~astropy.coordinates.SkyCoord`, optional
+        The position of the reference star, as a position on the sky, in right ascension
+        and declination. This is taken to be the center of the finder chart.
     bundle_separation: ~astropy.coordinates.Angle`
         The separation between the science fiber bundle and the sky fiber bundles, as an
         angle on the sky. The separation is measured between the center of the science
@@ -259,7 +262,7 @@ def nir_finder_chart(
     finder_chart = FinderChart(fits)
     annotation = _nir_observation_annotation(
         general=general,
-        science_bundle_center=science_bundle_center,
+        reference_star=reference_star,
         bundle_separation=bundle_separation,
         wcs=finder_chart.wcs,
     )
@@ -398,12 +401,16 @@ def _rss_fabry_perot_observation_annotation(
 
 def _nir_observation_annotation(
     general: GeneralProperties,
-    science_bundle_center: SkyCoord,
+    reference_star: Optional[SkyCoord],
     bundle_separation: Angle,
     wcs: WCS,
 ) -> GroupAnnotation:
+    science_bundle_center = general.target.position
+    if reference_star:
+        general.target.position = reference_star
     observation_annotation = _base_annotations(general, wcs)
     bundles_annotation = nir.bundles_annotation(
+        finder_chart_center=general.target.position,
         science_bundle_center=science_bundle_center,
         bundle_separation=bundle_separation,
         position_angle=general.position_angle,
