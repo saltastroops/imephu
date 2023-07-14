@@ -76,6 +76,25 @@ def longslit_annotation(
     ).rotate(fits_center, position_angle)
 
 
+def reference_star_annotation(reference_star: SkyCoord, wcs: WCS) -> CircleAnnotation:
+    """Return a circle highlighting a reference star.
+
+    Parameters
+    ----------
+    reference_star: `~astropy.coordinates.SkyCoord`
+        The central position of the finder chart, in right ascension and declination
+    wcs: `~astropy.wcs.WCS`
+        WCS object.
+    """
+    return CircleAnnotation(
+        reference_star,
+        10 * u.arcsec,
+        wcs,
+        edgecolor="red",
+        alpha=0.5,
+    )
+
+
 def mos_mask_annotation(
     mos_mask: MosMask, wcs: WCS, reference_star_box_width: Angle = 5 * u.arcsec
 ) -> GroupAnnotation:

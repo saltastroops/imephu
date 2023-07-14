@@ -296,8 +296,18 @@ def _create_rss_finder_chart(
     elif instrument_mode == "spectroscopy":
         slit_width = Angle(rss["slit-width"])
         slit_height = Angle(rss["slit-height"])
+        if "reference-star" in rss:
+            reference_star = SkyCoord(
+                ra=rss["reference-star"]["ra"], dec=rss["reference-star"]["dec"]
+            )
+        else:
+            reference_star = None
         return sfc.rss_longslit_finder_chart(
-            fits=fits, general=general, slit_width=slit_width, slit_height=slit_height
+            fits=fits,
+            general=general,
+            slit_width=slit_width,
+            slit_height=slit_height,
+            reference_star=reference_star,
         )
     elif instrument_mode == "mos":
         mos_mask = MosMask.from_file(rss["file"])
