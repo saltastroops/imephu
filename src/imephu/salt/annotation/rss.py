@@ -1,6 +1,10 @@
+from typing import Optional
+
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
+
+from imephu import geometry
 from imephu.annotation.general import (
     CircleAnnotation,
     GroupAnnotation,
@@ -74,6 +78,25 @@ def longslit_annotation(
     return RectangleAnnotation(
         fits_center, slit_width, slit_height, wcs=wcs, edgecolor="red", alpha=0.5
     ).rotate(fits_center, position_angle)
+
+
+def reference_star_annotation(reference_star: SkyCoord, wcs: WCS) -> CircleAnnotation:
+    """Return a circle highlighting a reference star.
+
+    Parameters
+    ----------
+    reference_star: `~astropy.coordinates.SkyCoord`
+        The central position of the finder chart, in right ascension and declination
+    wcs: `~astropy.wcs.WCS`
+        WCS object.
+    """
+    return CircleAnnotation(
+        reference_star,
+        10 * u.arcsec,
+        wcs,
+        edgecolor="red",
+        alpha=0.5,
+    )
 
 
 def mos_mask_annotation(

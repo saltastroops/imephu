@@ -219,6 +219,9 @@ def test_create_rss_spectroscopy_finder_chart(check_cli, mock_from_survey):
 instrument:
   rss:
     mode: spectroscopy
+    reference-star:
+      ra: 0h 40m 0s
+      dec: -60d 2m     
     slit-width: 4 arcsec
     slit-height: 8 arcmin
 """

@@ -1,6 +1,8 @@
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
+
+from imephu import geometry
 from imephu.annotation.general import TextAnnotation
 from imephu.finder_chart import FinderChart
 from imephu.salt.annotation import rss
@@ -43,6 +45,25 @@ def test_rss_longslit_annotation(
         horizontalalignment="left",
     )
     finder_chart.add_annotation(longslit_annotation)
+    finder_chart.add_annotation(legend)
+    check_finder(finder_chart)
+
+
+def test_rss_reference_star_annotation(fits_file, fits_center, check_finder):
+    finder_chart = FinderChart(fits_file)
+    reference_star = geometry.translate(fits_center, (1, 3) * u.arcmin)
+    reference_star_annotation = rss.reference_star_annotation(
+        reference_star, finder_chart.wcs
+    )
+    legend = TextAnnotation(
+        SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
+        f"reference star 1 armin in right ascension and 3 arcmin in declination away "
+        f"from the center",
+        wcs=finder_chart.wcs,
+        color="blue",
+        horizontalalignment="left",
+    )
+    finder_chart.add_annotation(reference_star_annotation)
     finder_chart.add_annotation(legend)
     check_finder(finder_chart)
 

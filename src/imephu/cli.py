@@ -303,7 +303,11 @@ def _create_rss_finder_chart(
         else:
             reference_star = None
         return sfc.rss_longslit_finder_chart(
-            fits=fits, general=general, slit_width=slit_width, slit_height=slit_height, reference_star=reference_star
+            fits=fits,
+            general=general,
+            slit_width=slit_width,
+            slit_height=slit_height,
+            reference_star=reference_star,
         )
     elif instrument_mode == "mos":
         mos_mask = MosMask.from_file(rss["file"])
