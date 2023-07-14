@@ -59,30 +59,7 @@
           ]
         },
         "reference-star": {
-          "type": "object",
-          "properties": {
-            "dec": {
-              "type": "string",
-              "description": "Declination of the reference star, in a format understood by AstroPy",
-              "examples": [
-                "-24d 5m 16s",
-                "-15.967d"
-              ]
-            },
-            "ra": {
-              "type": "string",
-              "description": "Right ascension of the reference star, in a format understood by AstroPy",
-              "examples": [
-                "23h 17m 22s",
-                "134.9823d"
-              ]
-            }
-          },
-          "required": [
-            "dec",
-            "ra"
-          ],
-          "additionalProperties": false
+          "$ref": "#/$defs/reference-star"
         }
       },
       "required": [
@@ -128,6 +105,32 @@
         "horizons-id",
         "name",
         "start-time"
+      ],
+      "additionalProperties": false
+    },
+    "reference-star": {
+      "type": "object",
+      "properties": {
+        "dec": {
+          "type": "string",
+          "description": "Declination of the reference star, in a format understood by AstroPy",
+          "examples": [
+            "-24d 5m 16s",
+            "-15.967d"
+          ]
+        },
+        "ra": {
+          "type": "string",
+          "description": "Right ascension of the reference star, in a format understood by AstroPy",
+          "examples": [
+            "23h 17m 22s",
+            "134.9823d"
+          ]
+        }
+      },
+      "required": [
+        "dec",
+        "ra"
       ],
       "additionalProperties": false
     },
@@ -209,6 +212,9 @@
           "type": "string",
           "description": "The mode, which must be \"spectroscopy\"",
           "pattern": "^spectroscopy$"
+        },
+        "reference-star": {
+          "$ref": "#/$defs/reference-star"
         },
         "slit-height": {
           "type": "string",

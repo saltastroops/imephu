@@ -62,15 +62,21 @@ def test_rss_imaging_observation_annotation(
     check_finder(finder_chart)
 
 
+@pytest.mark.parametrize("include_reference_star", [True, False])
 def test_rss_longslit_finder_chart(
-    fits_file, fits_center, check_finder, mock_from_survey
+    include_reference_star, fits_file, fits_center, check_finder, mock_from_survey
 ):
     """Test the finder chart for RSS longslit observations."""
+    if include_reference_star:
+        reference_star = translate(fits_center, (2, -1) * u.arcmin)
+    else:
+        reference_star = None
     finder_chart = rss_longslit_finder_chart(
         fits=fits_file,
         general=_general_properties(fits_center),
         slit_width=4 * u.arcsec,
         slit_height=8 * u.arcmin,
+        reference_star=reference_star,
     )
     check_finder(finder_chart)
 

@@ -136,6 +136,7 @@ def rss_longslit_finder_chart(
     general: GeneralProperties,
     slit_width: Angle,
     slit_height: Angle,
+    reference_star: Optional[SkyCoord],
 ) -> FinderChart:
     """Return the finder chart for an RSS longslit observation.
 
@@ -149,6 +150,8 @@ def rss_longslit_finder_chart(
         The slit width, as an angle on the sky.
     slit_height: `~astropy.coordinates.Angle`
         The slit height, as an angle on the sky.
+    reference_star: `~astropy.coordinates.SkyCoord`, optional
+        The position of a reference star, in right ascension and declination.
 
     Returns
     -------
@@ -160,6 +163,7 @@ def rss_longslit_finder_chart(
         general=general,
         slit_width=slit_width,
         slit_height=slit_height,
+        reference_star=reference_star,
         wcs=finder_chart.wcs,
     )
     finder_chart.add_annotation(annotation)
@@ -363,7 +367,11 @@ def _rss_imaging_observation_annotation(
 
 
 def _rss_longslit_observation_annotation(
-    general: GeneralProperties, slit_width: Angle, slit_height: Angle, wcs: WCS
+    general: GeneralProperties,
+    slit_width: Angle,
+    slit_height: Angle,
+    reference_star: SkyCoord,
+    wcs: WCS,
 ) -> GroupAnnotation:
     observation_annotation = _base_annotations(general, wcs)
     longslit_annotation = rss.longslit_annotation(
@@ -374,6 +382,9 @@ def _rss_longslit_observation_annotation(
         wcs=wcs,
     )
     observation_annotation.add_item(longslit_annotation)
+    if reference_star:
+        reference_star_annotation = rss.reference_star_annotation(reference_star, wcs)
+        observation_annotation.add_item(reference_star_annotation)
     return observation_annotation
 
 
