@@ -12,7 +12,7 @@ import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from imephu.finder_chart import FinderChart
-from imephu.utils import Ephemeris, MagnitudeRange
+from imephu.utils import Ephemeris, MagnitudeRange, SkyCoordRate
 
 
 class _FakeFinderChart:
@@ -37,6 +37,7 @@ def _ephemeris(epoch, ra=0 * u.deg, dec=0 * u.deg):
     return Ephemeris(
         epoch=epoch,
         position=SkyCoord(ra=ra, dec=dec),
+        position_rate=SkyCoordRate(ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour),
         magnitude_range=MagnitudeRange(
             bandpass="V", min_magnitude=13, max_magnitude=13
         ),

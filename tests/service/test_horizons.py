@@ -7,13 +7,15 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 from astropy.table import Table
 from imephu.service.horizons import HorizonsService
-from imephu.utils import Ephemeris
+from imephu.utils import Ephemeris, SkyCoordRate
 
 _MOCK_QUERY_RESULT_WITH_MAGNITUDE = Table(
     {
         "datetime_str": ["2022-Feb-08 13:27:14", "2022-Feb-08 13:32:14"],
         "RA": ["127", "127.01"],
         "DEC": ["-35", "-34.9"],
+        "RA_rate": ["1", "1.1"],
+        "DEC_rate": ["-4.5", "-4.5"],
         "V": ["18", "18.1"],
     }
 )
@@ -24,6 +26,8 @@ _MOCK_QUERY_RESULT_WITHOUT_MAGNITUDE = Table(
         "datetime_str": ["2022-Feb-08 13:27:14", "2022-Feb-08 13:32:14"],
         "RA": ["127", "127.01"],
         "DEC": ["-35", "-34.9"],
+        "RA_rate": ["1", "1.1"],
+        "DEC_rate": ["-4.5", "-4.5"],
     }
 )
 
@@ -236,6 +240,7 @@ def _ephemeris(time_diff):
         epoch=datetime(2022, 2, 8, 0, 0, 0, 0, tzinfo=timezone.utc)
         + timedelta(minutes=time_diff),
         position=SkyCoord(ra=0 * u.deg, dec=0 * u.deg),
+        position_rate=SkyCoordRate(ra=0 * u.arcsec / u.hour, dec=0 * u.arcsec / u.hour),
         magnitude_range=None,
     )
 

@@ -17,7 +17,7 @@ from imephu.salt.finder_chart import (
     salticam_finder_chart,
 )
 from imephu.salt.utils import MosMask, MosMaskSlit
-from imephu.utils import Ephemeris, MagnitudeRange
+from imephu.utils import Ephemeris, MagnitudeRange, SkyCoordRate
 
 POSITION_ANGLE = Angle(20 * u.deg)
 
@@ -179,26 +179,41 @@ def test_moving_target_finder_charts(
         Ephemeris(
             epoch=t,
             position=SkyCoord(ra="0h40m30s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
         Ephemeris(
             epoch=t + hour,
             position=SkyCoord(ra="0h40m00s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
         Ephemeris(
             epoch=t + 2 * hour,
             position=SkyCoord(ra="0h39m30s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
         Ephemeris(
             epoch=t + 3 * hour,
             position=SkyCoord(ra="0h39m00s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
         Ephemeris(
             epoch=t + 4 * hour,
             position=SkyCoord(ra="0h38m30s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
     ]

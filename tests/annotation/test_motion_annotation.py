@@ -6,7 +6,7 @@ from astropy.coordinates import SkyCoord
 from imephu.annotation.motion import motion_annotation
 from imephu.finder_chart import FinderChart
 from imephu.geometry import rotate
-from imephu.utils import Ephemeris, MagnitudeRange
+from imephu.utils import Ephemeris, MagnitudeRange, SkyCoordRate
 
 
 @pytest.mark.parametrize(
@@ -34,6 +34,7 @@ def test_large_motion_annotation(angle, fits_file, fits_center, check_finder, le
     initial_ephemeris = Ephemeris(
         epoch=datetime(2022, 2, 5, 22, 0, 0, 0, tzinfo=timezone.utc),
         position=initial_position,
+        position_rate=SkyCoordRate(ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour),
         magnitude_range=MagnitudeRange(
             min_magnitude=18, max_magnitude=18, bandpass="V"
         ),
@@ -41,6 +42,7 @@ def test_large_motion_annotation(angle, fits_file, fits_center, check_finder, le
     middle_ephemeris = Ephemeris(
         epoch=datetime(2022, 2, 6, 0, 0, 0, 0, tzinfo=timezone.utc),
         position=fits_center,
+        position_rate=SkyCoordRate(ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour),
         magnitude_range=MagnitudeRange(
             min_magnitude=18, max_magnitude=18, bandpass="V"
         ),
@@ -56,6 +58,7 @@ def test_large_motion_annotation(angle, fits_file, fits_center, check_finder, le
     final_ephemeris = Ephemeris(
         epoch=datetime(2022, 2, 6, 4, 0, 0, 0, tzinfo=sast),
         position=final_position,
+        position_rate=SkyCoordRate(ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour),
         magnitude_range=MagnitudeRange(
             min_magnitude=18, max_magnitude=18, bandpass="V"
         ),
@@ -96,6 +99,7 @@ def test_small_motion_annotation(angle, fits_file, fits_center, check_finder, le
     initial_ephemeris = Ephemeris(
         epoch=datetime(2022, 2, 5, 22, 0, 0, 0, tzinfo=timezone.utc),
         position=initial_position,
+        position_rate=SkyCoordRate(ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour),
         magnitude_range=MagnitudeRange(
             min_magnitude=18, max_magnitude=18, bandpass="V"
         ),
@@ -103,6 +107,7 @@ def test_small_motion_annotation(angle, fits_file, fits_center, check_finder, le
     middle_ephemeris = Ephemeris(
         epoch=datetime(2022, 2, 6, 0, 0, 0, 0, tzinfo=timezone.utc),
         position=fits_center,
+        position_rate=SkyCoordRate(ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour),
         magnitude_range=MagnitudeRange(
             min_magnitude=18, max_magnitude=18, bandpass="V"
         ),
@@ -118,6 +123,7 @@ def test_small_motion_annotation(angle, fits_file, fits_center, check_finder, le
     final_ephemeris = Ephemeris(
         epoch=datetime(2022, 2, 6, 4, 0, 0, 0, tzinfo=sast),
         position=final_position,
+        position_rate=SkyCoordRate(ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour),
         magnitude_range=MagnitudeRange(
             min_magnitude=18, max_magnitude=18, bandpass="V"
         ),
