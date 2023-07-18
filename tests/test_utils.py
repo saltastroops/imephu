@@ -8,9 +8,9 @@ from astropy.coordinates import SkyCoord
 from imephu.utils import (
     Ephemeris,
     MagnitudeRange,
+    SkyCoordRate,
     ephemerides_magnitude_range,
     mid_position,
-    SkyCoordRate,
 )
 
 
