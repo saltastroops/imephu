@@ -3,6 +3,24 @@ from datetime import datetime
 from typing import List, Optional
 
 from astropy.coordinates import SkyCoord
+from astropy.units import Quantity
+
+
+@dataclass
+class SkyCoordRate:
+    """A rate of change in position on the sky.
+
+    Attributes
+    ----------
+    ra: `~astropy.unit.Quantity`
+        The rate of change in right ascension.
+    dec: `~astropy.unit.Quantity`
+        The rate of change in declination.
+    """
+
+    ra: Quantity
+
+    dec: Quantity
 
 
 @dataclass
@@ -35,6 +53,8 @@ class Ephemeris:
         a timezone-aware datetime.
     position: `~astropy.coordinates.SkyCoord`
         The position, in right ascension and declination.
+    position_rate: SkyCoordRate
+        The rate of change in the position on the sky.
     magnitude_range: `~imephu.utils.MagnitudeRange`
         The magnitude range.
     """
@@ -42,6 +62,8 @@ class Ephemeris:
     epoch: datetime
 
     position: SkyCoord
+
+    position_rate: SkyCoordRate
 
     magnitude_range: Optional[MagnitudeRange]
 

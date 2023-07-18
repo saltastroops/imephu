@@ -8,6 +8,7 @@ from astropy.coordinates import SkyCoord
 from imephu.utils import (
     Ephemeris,
     MagnitudeRange,
+    SkyCoordRate,
     ephemerides_magnitude_range,
     mid_position,
 )
@@ -31,6 +32,9 @@ def test_ephemeris_epoch_must_be_timezone_aware(epoch, expectation):
         Ephemeris(
             epoch=epoch,
             position=SkyCoord(ra="0h00m00s", dec="0d00m00s"),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=MagnitudeRange(
                 min_magnitude=18, max_magnitude=18, bandpass="V"
             ),
@@ -85,6 +89,9 @@ def test_ephemerides_magnitude_range_requires_consistent_bandpass(
             Ephemeris(
                 epoch=datetime(2022, 2, 19, 0, 0, 0, 0, tzinfo=timezone.utc),
                 position=SkyCoord(ra=0 * u.deg, dec=0 * u.deg),
+                position_rate=SkyCoordRate(
+                    ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+                ),
                 magnitude_range=mr,
             )
         )
@@ -131,6 +138,9 @@ def test_ephemerides_magnitude_range(min_magnitudes, max_magnitudes, expected):
             Ephemeris(
                 epoch=datetime(2022, 2, 19, 0, 0, 0, 0, tzinfo=timezone.utc),
                 position=SkyCoord(ra=0 * u.deg, dec=0 * u.deg),
+                position_rate=SkyCoordRate(
+                    ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+                ),
                 magnitude_range=mr,
             )
         )

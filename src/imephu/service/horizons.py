@@ -7,7 +7,7 @@ from astropy.coordinates import SkyCoord
 from astropy.units import Quantity
 from astroquery.jplhorizons import Horizons
 from dateutil.parser import parse
-from imephu.utils import Ephemeris, MagnitudeRange
+from imephu.utils import Ephemeris, MagnitudeRange, SkyCoordRate
 
 
 class HorizonsService:
@@ -178,6 +178,8 @@ class HorizonsService:
             epoch = parse(ephemerides["datetime_str"][row]).replace(tzinfo=timezone.utc)
             ra = float(ephemerides["RA"][row]) * u.deg
             dec = float(ephemerides["DEC"][row]) * u.deg
+            ra_rate = float(ephemerides["RA_rate"][row]) * u.arcsec / u.hour
+            dec_rate = float(ephemerides["DEC_rate"][row]) * u.arcsec / u.hour
             if "V" in ephemerides.keys():
                 magnitude = float(ephemerides["V"][row])
                 magnitude_range = MagnitudeRange(
@@ -188,6 +190,7 @@ class HorizonsService:
             self._ephemerides.append(
                 Ephemeris(
                     position=SkyCoord(ra=ra, dec=dec),
+                    position_rate=SkyCoordRate(ra=ra_rate, dec=dec_rate),
                     magnitude_range=magnitude_range,
                     epoch=epoch,
                 )

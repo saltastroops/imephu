@@ -11,7 +11,7 @@ import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from imephu.cli import app
-from imephu.utils import Ephemeris
+from imephu.utils import Ephemeris, SkyCoordRate
 from typer.testing import CliRunner
 
 runner = CliRunner()
@@ -324,26 +324,41 @@ instrument:
         Ephemeris(
             epoch=t,
             position=SkyCoord(ra="0h40m30s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
         Ephemeris(
             epoch=t + hour,
             position=SkyCoord(ra="0h40m00s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
         Ephemeris(
             epoch=t + 2 * hour,
             position=SkyCoord(ra="0h39m30s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
         Ephemeris(
             epoch=t + 3 * hour,
             position=SkyCoord(ra="0h39m00s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
         Ephemeris(
             epoch=t + 4 * hour,
             position=SkyCoord(ra="0h38m30s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
     ]
@@ -443,11 +458,17 @@ def test_use_format_option_for_non_sidereal_finder_chart(fits_file, tmp_path_fac
         Ephemeris(
             epoch=t,
             position=SkyCoord(ra="0h40m30s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
         Ephemeris(
             epoch=t + hour,
             position=SkyCoord(ra="0h40m00s", dec=-60 * u.deg),
+            position_rate=SkyCoordRate(
+                ra=1 * u.arcsec / u.hour, dec=1 * u.arcsec / u.hour
+            ),
             magnitude_range=None,
         ),
     ]
