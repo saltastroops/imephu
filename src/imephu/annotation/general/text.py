@@ -30,7 +30,7 @@ class TextAnnotation(Annotation):
 
     Parameters
     ----------
-    position: `~astropy.coordinates.SkyCoord` or
+    position: `~astropy.coordinates.SkyCoord` or list of float
         The right ascension and declination of the point where to put the text.
     s: str
         The text.
