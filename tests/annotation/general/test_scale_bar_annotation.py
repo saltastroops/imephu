@@ -1,9 +1,7 @@
+import astropy.units as u
 import pytest
 from astropy.coordinates import Angle
-import astropy.units as u
-
 from imephu.annotation.general.scale_bar import (
-    _ScaleBarParameters,
     ScaleBarLineAnnotation,
 )
 from imephu.finder_chart import FinderChart

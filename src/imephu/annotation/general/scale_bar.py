@@ -1,7 +1,7 @@
 import dataclasses
 import math
 from copy import deepcopy
-from typing import List, Tuple
+from typing import Any, Tuple
 
 import astropy.units as u
 from astropy.coordinates import Angle, SkyCoord
@@ -52,7 +52,7 @@ class ScaleBarLineAnnotation(Annotation):
         wcs: WCS,
         color: str = "black",
         linewidth: float = 0.5,
-        **kwargs,
+        **kwargs: Any,
     ):
         self._left_edge = left_edge
         self._minimum_length = minimum_length
@@ -154,14 +154,14 @@ class ScaleBarLineAnnotation(Annotation):
         minimum_angle = minimum_length * pixel_scale
         if minimum_angle <= 50 * u.arcsec:
             minimum_angle_arcsec = minimum_angle.to_value(u.arcsec)
-            angle_value = ScaleBarLineAnnotation._preferred_angle_value(
+            angle_value = ScaleBarLineAnnotation._preferred_length_value(
                 minimum_angle_arcsec
             )
             angle = angle_value * u.arcsec
             units = "arcsec"
         else:
             minimum_angle_arcmin = minimum_angle.to_value(u.arcmin)
-            angle_value = ScaleBarLineAnnotation._preferred_angle_value(
+            angle_value = ScaleBarLineAnnotation._preferred_length_value(
                 minimum_angle_arcmin
             )
             angle = angle_value * u.arcmin
@@ -170,14 +170,35 @@ class ScaleBarLineAnnotation(Annotation):
         return _ScaleBarParameters(pixels=pixels, angle=angle_value, units=units)
 
     @staticmethod
-    def _preferred_angle_value(angle: float):
-        if angle <= 1:
-            return 1
-        if angle <= 10:
-            return math.ceil(angle)
+    def _preferred_length_value(minimum_length: float) -> float:
+        """
+        Return the preferred length given a minimum length value.
 
-        normalizing_factor = math.pow(10, math.floor(math.log10(angle)))
-        angle /= normalizing_factor
-        angle = math.ceil(angle)
-        angle *= normalizing_factor
-        return angle
+        The preferred value p is chosen as follows for a minimum length l_min.
+
+        1. If the l_min is less than or equal to 1, p is equal to 1.
+        2. Otherwise, if l_min is less than or equal to 1, p is l_min rounded up to the
+           nearest integer.
+        3. Otherwise, p is l_min rounded up to the next integer divisible by 10.
+
+        Parameters
+        ----------
+        minimum_length: float
+            Minimum scale bar length.
+
+        Returns
+        -------
+        float
+            The preferred scale bar length.
+
+        """
+        if minimum_length <= 1:
+            return 1
+        if minimum_length <= 10:
+            return math.ceil(minimum_length)
+
+        normalizing_factor = math.pow(10, math.floor(math.log10(minimum_length)))
+        minimum_length /= normalizing_factor
+        minimum_length = math.ceil(minimum_length)
+        minimum_length *= normalizing_factor
+        return minimum_length
