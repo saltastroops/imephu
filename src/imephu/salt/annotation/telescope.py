@@ -10,6 +10,7 @@ from imephu.annotation.general import (
     RectangleAnnotation,
     TextAnnotation,
 )
+from imephu.annotation.general.scale_bar import ScaleBarLineAnnotation
 from imephu.salt.annotation import rss, salticam
 
 
@@ -292,6 +293,7 @@ def base_annotations(
             _crosshairs_annotation(fits_center=fits_center, wcs=wcs),
             salticam.field_of_view_annotation(fits_center=fits_center, wcs=wcs),
             rss.field_of_view_annotation(fits_center=fits_center, wcs=wcs),
+            ScaleBarLineAnnotation(left_edge=(50, 50), minimum_length=100, wcs=wcs),
         ]
     )
 

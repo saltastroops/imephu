@@ -18,18 +18,18 @@ class LinePathAnnotation(Annotation):
     connected by straight lines on the finder chart. (The connecting lines in general
     will refer to curved lines on the sky.)
 
-    By default the path is assumed to be closed, i.e. the last vertex is connected to
+    By default, the path is assumed to be closed, i.e. the last vertex is connected to
     the first by a line. This behavior may be changed with the ``closed`` parameter.
 
     Parameters
     ----------
     vertices: sequence of `~astropy.coordinates.SkyCoord`
         The path vertices, as an array or sequence of sky coordinates (with right
-        ascension abd declination).
+        ascension and declination).
     wcs: `~astropy.wcs.WCS`
         WCS object.
     closed: bool, default: True
-        Whether the the path is closed, i.e. whether the last vertex is connected to the
+        Whether the path is closed, i.e. whether the last vertex is connected to the
         first by a line.
     edgecolor: color, default: "black"
         The edge color.
