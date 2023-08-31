@@ -128,7 +128,14 @@ def _create_sidereal_salt_finder_chart(configuration: Dict[str, Any]) -> FinderC
 
     # Create the finder chart
     instrument = configuration["instrument"]
-    return _obtain_sidereal_salt_finder_chart(fits, general, instrument)
+    finder_chart = _obtain_sidereal_salt_finder_chart(fits, general, instrument)
+
+    # Set the maximum size, if requested
+    max_size = configuration.get("max-size", None)
+    if max_size:
+        finder_chart.max_size = max_size * u.arcmin
+
+    return finder_chart
 
 
 def _save_sidereal_finder_chart(

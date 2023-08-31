@@ -285,6 +285,20 @@ instrument:
     check_cli(instrument_yaml)
 
 
+def test_max_size_is_honored(check_cli):
+    fits_file = Path(__file__).parent / "data" / "ra10_dec-60_15arcmin.fits"
+    fits_source_yaml = f"""\
+fits-source:
+  file: {fits_file}
+    """
+    instrument_yaml = """\
+instrument:
+  salticam:
+    slot-mode: false
+"""
+    check_cli(instrument_yaml, fits_source_yaml, max_size=10)
+
+
 @pytest.mark.parametrize(
     "finder_chart_file",
     [

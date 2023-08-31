@@ -137,7 +137,9 @@ def check_cli(fits_file, tmp_path_factory, file_regression):
     def _check_cli(
         instrument_yaml,
         fits_source_yaml="fits-source:\n  image-survey: POSS2/UKSTU Red",
+        max_size=None,
     ):
+        max_size_config = f"max-size: {max_size}" if max_size else ""
         configuration = f"""\
 {fits_source_yaml}
 telescope: SALT
@@ -153,6 +155,7 @@ target:
     minimum: 17
     maximum: 17.3
 {instrument_yaml}
+{max_size_config}
 """
         np.random.seed(0)
         try:
