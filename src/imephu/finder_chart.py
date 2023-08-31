@@ -28,6 +28,7 @@ from astropy.wcs import WCS, FITSFixedWarning
 from matplotlib.figure import Figure
 
 from imephu.annotation import Annotation
+from imephu.geometry import pixel_scales
 from imephu.service.survey import load_fits
 from imephu.utils import Ephemeris
 
@@ -41,6 +42,9 @@ class FinderChart:
     shows the region with an overlaid coordinate grid. The axes show WCS coordinates.
     Use the `add_annotation` method to add more content to the finder chart.
 
+    By default, the size of the finder chart is the same as that of the FITS file. You
+    may set the `max_size` property to choose a non-default maximum size.
+
     You can display the finder chart on the screen or save it as a file.
 
     This class uses Matplotlib for generating the finder chart.
@@ -52,9 +56,15 @@ class FinderChart:
     ----------
     name: `str`, `path-like` or `binary file-like`
         FITS file to display.
+    max_size: `~astropy.coordinates.Angle`
+        Maximum size of the generated finder chart.
     """
 
-    def __init__(self, name: Union[str, BinaryIO, os.PathLike[Any]]):
+    def __init__(
+        self,
+        name: Union[str, BinaryIO, os.PathLike[Any]],
+        max_size: Optional[Angle] = None,
+    ):
         self._hdu = fits.open(name)[0]
         # The FITS data is read in only when it is needed. To avoid trying to read from
         # a closed stream later on, we thus force the data to be read in immediately.
@@ -64,6 +74,7 @@ class FinderChart:
             warnings.simplefilter("ignore", category=FITSFixedWarning)
             self._wcs = WCS(self._hdu)
         self._annotations: List[Annotation] = []
+        self._max_size = max_size
 
     @staticmethod
     def from_survey(survey: str, fits_center: SkyCoord, size: Angle) -> "FinderChart":
@@ -241,6 +252,14 @@ class FinderChart:
         """
         self._metadata[key] = value
 
+    @property
+    def max_size(self) -> Angle:
+        return self._max_size
+
+    @max_size.setter
+    def max_size(self, new_max_size: Angle) -> None:
+        self._max_size = new_max_size
+
     def show(self) -> None:
         """Display the finder chart on the screen."""
         figure = self._create_plot()
@@ -284,6 +303,11 @@ class FinderChart:
         ax = plt.subplot(projection=self._wcs)
 
         self._add_fits_content(ax)
+
+        # Enforce the maximum finder chart size. This needs to be done after the FITS
+        # file has been added, as that sets the plot limits according to the image size.
+        self._enforce_max_size(ax)
+
         self._update_axes(ax)
 
         ax.grid(True, color="blue", alpha=0.2)
@@ -319,6 +343,42 @@ class FinderChart:
             norm=normalizer,
             aspect="equal",
         )
+
+    def _enforce_max_size(self, ax: WCSAxesSubplot) -> None:
+        if not self.max_size:
+            return
+
+        # Get the current plot limits
+        x_min, x_max = ax.get_xlim()
+        y_min, y_max = ax.get_ylim()
+
+        # Get the angular size in x and y direction, and assume the finder chart size
+        # to be the greater of the two
+        x_scale, y_scale = pixel_scales(ax.wcs)
+        x_size_pixels = x_max - x_min
+        y_size_pixels = y_max - y_min
+        x_size = x_size_pixels * x_scale
+        y_size = y_size_pixels * y_scale
+        size = max(x_size, y_size)
+
+        # If we are within 5% of the maximum size, there is nothing to do
+        if size < 1.05 * self.max_size:
+            return
+
+        # Update the limits in x direction
+        shrink_factor = float(self.max_size / size)
+        x_center = (x_min + x_max) / 2
+        x_size_data_coords_new = shrink_factor * x_size_pixels
+        x_min_new = x_center - x_size_data_coords_new / 2
+        x_max_new = x_center + x_size_data_coords_new / 2
+        ax.set_xlim(left=x_min_new, right=x_max_new)
+
+        # Update the limits in y direction
+        y_center = (y_min + y_max) / 2
+        y_size_data_coords_new = shrink_factor * y_size_pixels
+        y_min_new = y_center - y_size_data_coords_new / 2
+        y_max_new = y_center + y_size_data_coords_new / 2
+        ax.set_ylim(bottom=y_min_new, top=y_max_new)
 
     def _update_axes(self, ax: WCSAxesSubplot) -> None:
         axis_type_names = {
