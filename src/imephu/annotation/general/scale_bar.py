@@ -71,9 +71,9 @@ class ScaleBarLineAnnotation(Annotation):
         # Add the horizontal line
         pixel_scale = pixel_scales(self._wcs)[0]
         parameters = self._parameters(self._minimum_length, pixel_scale)
-        x_min = self._left_edge[0]
-        x_max = self._left_edge[0] + parameters.pixels
-        y_mid = self._left_edge[1]
+        x_min = ax.get_xlim()[0] + self._left_edge[0]
+        x_max = x_min + parameters.pixels
+        y_mid = ax.get_ylim()[0] + self._left_edge[1]
         horizontal_path = Path([(x_min, y_mid), (x_max, y_mid)], closed=False)  # noqa
         horizontal_path_patch = PathPatch(horizontal_path, **self._kwargs)
         horizontal_path_patch.set_clip_on(False)

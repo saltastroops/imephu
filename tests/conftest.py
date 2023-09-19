@@ -137,7 +137,9 @@ def check_cli(fits_file, tmp_path_factory, file_regression):
     def _check_cli(
         instrument_yaml,
         fits_source_yaml="fits-source:\n  image-survey: POSS2/UKSTU Red",
+        max_size=None,
     ):
+        max_size_config = f"max-size: {max_size}" if max_size else ""
         configuration = f"""\
 {fits_source_yaml}
 telescope: SALT
@@ -153,6 +155,7 @@ target:
     minimum: 17
     maximum: 17.3
 {instrument_yaml}
+{max_size_config}
 """
         np.random.seed(0)
         try:
@@ -190,8 +193,9 @@ def fits_file():
     """
     Return the path of an example FITS file.
 
-    The FITS file whose path is returned shows a 10 arcsecond by 10 arcsecond sky area
-    centered on the right ascension 10 degrees and the declination -60 degrees.
+    The FITS file whose path is returned shows a sky area centered on the right
+    ascension 10 degrees and the declination -60 degrees. The size is 10 arcminutes by
+    10 arcminutes.
 
     Returns
     -------
@@ -199,6 +203,23 @@ def fits_file():
         The path to the example FITS file.
     """
     return pathlib.Path(__file__).parent / "data" / "ra10_dec-60.fits"
+
+
+@pytest.fixture()
+def fits_file_oversized():
+    """
+    Return the path of an example FITS file.
+
+    The FITS file whose path is returned shows a sky area centered on the right
+    ascension 10 degrees and the declination -60 degrees. The size is 15 arcminutes by
+    15 arcminutes.
+
+    Returns
+    -------
+    `pathlib.Path`
+        The path to the example FITS file.
+    """
+    return pathlib.Path(__file__).parent / "data" / "ra10_dec-60_15arcmin.fits"
 
 
 @pytest.fixture()
