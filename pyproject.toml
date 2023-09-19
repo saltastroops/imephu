@@ -1,10 +1,13 @@
 [tool.poetry]
 name = "imephu"
-version = "0.6.0"
+version = "0.7.0"
 description = "Generate finder charts for astronomical observations."
 authors = ["Southern African Large Telescope"]
 license = "MIT"
 readme = "README.md"
+
+[tool.poetry.scripts]
+imephu = "imephu.cli:app"
 
 [tool.poetry.dependencies]
 python = "^3.8"

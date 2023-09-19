@@ -299,6 +299,10 @@
             }
           ]
         },
+        "max-size": {
+          "type": "number",
+          "description": "Maximum size of the generated finder chart, in arcminutes"
+        },
         "pi-family-name": {
           "type": "string",
           "description": "Family name of the Principal Investigator"

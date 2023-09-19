@@ -66,6 +66,13 @@ def test_finder_chart_is_generated_from_stream(check_finder):
     check_finder(finder_chart)
 
 
+def test_finder_chart_honors_max_size(check_finder):
+    """Test that finder charts honor the maximum size, if it is set."""
+    path = pathlib.Path(__file__).parent / "data" / "ra10_dec-60_15arcmin.fits"
+    finder_chart = FinderChart(path, max_size=10 * u.arcmin)
+    check_finder(finder_chart)
+
+
 # Formats other than jpg or png may produce different files for different runs,
 # so that they cannot be tested with pytest-regressions.
 @pytest.mark.parametrize("format", ["jpg", "png"])
