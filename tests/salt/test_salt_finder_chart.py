@@ -145,7 +145,7 @@ def test_nir_finder_chart(
 ):
     """Test the finder chart for an NIR observation."""
     general = _general_properties(fits_center)
-    if target_offset:
+    if target_offset is not None:
         reference_star = fits_center
         general.target.position = translate(fits_center, target_offset)
     else:
