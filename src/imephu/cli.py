@@ -48,6 +48,9 @@ def main(
         resolve_path=True,
         help="Configuration details for the finder chart(s).",
     ),
+    stdin: Optional[bool] = typer.Option(  # noqa: B008
+        None, "--stdin", help="Read the configuration details from stdin"
+    ),
     output: Optional[Path] = typer.Option(  # noqa: B008
         None, "--out", "-o", file_okay=True, resolve_path=True, help="Output file."
     ),
@@ -63,7 +66,7 @@ def main(
 ) -> None:
     """A tool for creating finder charts."""  # noqa: D401
     try:
-        configuration = _read_configuration(config)
+        configuration = _read_configuration(config, stdin)
         _validate_configuration(configuration)
         configuration["__config-path"] = config
         _create_finder_charts(configuration, output, format)
@@ -72,12 +75,18 @@ def main(
         raise typer.Exit(code=1) from e
 
 
-def _read_configuration(config: Optional[Path]) -> Any:
+def _read_configuration(config: Optional[Path], stdin: Optional[bool]) -> Any:
+    if config and stdin:
+        print("The --config/-c and --stdin options are mutually exclusive.")
+        raise typer.Exit(code=1)
     if config:
         with open(config, "r") as f:
             configuration_yaml = f.read()
-    else:
+    elif stdin:
         configuration_yaml = typer.get_text_stream("stdin").read()
+    else:
+        print("The --config/-c or --stdin option is required.")
+        raise typer.Exit(code=1)
 
     return yaml.safe_load(configuration_yaml.encode("utf-8"))
 
