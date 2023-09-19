@@ -6,6 +6,9 @@ authors = ["Southern African Large Telescope"]
 license = "MIT"
 readme = "README.md"
 
+[tool.poetry.scripts]
+imephu = "imephu.cli:app"
+
 [tool.poetry.dependencies]
 python = "^3.8"
 astropy = ">=5.0"
