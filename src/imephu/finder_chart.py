@@ -253,11 +253,11 @@ class FinderChart:
         self._metadata[key] = value
 
     @property
-    def max_size(self) -> Angle:
+    def max_size(self) -> Optional[Angle]:
         return self._max_size
 
     @max_size.setter
-    def max_size(self, new_max_size: Angle) -> None:
+    def max_size(self, new_max_size: Optional[Angle]) -> None:
         self._max_size = new_max_size
 
     def show(self) -> None:
@@ -345,7 +345,7 @@ class FinderChart:
         )
 
     def _enforce_max_size(self, ax: WCSAxesSubplot) -> None:
-        if not self.max_size:
+        if self.max_size is None:
             return
 
         # Get the current plot limits

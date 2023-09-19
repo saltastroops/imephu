@@ -300,7 +300,8 @@ instrument:
     check_cli(instrument_yaml)
 
 
-def test_max_size_is_honored(check_cli):
+def test_default_max_size_is_10_arcmin(check_cli):
+    """Test that the default maximum size is 10 arcminutes."""
     fits_file = Path(__file__).parent / "data" / "ra10_dec-60_15arcmin.fits"
     fits_source_yaml = f"""\
 fits-source:
@@ -311,7 +312,22 @@ instrument:
   salticam:
     slot-mode: false
 """
-    check_cli(instrument_yaml, fits_source_yaml, max_size=10)
+    check_cli(instrument_yaml, fits_source_yaml)
+
+
+def test_max_size_is_honored(check_cli):
+    """Test that a maximum size is honoured."""
+    fits_file = Path(__file__).parent / "data" / "ra10_dec-60_15arcmin.fits"
+    fits_source_yaml = f"""\
+fits-source:
+  file: {fits_file}
+    """
+    instrument_yaml = """\
+instrument:
+  salticam:
+    slot-mode: false
+"""
+    check_cli(instrument_yaml, fits_source_yaml, max_size=12)
 
 
 @pytest.mark.parametrize(
