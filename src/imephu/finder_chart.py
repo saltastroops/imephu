@@ -26,7 +26,9 @@ from astropy.visualization.mpl_normalize import simple_norm
 from astropy.visualization.wcsaxes.core import WCSAxesSubplot
 from astropy.wcs import WCS, FITSFixedWarning
 from matplotlib.figure import Figure
+from PyPDF2 import PdfReader, PdfWriter
 
+import imephu
 from imephu.annotation import Annotation
 from imephu.geometry import pixel_scales
 from imephu.service.survey import load_fits
@@ -289,6 +291,9 @@ class FinderChart:
         if format and format.lower() == "pdf":
             pdf = BytesIO()
             plt.savefig(pdf, format=format, bbox_inches="tight")
+
+            pdf = self._add_author_metadata(pdf)
+
             if hasattr(name, "write"):
                 name.write(pdf.getvalue())
             else:
@@ -409,3 +414,43 @@ class FinderChart:
 
         x.set_ticks(size=7)
         y.set_ticks(size=7)
+
+    def _add_author_metadata(self, pdf: BytesIO) -> BytesIO:
+        """
+        Add imephu (and the version) as the author metadata to the given pdf.
+
+        Parameters
+        ----------
+        pdf: `~io.BinaryIO`
+            PDF.
+
+        Returns
+        -------
+        `~io.BinaryIO`
+            The PDF with the author metadata.
+        """
+        # Read the existing metadata
+        pdf.seek(0)
+        reader = PdfReader(pdf)
+        meta = reader.metadata
+
+        # Copy the pdf content
+        writer = PdfWriter()
+        for page in reader.pages:
+            writer.add_page(page)
+
+        # Collect the current metadata and add the author
+        # Note that the slash in "/Author" is indeed required
+        if meta:
+            updated_meta = {str(k): str(v) for k, v in meta.items()}
+        else:
+            updated_meta = {}
+        updated_meta["/Author"] = f"imephu ({imephu.__version__})"
+        writer.add_metadata(updated_meta)
+
+        # Save the new pdf
+        updated_pdf = BytesIO()
+        writer.write(updated_pdf)
+        updated_pdf.seek(0)
+
+        return updated_pdf
