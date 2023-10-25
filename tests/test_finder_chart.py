@@ -13,6 +13,7 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 from imephu.finder_chart import FinderChart
 from imephu.utils import Ephemeris, MagnitudeRange, SkyCoordRate
+from PyPDF2 import PdfReader
 
 
 class _FakeFinderChart:
@@ -83,6 +84,21 @@ def test_finder_chart_export_formats(format, check_image, fits_file):
     contents = io.BytesIO()
     finder_chart.save(contents, format=format)
     check_image(contents)
+
+
+def test_author_metadata_is_added_to_pdf(fits_file):
+    """Test that the author metadata is set in the saved pdf."""
+    np.random.seed(0)
+    finder_chart = FinderChart(fits_file)
+    pdf = io.BytesIO()
+    finder_chart.save(pdf, format="pdf")
+
+    pdf.seek(0)
+    reader = PdfReader(pdf)
+
+    meta = reader.metadata
+    expected_author = f"imephu ({imephu.__version__})"
+    assert str(meta.author) == expected_author
 
 
 def test_finder_chart_from_survey_returns_finder_chart(
