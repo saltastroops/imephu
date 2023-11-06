@@ -24,6 +24,49 @@ from imephu.utils import (
 _FINDER_CHART_SIZE = 10 * u.arcmin
 
 
+class SaltFinderChart(FinderChart):
+    """A finder chart for an astronomical observation.
+
+    The finder chart is generated from a FITS file. By default the finder chart just
+    shows the region with an overlaid coordinate grid. The axes show WCS coordinates.
+    Use the `add_annotation` method to add more content to the finder chart.
+
+    By default, the size of the finder chart is the same as that of the FITS file. You
+    may set the `max_size` property to choose a non-default maximum size.
+
+    You can display the finder chart on the screen or save it as a file.
+
+    This class uses Matplotlib for generating the finder chart.
+
+    .. warning:: Be careful when working with several finder charts as all the finder
+       charts use the same Matplotlib figure.
+
+    Parameters
+    ----------
+    name: `str`, `path-like` or `binary file-like`
+        FITS file to display.
+
+    target: `imephu.salt.finder_chart.Target`
+        Target for the finder chart.
+
+    max_size: `~astropy.coordinates.Angle`
+        Maximum size of the generated finder chart.
+    """
+
+    def __init__(
+        self,
+        name: Union[str, BinaryIO, os.PathLike[Any]],
+        target: Target,
+        max_size: Optional[Angle] = None,
+    ):
+        super().__init__(name, max_size)
+
+        right_ascension_deg = target.position.ra.to(u.deg).value
+        declination_deg = target.position.dec.to(u.deg).value
+        self.add_metadata("right_ascension", f"{right_ascension_deg} deg")
+        self.add_metadata("declination", f"{declination_deg} deg")
+
+
 @dataclass
 class Target:
     """Target properties.
@@ -94,7 +137,7 @@ def salticam_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for a Salticam observation.
     """
-    finder_chart = FinderChart(fits)
+    finder_chart = SaltFinderChart(fits, general.target)
     annotation = _salticam_observation_annotation(
         general=general, is_slot_mode=is_slot_mode, wcs=finder_chart.wcs
     )
@@ -123,7 +166,7 @@ def rss_imaging_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an RSS imaging observation.
     """
-    finder_chart = FinderChart(fits)
+    finder_chart = SaltFinderChart(fits, general.target)
     annotation = _rss_imaging_observation_annotation(
         general=general, is_slot_mode=is_slot_mode, wcs=finder_chart.wcs
     )
@@ -158,7 +201,7 @@ def rss_longslit_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an RSS longslit observation.
     """
-    finder_chart = FinderChart(fits)
+    finder_chart = SaltFinderChart(fits, general.target)
     annotation = _rss_longslit_observation_annotation(
         general=general,
         slit_width=slit_width,
@@ -198,7 +241,7 @@ def rss_mos_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an RSS MOS observation.
     """
-    finder_chart = FinderChart(fits)
+    finder_chart = SaltFinderChart(fits, general.target)
     annotation = _rss_mos_observation_annotation(
         general=general,
         mos_mask=mos_mask,
@@ -227,7 +270,7 @@ def rss_fabry_perot_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an RSS Fabry-Pérot observation.
     """
-    finder_chart = FinderChart(fits)
+    finder_chart = SaltFinderChart(fits, general.target)
     annotation = _rss_fabry_perot_observation_annotation(
         general=general, wcs=finder_chart.wcs
     )
@@ -263,7 +306,7 @@ def nir_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an NIR observation.
     """
-    finder_chart = FinderChart(fits)
+    finder_chart = SaltFinderChart(fits, general.target)
     annotation = _nir_observation_annotation(
         general=general,
         reference_star=reference_star,
@@ -291,7 +334,7 @@ def hrs_finder_chart(
     `~imephu.finder_chart.FinderChart`
         The finder chart for an HRS observation.
     """
-    finder_chart = FinderChart(fits)
+    finder_chart = SaltFinderChart(fits, general.target)
     annotation = _hrs_observation_annotation(general=general, wcs=finder_chart.wcs)
     finder_chart.add_annotation(annotation)
     return finder_chart

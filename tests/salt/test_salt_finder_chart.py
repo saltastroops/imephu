@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta, timezone
 
+import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from imephu.geometry import translate
 from imephu.salt.finder_chart import (
     GeneralProperties,
+    SaltFinderChart,
     Target,
     hrs_finder_chart,
     moving_target_finder_charts,
@@ -236,3 +238,14 @@ def test_moving_target_finder_charts(
         counter += 1
 
     assert counter == 2
+
+
+def test_target_is_added_to_metadata(fits_file, fits_center):
+    """Test that the target coordinates are added to the pdf metadata attachment."""
+    np.random.seed(0)
+    general = _general_properties(fits_center)
+    finder_chart = SaltFinderChart(fits_file, general.target)
+
+    metadata = finder_chart.metadata
+    assert metadata["right_ascension"] == "10.0 deg"
+    assert metadata["declination"] == "-60.0 deg"
