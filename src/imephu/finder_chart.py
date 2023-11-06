@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import bisect
+import json
 import os
 import warnings
+from copy import deepcopy
 from datetime import datetime
 from io import BytesIO
 from typing import (
@@ -200,7 +202,9 @@ class FinderChart:
         for group in groups:
             valid_for = (group[0].epoch, group[-1].epoch)
             finder_chart = create_finder_chart(group)
-            finder_chart.add_metadata("valid_for", valid_for)
+            finder_chart.add_metadata(
+                "valid_for", [valid_for[0].isoformat(), valid_for[1].isoformat()]
+            )
             yield finder_chart, valid_for
 
     @property
@@ -292,7 +296,7 @@ class FinderChart:
             pdf = BytesIO()
             plt.savefig(pdf, format=format, bbox_inches="tight")
 
-            pdf = self._add_author_metadata(pdf)
+            pdf = self._add_metadata(pdf)
 
             if hasattr(name, "write"):
                 name.write(pdf.getvalue())
@@ -415,9 +419,18 @@ class FinderChart:
         x.set_ticks(size=7)
         y.set_ticks(size=7)
 
-    def _add_author_metadata(self, pdf: BytesIO) -> BytesIO:
+    def _add_metadata(self, pdf: BytesIO) -> BytesIO:
         """
-        Add imephu (and the version) as the author metadata to the given pdf.
+        Add metadata to the pdf.
+
+        The following metadata is added as a JSON file attachment named metadata.json to
+        the given pdf.
+
+        * All content of the finder chart's metadata dictionary.
+        * imephu (and the version) as the property "author", unless the finder chart's
+          metadata dictionary contains that property already.
+
+        imephu (and the version) is also as the author metadata to the given pdf
 
         Parameters
         ----------
@@ -439,13 +452,20 @@ class FinderChart:
         for page in reader.pages:
             writer.add_page(page)
 
+        # Add the metadata (and author)
+        author = f"imephu ({imephu.__version__})"
+        metadata = deepcopy(self.metadata)
+        if "author" not in metadata:
+            metadata["author"] = author
+        writer.add_attachment("metadata.json", json.dumps(metadata).encode("utf-8"))
+
         # Collect the current metadata and add the author
         # Note that the slash in "/Author" is indeed required
         if meta:
             updated_meta = {str(k): str(v) for k, v in meta.items()}
         else:
             updated_meta = {}
-        updated_meta["/Author"] = f"imephu ({imephu.__version__})"
+        updated_meta["/Author"] = author
         writer.add_metadata(updated_meta)
 
         # Save the new pdf

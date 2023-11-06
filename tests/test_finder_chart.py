@@ -1,4 +1,5 @@
 import io
+import json
 import pathlib
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
@@ -43,6 +44,26 @@ def _ephemeris(epoch, ra=0 * u.deg, dec=0 * u.deg):
             bandpass="V", min_magnitude=13, max_magnitude=13
         ),
     )
+
+
+def _get_attachments(reader: PdfReader):
+    """
+    Return the file attachments as a dictionary of file names and byte strings.
+
+    Adapted from
+    https://kevinmloeffler.com/2018/07/08/how-to-extract-pdf-file-attachments-using-python-and-pypdf2/
+    """
+    catalog = reader.trailer["/Root"]
+    file_names = catalog["/Names"]["/EmbeddedFiles"]["/Names"]
+    attachments = {}
+    for f in file_names:
+        if isinstance(f, str):
+            name = f
+            data_index = file_names.index(f) + 1
+            f_dict = file_names[data_index].get_object()
+            f_data = f_dict["/EF"]["/F"].get_data()
+            attachments[name] = f_data
+    return attachments
 
 
 def test_finder_chart_is_generated_from_path(check_finder):
@@ -99,6 +120,44 @@ def test_author_metadata_is_added_to_pdf(fits_file):
     meta = reader.metadata
     expected_author = f"imephu ({imephu.__version__})"
     assert str(meta.author) == expected_author
+
+
+def test_metadata_attachment_is_added_to_pdf(fits_file):
+    """Test that the metadata is added as an attachment to the saved pdf."""
+    np.random.seed(0)
+    finder_chart = FinderChart(fits_file)
+
+    finder_chart.add_metadata("custom", "something")
+    pdf = io.BytesIO()
+    finder_chart.save(pdf, format="pdf")
+
+    pdf.seek(0)
+    reader = PdfReader(pdf)
+
+    attachments = _get_attachments(reader)
+
+    assert "metadata.json" in attachments
+
+    metadata = json.loads(attachments["metadata.json"].decode("utf-8"))
+    assert metadata["author"] == f"imephu ({imephu.__version__})"
+
+
+def test_custom_author_is_not_replaced(fits_file):
+    """Test that a custom author is not replaced in the saved pdf."""
+    np.random.seed(0)
+    finder_chart = FinderChart(fits_file)
+
+    author = "someone"
+    finder_chart.add_metadata("author", author)
+    pdf = io.BytesIO()
+    finder_chart.save(pdf, format="pdf")
+
+    pdf.seek(0)
+    reader = PdfReader(pdf)
+
+    attachments = _get_attachments(reader)
+    metadata = json.loads(attachments["metadata.json"].decode("utf-8"))
+    assert metadata["author"] == author
 
 
 def test_finder_chart_from_survey_returns_finder_chart(
@@ -338,7 +397,10 @@ def test_for_time_interval_creates_correct_finder_charts(positions, expected_ind
     for index_group in expected_indices:
         expected_ephemerides.append([ephemerides[i] for i in index_group])
         expected_valid_for.append(
-            (ephemerides[index_group[0]].epoch, ephemerides[index_group[-1]].epoch)
+            [
+                ephemerides[index_group[0]].epoch.isoformat(),
+                ephemerides[index_group[-1]].epoch.isoformat(),
+            ]
         )
 
     start = t
