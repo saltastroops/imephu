@@ -28,7 +28,7 @@ from astropy.visualization.mpl_normalize import simple_norm
 from astropy.visualization.wcsaxes.core import WCSAxesSubplot
 from astropy.wcs import WCS, FITSFixedWarning
 from matplotlib.figure import Figure
-from PyPDF2 import PdfReader, PdfWriter
+from pypdf import PdfReader, PdfWriter
 
 import imephu
 from imephu.annotation import Annotation
@@ -449,8 +449,7 @@ class FinderChart:
 
         # Copy the pdf content
         writer = PdfWriter()
-        for page in reader.pages:
-            writer.add_page(page)
+        writer.append_pages_from_reader(reader)
 
         # Add the metadata (and author)
         author = f"imephu ({imephu.__version__})"

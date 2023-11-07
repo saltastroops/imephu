@@ -14,7 +14,7 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 from imephu.finder_chart import FinderChart
 from imephu.utils import Ephemeris, MagnitudeRange, SkyCoordRate
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 
 
 class _FakeFinderChart:
