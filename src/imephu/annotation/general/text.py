@@ -51,7 +51,7 @@ class TextAnnotation(Annotation):
 
     def __init__(
         self,
-        position: Union[SkyCoord, Sequence[float], npt.NDArray[np.float_]],
+        position: Union[SkyCoord, Sequence[float], npt.NDArray[np.float64]],
         s: str,
         wcs: WCS,
         color: Union[str, Tuple[float, float, float]] = "black",
