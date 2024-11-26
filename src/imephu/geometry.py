@@ -149,7 +149,7 @@ def pixel_scales(wcs: WCS) -> Tuple[Angle, Angle]:
     )
 
 
-def sky_position_to_pixel(position: SkyCoord, wcs: WCS) -> npt.NDArray[np.float_]:
+def sky_position_to_pixel(position: SkyCoord, wcs: WCS) -> npt.NDArray[np.float64]:
     """Convert a sky position to the corresponding pixel coordinates.
 
     Parameters
@@ -168,7 +168,7 @@ def sky_position_to_pixel(position: SkyCoord, wcs: WCS) -> npt.NDArray[np.float_
     return np.array([float(pixel_coords[0].item()), float(pixel_coords[1].item())])
 
 
-def pixel_to_sky_position(position_px: npt.NDArray[np.float_], wcs: WCS) -> SkyCoord:
+def pixel_to_sky_position(position_px: npt.NDArray[np.float64], wcs: WCS) -> SkyCoord:
     """Convert pixel coordinates to the corresponding sky position.
 
     Parameters
@@ -205,7 +205,7 @@ def _is_positive_angle_anti_clockwise(wcs: WCS) -> bool:
         ``True`` if angles from north to east correspond to mathematically positive
         ("anti-clockwise") angles on a finder chart, ``False`` otherwise.
     """
-    origin_px: npt.NDArray[np.float_] = np.array((0.0, 0.0))
+    origin_px: npt.NDArray[np.float64] = np.array((0.0, 0.0))
     origin_on_sky = pixel_to_sky_position(origin_px, wcs)
     origin_ra = origin_on_sky.ra
     origin_dec = origin_on_sky.dec
@@ -248,7 +248,7 @@ def _is_positive_angle_anti_clockwise(wcs: WCS) -> bool:
     angle = math.acos(cos_angle)
 
     # Rotate the vector to the north (in anti-clockwise direction) by this angle
-    rotation: npt.NDArray[np.float_] = np.array(
+    rotation: npt.NDArray[np.float64] = np.array(
         [[cos(angle), -sin(angle)], [sin(angle), cos(angle)]]
     )
     rotated_north_vector_px = np.dot(rotation, north_vector_px)

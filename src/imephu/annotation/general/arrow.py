@@ -103,7 +103,7 @@ class ArrowAnnotation(GroupAnnotation):
         point_of_intersection = end_px + head_height_px * n_TS_px  # noqa
 
         # We can also use it to get a unit vector n_AB along AB.
-        n_AB_px: npt.NDArray[np.float_] = np.array([n_TS_px[1], -n_TS_px[0]])
+        n_AB_px: npt.NDArray[np.float64] = np.array([n_TS_px[1], -n_TS_px[0]])
 
         # And hence we can calculate A and B.
         head_width_px = float(head_width / sx) / 2

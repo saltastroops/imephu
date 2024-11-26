@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "imephu"
-version = "0.10.1"
+version = "0.10.2"
 description = "Generate finder charts for astronomical observations."
 authors = ["Southern African Large Telescope"]
 license = "MIT"
