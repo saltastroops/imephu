@@ -1,9 +1,14 @@
+from pathlib import Path
+
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
+from fontTools.ttLib.tables.otBase import valueRecordFormat
+
 from imephu import geometry
 from imephu.annotation.general import TextAnnotation
 from imephu.finder_chart import FinderChart
+from imephu.geometry import translate
 from imephu.salt.annotation import rss
 from imephu.salt.utils import MosMask, MosMaskSlit
 
@@ -109,5 +114,77 @@ def test_mos_mask_annotation(
         horizontalalignment="left",
     )
     finder_chart.add_annotation(mask_annotation)
+    finder_chart.add_annotation(legend)
+    check_finder(finder_chart)
+
+
+@pytest.mark.parametrize("position_angle", [Angle(0 * u.deg), 70 * u.deg])
+def test_smi_annotation(position_angle, fits_file, fits_center, check_finder):
+    """Test the SMI annotation."""
+    finder_chart = FinderChart(fits_file)
+    smi_annotation = rss.smi_bundles_annotation(
+        fits_center, fits_center, position_angle, finder_chart.wcs, False
+    )
+    legend = TextAnnotation(
+        SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
+        f"position angle: {position_angle}",
+        wcs=finder_chart.wcs,
+        color="blue",
+        horizontalalignment="left",
+    )
+    finder_chart.add_annotation(smi_annotation)
+    finder_chart.add_annotation(legend)
+    check_finder(finder_chart)
+
+
+@pytest.mark.parametrize(
+    "position_angle, include_fibers",
+    [(0 * u.deg, False), (70 * u.deg, True)],
+)
+def test_smi_annotation_details(position_angle, include_fibers, check_finder):
+    """Test the SMI annotation with a zoomed in PANSTARRS finder chart."""
+    fits_path = Path(__file__).parent.parent.parent / "data" / "ngc6000_1arcmin.fits"
+    finder_chart = FinderChart(fits_path)
+    center = SkyCoord(ra="15h49m49.5s", dec="-29d23m13s")
+    smi_annotation = rss.smi_bundles_annotation(
+        center, center, position_angle, finder_chart.wcs, True
+    )
+    legend = TextAnnotation(
+        SkyCoord(ra="15h49m51.6s", dec="-29d22m45s"),
+        f"position angle: 0.0 deg",
+        wcs=finder_chart.wcs,
+        color="blue",
+        horizontalalignment="left",
+    )
+    finder_chart.add_annotation(smi_annotation)
+    finder_chart.add_annotation(legend)
+    check_finder(finder_chart)
+
+
+@pytest.mark.parametrize(
+    "dec_offset",
+    [
+        pytest.param(-90 * u.arcsec, id="sky bundle 1"),
+        pytest.param(0 * u.arcsec, id="target bundle"),
+        pytest.param(90 * u.arcsec, id="sky bundle 2"),
+    ],
+)
+def test_smi_annotation_bundle_part_details(dec_offset, check_finder):
+    """Test the SMI annotation with a zoomed in PANSTARRS finder chart."""
+    fits_path = Path(__file__).parent.parent.parent / "data" / "ngc6000_1arcmin.fits"
+    finder_chart = FinderChart(fits_path)
+    center = SkyCoord(ra="15h49m49.5s", dec="-29d23m13s")
+    ifu_center = translate(center, (0 * u.arcsec, dec_offset))
+    smi_annotation = rss.smi_bundles_annotation(
+        center, ifu_center, 0 * u.deg, finder_chart.wcs, True
+    )
+    legend = TextAnnotation(
+        SkyCoord(ra="15h49m51.6s", dec="-29d22m45s"),
+        f"position angle: 0.0 deg",
+        wcs=finder_chart.wcs,
+        color="blue",
+        horizontalalignment="left",
+    )
+    finder_chart.add_annotation(smi_annotation)
     finder_chart.add_annotation(legend)
     check_finder(finder_chart)
