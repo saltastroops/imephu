@@ -146,6 +146,9 @@
           "$ref": "#/$defs/rss-mos"
         },
         {
+          "$ref": "#/$defs/rss-smi"
+        },
+        {
           "$ref": "#/$defs/rss-fabry-perot"
         }
       ]
@@ -202,6 +205,23 @@
       "required": [
         "mode",
         "file"
+      ],
+      "additionalProperties": false
+    },
+    "rss-smi": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "The mode, which must be \"smi\"",
+          "pattern": "^smi$"
+        },
+        "reference-star": {
+          "$ref": "#/$defs/reference-star"
+        }
+      },
+      "required": [
+        "mode"
       ],
       "additionalProperties": false
     },

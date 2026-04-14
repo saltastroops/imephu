@@ -1,19 +1,17 @@
-from typing import Iterable
+from typing import Iterable, List, Tuple
 
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
-
 from imephu.annotation.general import (
     CircleAnnotation,
     GroupAnnotation,
+    LinePathAnnotation,
     RectangleAnnotation,
     TextAnnotation,
-    LinePathAnnotation,
 )
 from imephu.geometry import translate
 from imephu.salt.utils import MosMask
-
 
 _OUTLINE_COLOR = "red"
 
@@ -528,7 +526,7 @@ class _SMI:
         (3.15 * u.arcsec, 1.77 * u.arcsec),
     ]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.fibers = _SMI.FIBER_CENTERS
         self.fiber_radius = _SMI.FIBER_RADIUS
 
@@ -543,10 +541,10 @@ class _SMI:
             ]
         )
 
-    def _left_sky_bundle_fibers(self):
+    def _left_sky_bundle_fibers(self) -> List[Tuple[Angle, Angle]]:
         return [c for c in self.fibers if c[0] < -50 * u.arcsec]
 
-    def _target_bundle_fibers(self):
+    def _target_bundle_fibers(self) -> List[Tuple[Angle, Angle]]:
         return [
             c
             for c in _SMI.FIBER_CENTERS
@@ -554,12 +552,12 @@ class _SMI:
             and -12 * u.arcsec < c[1] < 12 * u.arcsec
         ]
 
-    def _right_sky_bundle_fibers(self):
+    def _right_sky_bundle_fibers(self) -> List[Tuple[Angle, Angle]]:
         return [c for c in _SMI.FIBER_CENTERS if c[0] > 50 * u.arcsec]
 
     @staticmethod
     def _fiber_outlines(
-        fibers: Iterable, radius: Angle, center: SkyCoord, wcs: WCS
+        fibers: Iterable[Tuple[Angle, Angle]], radius: Angle, center: SkyCoord, wcs: WCS
     ) -> GroupAnnotation:
         annotation = GroupAnnotation([])
         for x, y in fibers:
@@ -576,7 +574,9 @@ class _SMI:
 
         return annotation
 
-    def _left_sky_bundle(self, center: SkyCoord, wcs: WCS, include_fibers: bool):
+    def _left_sky_bundle(
+        self, center: SkyCoord, wcs: WCS, include_fibers: bool
+    ) -> GroupAnnotation:
         annotation = GroupAnnotation([])
         if include_fibers:
             sky_bundle_fibers = self._left_sky_bundle_fibers()
@@ -587,7 +587,9 @@ class _SMI:
 
         return annotation
 
-    def _left_sky_bundle_outline(self, center: SkyCoord, wcs: WCS):
+    def _left_sky_bundle_outline(
+        self, center: SkyCoord, wcs: WCS
+    ) -> LinePathAnnotation:
         # Approximate the outline by a polygon consisting of horizontal and vertical lines.
         r = self.fiber_radius
         left_sky_bundle_fibers = self._left_sky_bundle_fibers()
@@ -618,7 +620,9 @@ class _SMI:
         )
         return line
 
-    def _right_sky_bundle(self, center: SkyCoord, wcs: WCS, include_fibers: bool):
+    def _right_sky_bundle(
+        self, center: SkyCoord, wcs: WCS, include_fibers: bool
+    ) -> GroupAnnotation:
         annotation = GroupAnnotation([])
         if include_fibers:
             sky_bundle_fibers = self._right_sky_bundle_fibers()
@@ -629,7 +633,9 @@ class _SMI:
 
         return annotation
 
-    def _right_sky_bundle_outline(self, center: SkyCoord, wcs: WCS):
+    def _right_sky_bundle_outline(
+        self, center: SkyCoord, wcs: WCS
+    ) -> LinePathAnnotation:
         # Approximate the outline by a polygon consisting of horizontal and vertical lines.
         r = self.fiber_radius
         right_sky_bundle_fibers = self._right_sky_bundle_fibers()
@@ -664,7 +670,9 @@ class _SMI:
         )
         return line
 
-    def _target_bundle(self, center: SkyCoord, wcs: WCS, include_fibers: bool):
+    def _target_bundle(
+        self, center: SkyCoord, wcs: WCS, include_fibers: bool
+    ) -> GroupAnnotation:
         annotation = GroupAnnotation([])
         if include_fibers:
             target_bundle_fibers = self._target_bundle_fibers()
@@ -677,7 +685,7 @@ class _SMI:
 
         return annotation
 
-    def _target_bundle_outline(self, center: SkyCoord, wcs: WCS):
+    def _target_bundle_outline(self, center: SkyCoord, wcs: WCS) -> LinePathAnnotation:
         # Approximate the outline by a vertically and horizontally symmetric hexagon.
         r = self.fiber_radius
         target_bundle_fibers = self._target_bundle_fibers()

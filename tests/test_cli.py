@@ -268,6 +268,19 @@ instrument:
     check_cli(instrument_yaml)
 
 
+def test_create_rss_smi_finder_chart(check_cli, mock_from_survey):
+    """Test creating an RSS spectroscopy finder chart with the CLI."""
+    instrument_yaml = """\
+instrument:
+  rss:
+    mode: smi
+    reference-star:
+      ra: 0h 40m 0s
+      dec: -60d 2m     
+"""
+    check_cli(instrument_yaml)
+
+
 def test_create_rss_fabry_perot_finder_chart(check_cli, mock_from_survey):
     """Test creating an RSS Fabry-Perot finder chart with the CLI."""
     instrument_yaml = """\

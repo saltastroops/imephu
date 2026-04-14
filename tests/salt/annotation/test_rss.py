@@ -3,8 +3,6 @@ from pathlib import Path
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
-from fontTools.ttLib.tables.otBase import valueRecordFormat
-
 from imephu import geometry
 from imephu.annotation.general import TextAnnotation
 from imephu.finder_chart import FinderChart
@@ -151,7 +149,7 @@ def test_smi_annotation_details(position_angle, include_fibers, check_finder):
     )
     legend = TextAnnotation(
         SkyCoord(ra="15h49m51.6s", dec="-29d22m45s"),
-        f"position angle: 0.0 deg",
+        "position angle: 0.0 deg",
         wcs=finder_chart.wcs,
         color="blue",
         horizontalalignment="left",
@@ -180,7 +178,7 @@ def test_smi_annotation_bundle_part_details(dec_offset, check_finder):
     )
     legend = TextAnnotation(
         SkyCoord(ra="15h49m51.6s", dec="-29d22m45s"),
-        f"position angle: 0.0 deg",
+        "position angle: 0.0 deg",
         wcs=finder_chart.wcs,
         color="blue",
         horizontalalignment="left",

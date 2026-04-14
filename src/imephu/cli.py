@@ -337,6 +337,18 @@ def _create_rss_finder_chart(
             mos_mask=mos_mask,
             reference_star_box_width=reference_star_box_width,
         )
+    elif instrument_mode == "smi":
+        if "reference-star" in rss:
+            reference_star = SkyCoord(
+                ra=rss["reference-star"]["ra"], dec=rss["reference-star"]["dec"]
+            )
+        else:
+            reference_star = None
+        return sfc.rss_smi_finder_chart(
+            fits=fits,
+            general=general,
+            reference_star=reference_star,
+        )
     elif instrument_mode == "fabry-perot":
         return sfc.rss_fabry_perot_finder_chart(fits=fits, general=general)
     else:
