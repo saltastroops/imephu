@@ -252,6 +252,37 @@ def rss_mos_finder_chart(
     return finder_chart
 
 
+def rss_smi_finder_chart(
+    fits: Union[str, BinaryIO, os.PathLike[Any]],
+    general: GeneralProperties,
+    reference_star: Optional[SkyCoord],
+) -> FinderChart:
+    """Return the finder chart for an RSS longslit observation.
+
+    Parameters
+    ----------
+    fits: `str`, `path-like` or `binary file-like`
+        FITS file to display.
+    general: `GeneralProperties`
+        Properties which are not specific to the instrument.
+    reference_star: `~astropy.coordinates.SkyCoord`, optional
+        The position of a reference star, in right ascension and declination.
+
+    Returns
+    -------
+    `~imephu.finder_chart.FinderChart`
+        The finder chart for an RSS longslit observation.
+    """
+    finder_chart = SaltFinderChart(fits, general.target)
+    annotation = _rss_smi_observation_annotation(
+        general=general,
+        reference_star=reference_star,
+        wcs=finder_chart.wcs,
+    )
+    finder_chart.add_annotation(annotation)
+    return finder_chart
+
+
 def rss_fabry_perot_finder_chart(
     fits: Union[str, BinaryIO, os.PathLike[Any]],
     general: GeneralProperties,
@@ -444,6 +475,25 @@ def _rss_mos_observation_annotation(
         reference_star_box_width=reference_star_box_width,
     )
     observation_annotation.add_item(mask_annotation)
+    return observation_annotation
+
+
+def _rss_smi_observation_annotation(
+    general: GeneralProperties,
+    reference_star: Optional[SkyCoord],
+    wcs: WCS,
+) -> GroupAnnotation:
+    observation_annotation = _base_annotations(general, wcs)
+    smi_annotation = rss.smi_bundles_annotation(
+        fits_center=general.target.position,
+        science_bundle_center=general.target.position,
+        position_angle=general.position_angle,
+        wcs=wcs,
+    )
+    observation_annotation.add_item(smi_annotation)
+    if reference_star:
+        reference_star_annotation = rss.reference_star_annotation(reference_star, wcs)
+        observation_annotation.add_item(reference_star_annotation)
     return observation_annotation
 
 

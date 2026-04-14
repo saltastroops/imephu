@@ -16,6 +16,7 @@ from imephu.salt.finder_chart import (
     rss_imaging_finder_chart,
     rss_longslit_finder_chart,
     rss_mos_finder_chart,
+    rss_smi_finder_chart,
     salticam_finder_chart,
 )
 from imephu.salt.utils import MosMask, MosMaskSlit
@@ -114,6 +115,23 @@ def test_rss_mos_finder_chart(
     mos_mask = MosMask(xml)
     finder_chart = rss_mos_finder_chart(
         fits=fits_file, general=_general_properties(fits_center), mos_mask=mos_mask
+    )
+    check_finder(finder_chart)
+
+
+@pytest.mark.parametrize("include_reference_star", [True, False])
+def test_rss_smi_finder_chart(
+    include_reference_star, fits_file, fits_center, check_finder, mock_from_survey
+):
+    """Test the finder chart for RSS SMI observations."""
+    if include_reference_star:
+        reference_star = translate(fits_center, (2, -1) * u.arcmin)
+    else:
+        reference_star = None
+    finder_chart = rss_smi_finder_chart(
+        fits=fits_file,
+        general=_general_properties(fits_center),
+        reference_star=reference_star,
     )
     check_finder(finder_chart)
 
