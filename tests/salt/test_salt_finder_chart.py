@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
+
 from imephu.geometry import translate
 from imephu.salt.finder_chart import (
     GeneralProperties,

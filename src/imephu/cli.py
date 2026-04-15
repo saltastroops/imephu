@@ -158,7 +158,7 @@ def _save_sidereal_finder_chart(
 
 
 def _create_non_sidereal_salt_finder_charts(
-    configuration: Dict[str, Any]
+    configuration: Dict[str, Any],
 ) -> Generator[Tuple[FinderChart, Tuple[datetime, datetime]], None, None]:
     # Extract the target details
     target_ = configuration["target"]
