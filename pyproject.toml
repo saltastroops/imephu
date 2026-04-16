@@ -38,11 +38,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
 select = ["E", "F", "B", "I"]
 unfixable = ["B"]
 ignore = ["E203", "E501"]
 dummy-variable-rgx = "^ignore_me$"
-target-version = "py310"
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "numpy"

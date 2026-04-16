@@ -5,14 +5,15 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest import mock
 
-import imephu
 import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import SkyCoord
+from typer.testing import CliRunner
+
+import imephu
 from imephu.cli import app
 from imephu.utils import Ephemeris, SkyCoordRate
-from typer.testing import CliRunner
 
 runner = CliRunner()
 
@@ -268,15 +269,18 @@ instrument:
     check_cli(instrument_yaml)
 
 
-def test_create_rss_smi_finder_chart(check_cli, mock_from_survey):
+@pytest.mark.parametrize("include_fibers", ["true", "false"])
+def test_create_rss_smi_finder_chart(include_fibers, check_cli, mock_from_survey):
     """Test creating an RSS spectroscopy finder chart with the CLI."""
-    instrument_yaml = """\
+    instrument_yaml = f"""\
 instrument:
   rss:
     mode: smi
     reference-star:
       ra: 0h 40m 0s
-      dec: -60d 2m     
+      dec: -60d 2m
+    smi_barcode: PF0200N001
+    include_fibers: {include_fibers}     
 """
     check_cli(instrument_yaml)
 
