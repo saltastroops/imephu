@@ -1,6 +1,7 @@
 import astropy.units as u
 import pytest
 from astropy.coordinates import Angle
+
 from imephu.annotation.general.scale_bar import (
     ScaleBarLineAnnotation,
 )

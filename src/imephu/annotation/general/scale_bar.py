@@ -83,13 +83,15 @@ class ScaleBarLineAnnotation(Annotation):
         y_min = y_mid - 10
         y_max = y_mid + 10
         left_vertical_path = Path(
-            [(x_min, y_min), (x_min, y_max)], closed=False  # noqa
+            [(x_min, y_min), (x_min, y_max)],
+            closed=False,  # noqa
         )  # noqa
         left_vertical_path_patch = PathPatch(left_vertical_path, **self._kwargs)
         left_vertical_path_patch.set_clip_on(False)
         ax.add_patch(left_vertical_path_patch)
         right_vertical_path = Path(
-            [(x_max, y_min), (x_max, y_max)], closed=False  # noqa
+            [(x_max, y_min), (x_max, y_max)],
+            closed=False,  # noqa
         )  # noqa
         right_vertical_path_patch = PathPatch(right_vertical_path, **self._kwargs)
         right_vertical_path_patch.set_clip_on(False)

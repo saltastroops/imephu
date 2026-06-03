@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
+
 from imephu.annotation.general import CircleAnnotation, TextAnnotation
 from imephu.finder_chart import FinderChart
 

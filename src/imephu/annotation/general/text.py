@@ -77,7 +77,7 @@ class TextAnnotation(Annotation):
         ax:  `~astropy.visualization.wcsaxes.WCSAxes`
             WCS axes object.
         """
-        if type(self._position) == SkyCoord:
+        if type(self._position) is SkyCoord:
             position_px = sky_position_to_pixel(self._position, self._wcs)
             ax.text(position_px[0], position_px[1], self._s, **self._kwargs)  # noqa
         else:

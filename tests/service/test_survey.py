@@ -4,6 +4,8 @@ import pytest
 import responses
 from astropy import units as u
 from astropy.coordinates import SkyCoord
+from responses import matchers
+
 from imephu.service.survey import (
     DigitizedSkySurvey,
     SkyView,
@@ -11,7 +13,6 @@ from imephu.service.survey import (
     is_covering_position,
     load_fits,
 )
-from responses import matchers
 
 DSS_URL = "https://archive.stsci.edu/cgi-bin/dss_search"
 
@@ -112,7 +113,7 @@ def test_skyview_returns_the_content_sent():
 def test_skyview_handles_wrong_survey():
     """Test that the SkyView class handles wrong survey names correctly."""
     dss = SkyView()
-    with pytest.raises(BaseException):
+    with pytest.raises(SurveyError):
         dss.load_fits(
             "Invalid Survey", SkyCoord(ra=0 * u.deg, dec=0 * u.deg), 10 * u.arcmin
         )

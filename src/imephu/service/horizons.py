@@ -7,6 +7,7 @@ from astropy.coordinates import SkyCoord
 from astropy.units import Quantity
 from astroquery.jplhorizons import Horizons
 from dateutil.parser import parse
+
 from imephu.utils import Ephemeris, MagnitudeRange, SkyCoordRate
 
 
@@ -78,7 +79,7 @@ class HorizonsService:
         # avoid overly excessive queries
         if stepsize < 5 * u.minute:
             raise ValueError(
-                "The time between ephemeris values must be at least 5 " "minutes"
+                "The time between ephemeris values must be at least 5 minutes"
             )
 
         self._object_id = object_id
@@ -138,11 +139,11 @@ class HorizonsService:
         # constructor
         if start < self._start:
             raise ValueError(
-                "The start time must not be earlier than that of the " "constructor."
+                "The start time must not be earlier than that of the constructor."
             )
         if end > self._end:
             raise ValueError(
-                "The end time must not be later than that of the" "constructor."
+                "The end time must not be later than that of the constructor."
             )
 
         if self._ephemerides is None:

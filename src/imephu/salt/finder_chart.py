@@ -9,6 +9,7 @@ from typing import Any, BinaryIO, Generator, List, Optional, Tuple, Union
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
+
 from imephu.annotation.general import GroupAnnotation
 from imephu.annotation.motion import motion_annotation
 from imephu.finder_chart import FinderChart
@@ -255,7 +256,9 @@ def rss_mos_finder_chart(
 def rss_smi_finder_chart(
     fits: Union[str, BinaryIO, os.PathLike[Any]],
     general: GeneralProperties,
+    smi_barcode: str,
     reference_star: Optional[SkyCoord],
+    include_fibers: bool = False,
 ) -> FinderChart:
     """Return the finder chart for an RSS longslit observation.
 
@@ -265,8 +268,11 @@ def rss_smi_finder_chart(
         FITS file to display.
     general: `GeneralProperties`
         Properties which are not specific to the instrument.
+    smi_barcode: str
+        The barcode of the slit masdk IFU.
     reference_star: `~astropy.coordinates.SkyCoord`, optional
-        The position of a reference star, in right ascension and declination.
+        The position of a reference star, in right ascension and declination
+    include_fibers: bool, default: False
 
     Returns
     -------
@@ -276,8 +282,10 @@ def rss_smi_finder_chart(
     finder_chart = SaltFinderChart(fits, general.target)
     annotation = _rss_smi_observation_annotation(
         general=general,
+        smi_barcode=smi_barcode,
         reference_star=reference_star,
         wcs=finder_chart.wcs,
+        include_fibers=include_fibers,
     )
     finder_chart.add_annotation(annotation)
     return finder_chart
@@ -480,15 +488,19 @@ def _rss_mos_observation_annotation(
 
 def _rss_smi_observation_annotation(
     general: GeneralProperties,
+    smi_barcode: str,
     reference_star: Optional[SkyCoord],
     wcs: WCS,
+    include_fibers: bool = False,
 ) -> GroupAnnotation:
     observation_annotation = _base_annotations(general, wcs)
     smi_annotation = rss.smi_bundles_annotation(
+        smi_barcode=smi_barcode,
         fits_center=general.target.position,
         science_bundle_center=general.target.position,
         position_angle=general.position_angle,
         wcs=wcs,
+        include_fibers=include_fibers,
     )
     observation_annotation.add_item(smi_annotation)
     if reference_star:

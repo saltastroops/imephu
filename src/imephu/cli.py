@@ -158,7 +158,7 @@ def _save_sidereal_finder_chart(
 
 
 def _create_non_sidereal_salt_finder_charts(
-    configuration: Dict[str, Any]
+    configuration: Dict[str, Any],
 ) -> Generator[Tuple[FinderChart, Tuple[datetime, datetime]], None, None]:
     # Extract the target details
     target_ = configuration["target"]
@@ -338,16 +338,20 @@ def _create_rss_finder_chart(
             reference_star_box_width=reference_star_box_width,
         )
     elif instrument_mode == "smi":
+        smi_barcode = rss["smi_barcode"]
         if "reference-star" in rss:
             reference_star = SkyCoord(
                 ra=rss["reference-star"]["ra"], dec=rss["reference-star"]["dec"]
             )
         else:
             reference_star = None
+        include_fibers = rss["include_fibers"]
         return sfc.rss_smi_finder_chart(
             fits=fits,
             general=general,
+            smi_barcode=smi_barcode,
             reference_star=reference_star,
+            include_fibers=include_fibers,
         )
     elif instrument_mode == "fabry-perot":
         return sfc.rss_fabry_perot_finder_chart(fits=fits, general=general)

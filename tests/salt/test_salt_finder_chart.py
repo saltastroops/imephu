@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
+
 from imephu.geometry import translate
 from imephu.salt.finder_chart import (
     GeneralProperties,
@@ -119,21 +120,69 @@ def test_rss_mos_finder_chart(
     check_finder(finder_chart)
 
 
-@pytest.mark.parametrize("include_reference_star", [True, False])
-def test_rss_smi_finder_chart(
-    include_reference_star, fits_file, fits_center, check_finder, mock_from_survey
+@pytest.mark.parametrize(
+    "smi_barcode, include_reference_star, include_fibers",
+    [("PF0200N001", True, False), ("PF0300N001", False, True)],
+)
+def test_rss_smi_finder_chart_details(
+    smi_barcode,
+    include_reference_star,
+    include_fibers,
+    fits_file,
+    fits_center,
+    check_finder,
+    mock_from_survey,
 ):
-    """Test the finder chart for RSS SMI observations."""
+    """
+    Test inclusion/exclusion of a reference star and individual fibers in RSS SMI
+    finder charts.
+    """
     if include_reference_star:
         reference_star = translate(fits_center, (2, -1) * u.arcmin)
     else:
         reference_star = None
     finder_chart = rss_smi_finder_chart(
         fits=fits_file,
+        smi_barcode=smi_barcode,
         general=_general_properties(fits_center),
         reference_star=reference_star,
+        include_fibers=include_fibers,
     )
     check_finder(finder_chart)
+
+
+@pytest.mark.parametrize(
+    "smi_barcode",
+    ["PF0200N001", "PF0300N001"],
+)
+def test_rss_smi_finder_chart(
+    smi_barcode: str,
+    fits_file,
+    fits_center,
+    check_finder,
+    mock_from_survey,
+):
+    """Test the finder chart for RSS SMI observations."""
+    finder_chart = rss_smi_finder_chart(
+        fits=fits_file,
+        smi_barcode=smi_barcode,
+        general=_general_properties(fits_center),
+        reference_star=None,
+        include_fibers=True,
+    )
+    check_finder(finder_chart)
+
+
+def test_rss_smi_invalid_barcode(fits_file, fits_center):
+    """Test that an invalid slit mask IFU barcode raises an error."""
+    with pytest.raises(ValueError):
+        rss_smi_finder_chart(
+            fits=fits_file,
+            smi_barcode="invalid",
+            general=_general_properties(fits_center),
+            reference_star=None,
+            include_fibers=True,
+        )
 
 
 def test_rss_fabry_perot_finder_chart(
