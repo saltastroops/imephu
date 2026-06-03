@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Protocol, Tuple
+from typing import Iterable, List, Tuple
 
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 from astropy.wcs import WCS
 
-from imephu import finder_chart
 from imephu.annotation.general import (
     CircleAnnotation,
     GroupAnnotation,
