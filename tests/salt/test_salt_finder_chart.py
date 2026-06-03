@@ -121,10 +121,11 @@ def test_rss_mos_finder_chart(
 
 
 @pytest.mark.parametrize(
-    "include_reference_star, include_fibers",
-    [(True, False), (False, True)],
+    "smi_barcode, include_reference_star, include_fibers",
+    [("PF0200N001", True, False), ("PF0300N001", False, True)],
 )
 def test_rss_smi_finder_chart_details(
+    smi_barcode,
     include_reference_star,
     include_fibers,
     fits_file,
@@ -142,7 +143,7 @@ def test_rss_smi_finder_chart_details(
         reference_star = None
     finder_chart = rss_smi_finder_chart(
         fits=fits_file,
-        smi_barcode="PF0200N001",
+        smi_barcode=smi_barcode,
         general=_general_properties(fits_center),
         reference_star=reference_star,
         include_fibers=include_fibers,
@@ -152,7 +153,7 @@ def test_rss_smi_finder_chart_details(
 
 @pytest.mark.parametrize(
     "smi_barcode",
-    ["PF0200N001"],
+    ["PF0200N001", "PF0300N001"],
 )
 def test_rss_smi_finder_chart(
     smi_barcode: str,

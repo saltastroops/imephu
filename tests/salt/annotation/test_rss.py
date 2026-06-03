@@ -119,7 +119,7 @@ def test_mos_mask_annotation(
 
 
 @pytest.mark.parametrize(
-    "smi_barcode, include_fibers", product(["PF0200N001"], [True, False])
+    "smi_barcode, include_fibers", product(["PF0200N001", "PF0300N001"], [True, False])
 )
 def test_smi_annotation_barcode(
     smi_barcode, include_fibers, fits_file, fits_center, check_finder
@@ -127,7 +127,12 @@ def test_smi_annotation_barcode(
     """Test the SMI annotation with different barcodes, with and without fibers."""
     finder_chart = FinderChart(fits_file)
     smi_annotation = rss.smi_bundles_annotation(
-        smi_barcode, fits_center, fits_center, 0 * u.deg, finder_chart.wcs, False
+        smi_barcode,
+        fits_center,
+        fits_center,
+        0 * u.deg,
+        finder_chart.wcs,
+        include_fibers,
     )
     legend = TextAnnotation(
         SkyCoord(ra="00h40m36s", dec="-59d55m30s"),
@@ -145,7 +150,7 @@ def test_smi_annotation_barcode(
 def test_smi_annotation_position_angle(
     position_angle, fits_file, fits_center, check_finder
 ):
-    """Test the SMI annotation  with and without position angles."""
+    """Test the SMI annotation with and without position angles."""
     finder_chart = FinderChart(fits_file)
     smi_annotation = rss.smi_bundles_annotation(
         "PF0200N001", fits_center, fits_center, position_angle, finder_chart.wcs, False
@@ -163,20 +168,27 @@ def test_smi_annotation_position_angle(
 
 
 @pytest.mark.parametrize(
-    "position_angle, include_fibers",
-    [(0 * u.deg, False), (70 * u.deg, True)],
+    "smi_barcode, position_angle, include_fibers",
+    [
+        ("PF0200N001", 0 * u.deg, False),
+        ("PF0200N001", 70 * u.deg, True),
+        ("PF0300N001", 0 * u.deg, False),
+        ("PF0300N001", 70 * u.deg, True),
+    ],
 )
-def test_smi_annotation_details(position_angle, include_fibers, check_finder):
+def test_smi_annotation_details(
+    smi_barcode, position_angle, include_fibers, check_finder
+):
     """Test the SMI annotation with a zoomed in PANSTARRS finder chart."""
     fits_path = Path(__file__).parent.parent.parent / "data" / "ngc6000_1arcmin.fits"
     finder_chart = FinderChart(fits_path)
     center = SkyCoord(ra="15h49m49.5s", dec="-29d23m13s")
     smi_annotation = rss.smi_bundles_annotation(
-        "PF0200N001", center, center, position_angle, finder_chart.wcs, True
+        smi_barcode, center, center, position_angle, finder_chart.wcs, include_fibers
     )
     legend = TextAnnotation(
         SkyCoord(ra="15h49m51.6s", dec="-29d22m45s"),
-        "position angle: 0.0 deg",
+        f"{smi_barcode}, {'with' if include_fibers else 'without'} fibers, position angle: {position_angle}",
         wcs=finder_chart.wcs,
         color="blue",
         horizontalalignment="left",
@@ -187,25 +199,28 @@ def test_smi_annotation_details(position_angle, include_fibers, check_finder):
 
 
 @pytest.mark.parametrize(
-    "dec_offset",
+    "smi_barcode, dec_offset",
     [
-        pytest.param(-90 * u.arcsec, id="sky bundle 1"),
-        pytest.param(0 * u.arcsec, id="target bundle"),
-        pytest.param(90 * u.arcsec, id="sky bundle 2"),
+        pytest.param("PF0200N001", -90 * u.arcsec, id="PF0200N001, sky bundle 1"),
+        pytest.param("PF0200N001", 0 * u.arcsec, id="PF0200N001, target bundle"),
+        pytest.param("PF0200N001", 90 * u.arcsec, id="PF0200N001, sky bundle 2"),
+        pytest.param("PF0300N001", -90 * u.arcsec, id="PF0300N001, sky bundle 1"),
+        pytest.param("PF0300N001", 0 * u.arcsec, id="PF0300N001, target bundle"),
+        pytest.param("PF0300N001", 90 * u.arcsec, id="PF0300N001, sky bundle 2"),
     ],
 )
-def test_smi_annotation_bundle_part_details(dec_offset, check_finder):
+def test_smi_annotation_bundle_part_details(smi_barcode, dec_offset, check_finder):
     """Test the SMI annotation with a zoomed in PANSTARRS finder chart."""
     fits_path = Path(__file__).parent.parent.parent / "data" / "ngc6000_1arcmin.fits"
     finder_chart = FinderChart(fits_path)
     center = SkyCoord(ra="15h49m49.5s", dec="-29d23m13s")
     ifu_center = translate(center, (0 * u.arcsec, dec_offset))
     smi_annotation = rss.smi_bundles_annotation(
-        "PF0200N001", center, ifu_center, 0 * u.deg, finder_chart.wcs, True
+        smi_barcode, center, ifu_center, 0 * u.deg, finder_chart.wcs, True
     )
     legend = TextAnnotation(
         SkyCoord(ra="15h49m51.6s", dec="-29d22m45s"),
-        "position angle: 0.0 deg",
+        f"{smi_barcode}, position angle: 0.0 deg",
         wcs=finder_chart.wcs,
         color="blue",
         horizontalalignment="left",
