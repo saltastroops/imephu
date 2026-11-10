@@ -342,7 +342,7 @@ class FinderChart:
         vmin = -0.1 * (vmax - vmin) + vmin
         vmax = 0.1 * (vmax - vmin) + vmax
 
-        normalizer = simple_norm(self._data, power=2, min_cut=vmin, max_cut=vmax)
+        normalizer = simple_norm(self._data, power=2, vmin=vmin, vmax=vmax)
 
         ax.imshow(
             self._hdu.data,
