@@ -267,7 +267,7 @@ def base_annotations(
     survey: str, optional
         The image survey name.
     fits_center: `~astropy.coordinates.SkyCoord`
-        The central position of the finder chart, in right ascension and declination
+        The central position of the finder chart, in right ascension and declination.
     wcs: `~astropy.wcs.WCS`
         WCS object.
 
