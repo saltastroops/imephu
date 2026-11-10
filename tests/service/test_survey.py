@@ -135,6 +135,13 @@ def test_load_fits_handles_invalid_survey(fits_center):
         load_fits(survey="Invalid Survey", fits_center=fits_center, size=10 * u.arcmin)
 
 
+def test_load_fits_rejects_non_icrs_coordinates():
+    """Test that the load_fits function rejects non-ICRS coordinates."""
+    fits_center = SkyCoord(ra=6 * u.deg, dec=-56 * u.deg, frame="fk5")
+    with pytest.raises(ValueError, match="ICRS"):
+        load_fits(survey="Invalid Survey", fits_center=fits_center, size=10 * u.arcmin)
+
+
 @pytest.mark.parametrize(
     "survey, ra, dec, expected",
     [

@@ -6,6 +6,8 @@ import requests
 from astropy import units as u
 from astropy.coordinates import Angle, SkyCoord
 
+from imephu.utils import check_icrs
+
 
 class SurveyError(BaseException):
     """An exception arising when querying a sky survey."""
@@ -130,7 +132,8 @@ class DigitizedSkySurvey(SkySurvey):
         survey: `str`
             The name of the survey to query for the FITS file.
         fits_center: `~astropy.coordinates.SkyCoord`
-            The center position of the loaded FITS file.
+            The center position of the loaded FITS file. It must be given in the ICRS
+            frame.
         size: `~astropy.coordinates.Angle`
             The width and height of the FITS image, as an angle on the sky.
 
@@ -139,6 +142,7 @@ class DigitizedSkySurvey(SkySurvey):
         str
             The URL.
         """
+        check_icrs(fits_center)
         url = "https://archive.stsci.edu/cgi-bin/dss_search"
         params = {
             "v": self._survey_identifier(survey),
@@ -243,7 +247,8 @@ class SkyView(SkySurvey):
         survey: `str`
             The name of the survey to query for the FITS file.
         fits_center: `~astropy.coordinates.SkyCoord`
-            The center position of the loaded FITS file.
+            The center position of the loaded FITS file. It must be given in the ICRS
+            frame.
         size: `~astropy.coordinates.Angle`
             The width and height of the FITS image, as an angle on the sky.
 
@@ -252,6 +257,7 @@ class SkyView(SkySurvey):
         str
             The URL.
         """
+        check_icrs(fits_center)
         url = "https://skyview.gsfc.nasa.gov/current/cgi/runquery.pl"
         params = {
             "Position": f"{fits_center.ra.to_value(u.deg)}, "
@@ -357,7 +363,7 @@ def url(survey: str, fits_center: SkyCoord, size: Angle) -> str:
     survey: `str`
         The name of the survey to query for the FITS file.
     fits_center: `~astropy.coordinates.SkyCoord`
-        The center position of the loaded FITS file.
+        The center position of the loaded FITS file. It must be given in the ICRS frame.
     size: `~astropy.coordinates.Angle`
         The width and height of the FITS image, as an angle on the sky.
 
@@ -366,6 +372,7 @@ def url(survey: str, fits_center: SkyCoord, size: Angle) -> str:
     str
         The URL.
     """
+    check_icrs(fits_center)
     if survey.lower() in [s.lower() for s in _DSS_DETAILS.keys()]:
         survey_: SkySurvey = DigitizedSkySurvey()
     elif survey.lower() in [s.lower() for s in _SKYVIEW_DETAILS.keys()]:
@@ -410,7 +417,7 @@ def load_fits(survey: str, fits_center: SkyCoord, size: Angle) -> BinaryIO:
     survey: `str`
         The name of the survey to query for the FITS file.
     fits_center: `~astropy.coordinates.SkyCoord`
-        The center position of the loaded FITS file.
+        The center position of the loaded FITS file. It must be given in the ICRS frame.
     size: `~astropy.coordinates.Angle`
         The width and height of the FITS image, as an angle on the sky.
 
@@ -419,6 +426,7 @@ def load_fits(survey: str, fits_center: SkyCoord, size: Angle) -> BinaryIO:
     binary stream
         The FITS file.
     """
+    check_icrs(fits_center)
     response = requests.get(url(survey, fits_center, size))
     if response.status_code != 200:
         raise SurveyError("No FITS file could be loaded.")

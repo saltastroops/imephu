@@ -18,6 +18,7 @@ from imephu.salt.utils import MosMask
 from imephu.utils import (
     Ephemeris,
     MagnitudeRange,
+    check_icrs,
     ephemerides_magnitude_range,
     mid_position,
 )
@@ -48,7 +49,7 @@ class SaltFinderChart(FinderChart):
         FITS file to display.
 
     target: `imephu.salt.finder_chart.Target`
-        Target for the finder chart.
+        Target for the finder chart. Its coordinates must be given in the ICRS frame.
 
     max_size: `~astropy.coordinates.Angle`
         Maximum size of the generated finder chart.
@@ -61,6 +62,8 @@ class SaltFinderChart(FinderChart):
         max_size: Optional[Angle] = None,
     ):
         super().__init__(name, max_size)
+
+        check_icrs(target.position)
 
         right_ascension_deg = target.position.ra.to(u.deg).value
         declination_deg = target.position.dec.to(u.deg).value

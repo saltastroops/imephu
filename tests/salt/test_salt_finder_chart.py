@@ -307,6 +307,18 @@ def test_moving_target_finder_charts(
     assert counter == 2
 
 
+def test_target_must_have_icrs_coordinates(fits_file, fits_center):
+    """Test that the target coordinates must be given in the ICRS frame."""
+    np.random.seed(0)
+    general = _general_properties(fits_center)
+
+    # Use a frame other than ICRS.
+    general.target.position = general.target.position.transform_to("fk5")
+
+    with pytest.raises(ValueError, match="ICRS"):
+        SaltFinderChart(fits_file, general.target)
+
+
 def test_target_is_added_to_metadata(fits_file, fits_center):
     """Test that the target coordinates are added to the pdf metadata attachment."""
     np.random.seed(0)

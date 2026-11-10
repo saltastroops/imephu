@@ -137,3 +137,21 @@ def ephemerides_magnitude_range(
         )
     else:
         return None
+
+
+def check_icrs(coords: SkyCoord) -> None:
+    """
+    Raise a value error if the given coordinates are not given in the ICRS frame.
+
+    Parameters
+    ----------
+    coords : `astropy.coords.SkyCoord`
+        Coordinates.
+
+    Raises
+    ------
+    ValueError
+        If the coordinates are not given in the ICRS frame.
+    """
+    if coords.frame.name.upper() != "ICRS":
+        raise ValueError("The coordinates must be given in the ICRS frame.")

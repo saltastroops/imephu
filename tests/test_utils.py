@@ -10,6 +10,7 @@ from imephu.utils import (
     Ephemeris,
     MagnitudeRange,
     SkyCoordRate,
+    check_icrs,
     ephemerides_magnitude_range,
     mid_position,
 )
@@ -147,3 +148,17 @@ def test_ephemerides_magnitude_range(min_magnitudes, max_magnitudes, expected):
         )
     magnitude_range = ephemerides_magnitude_range(ephemerides)
     assert magnitude_range == expected
+
+
+def test_check_icrs_accepts_icrs_coordinates():
+    """Test that coordinates using ICRS are accepted."""
+    coords = SkyCoord(ra="6h", dec="17d")
+    with _does_not_raise():
+        check_icrs(coords)
+
+
+def test_check_icrs_rejects_non_icrs_coordinates():
+    """Test that coordinates using a non-ICRS frame are rejected."""
+    coords = SkyCoord(ra="6h", dec="17d", frame="fk5")
+    with pytest.raises(ValueError, match="ICRS"):
+        check_icrs(coords)
