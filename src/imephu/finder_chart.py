@@ -332,7 +332,7 @@ class FinderChart:
 
         The code has been adapted from APLpy.
         """
-        cmap = plt.cm.get_cmap("gist_yarg")
+        cmap = plt.get_cmap("gist_yarg")
 
         # value range in the image
         pmin = 0.25
