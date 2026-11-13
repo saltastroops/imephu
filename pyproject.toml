@@ -1,6 +1,6 @@
 [project]
 name = "imephu"
-version = "0.13.1"
+version = "0.13.2"
 description = "Finder charts for the Southern African Large Telescope (SALT)"
 readme = "README.md"
 requires-python = ">=3.11"
