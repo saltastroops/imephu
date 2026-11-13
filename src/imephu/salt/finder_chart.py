@@ -69,6 +69,7 @@ class SaltFinderChart(FinderChart):
         declination_deg = target.position.dec.to(u.deg).value
         self.add_metadata("right_ascension", f"{right_ascension_deg} deg")
         self.add_metadata("declination", f"{declination_deg} deg")
+        self.add_metadata("coordinate_frame", "ICRS")
 
 
 @dataclass
